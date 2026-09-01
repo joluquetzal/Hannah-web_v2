@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { TreatmentRow } from "@/components/TreatmentRow";
+import { ScrollBackdrop } from "@/components/ScrollBackdrop";
 import { faciales } from "@/data/faciales";
+import { backdrop } from "@/lib/backdrop";
 
 export const metadata: Metadata = {
   title: "Faciales",
@@ -11,26 +13,30 @@ export const metadata: Metadata = {
 
 export default function FacialesPage() {
   return (
-    <div className="mx-auto max-w-5xl px-6 pb-24 pt-40">
-      <header className="max-w-2xl">
-        <h1 className="font-display text-4xl italic text-cream sm:text-5xl">
-          Faciales
-        </h1>
-        <p className="mt-4 leading-relaxed text-sand">
-          Seis faciales para hidratar, equilibrar y rejuvenecer según tu tipo de
-          piel.
-        </p>
-      </header>
+    <>
+      <ScrollBackdrop />
 
-      <div className="mt-16 space-y-20 md:space-y-28">
-        {faciales.map((treatment, index) => (
-          <TreatmentRow
-            key={treatment.slug}
-            treatment={treatment}
-            index={index}
-          />
-        ))}
+      <div className="mx-auto max-w-5xl px-6 pb-24 pt-40">
+        <header data-bg={backdrop.noir} className="max-w-2xl">
+          <h1 className="font-display text-4xl italic text-cream sm:text-5xl">
+            Faciales
+          </h1>
+          <p className="mt-4 leading-relaxed text-sand">
+            Seis faciales para hidratar, equilibrar y rejuvenecer según tu tipo de
+            piel.
+          </p>
+        </header>
+
+        <div className="mt-16 space-y-20 md:space-y-28">
+          {faciales.map((treatment, index) => (
+            <TreatmentRow
+              key={treatment.slug}
+              treatment={treatment}
+              index={index}
+            />
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

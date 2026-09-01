@@ -1,6 +1,7 @@
 import Image from "next/image";
 import clsx from "clsx";
 import type { Treatment } from "@/data/types";
+import { backdrop } from "@/lib/backdrop";
 
 /**
  * Alternating image/text row. Even index: image left. Odd index: image right.
@@ -16,7 +17,10 @@ export function TreatmentRow({
   const imageRight = index % 2 === 1;
 
   return (
-    <article className="grid items-center gap-8 md:grid-cols-2 md:gap-14">
+    <article
+      data-bg={imageRight ? backdrop.crimsonLight : backdrop.noir}
+      className="grid items-center gap-8 md:grid-cols-2 md:gap-14"
+    >
       <figure
         className={clsx(
           "group relative aspect-[4/5] overflow-hidden border border-crimson-light",

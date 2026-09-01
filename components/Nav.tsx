@@ -4,10 +4,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
+import { NavDropdown } from "@/components/NavDropdown";
 import { site } from "@/lib/site";
 
+/** Links after the dropdown. "Inicio" and "Servicios" are rendered separately. */
 const links = [
-  { href: "/servicios", label: "Servicios" },
   { href: "/nosotros", label: "Nosotros" },
   { href: "/contacto", label: "Contacto" },
 ] as const;
@@ -22,6 +23,9 @@ export function Nav() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const linkClass = (active: boolean) =>
+    clsx("transition-colors hover:text-cream", active ? "text-cream" : "text-sand");
 
   return (
     <header
@@ -42,6 +46,18 @@ export function Nav() {
         </Link>
 
         <ul className="flex items-center gap-5 text-[13px] sm:gap-7 sm:text-sm">
+          <li>
+            <Link
+              href="/"
+              aria-current={pathname === "/" ? "page" : undefined}
+              className={linkClass(pathname === "/")}
+            >
+              Inicio
+            </Link>
+          </li>
+
+          <NavDropdown />
+
           {links.map((link) => {
             const active = pathname.startsWith(link.href);
             return (
@@ -49,10 +65,7 @@ export function Nav() {
                 <Link
                   href={link.href}
                   aria-current={active ? "page" : undefined}
-                  className={clsx(
-                    "transition-colors hover:text-cream",
-                    active ? "text-cream" : "text-sand",
-                  )}
+                  className={linkClass(active)}
                 >
                   {link.label}
                 </Link>

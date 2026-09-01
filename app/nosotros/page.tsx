@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ScrollBackdrop } from "@/components/ScrollBackdrop";
 import { ButtonLink } from "@/components/ButtonLink";
+import { backdrop } from "@/lib/backdrop";
 
 export const metadata: Metadata = {
   title: "Nosotros",
@@ -17,7 +18,7 @@ export default function NosotrosPage() {
 
       <article className="mx-auto max-w-3xl px-6 pb-32 pt-40">
         <section
-          data-bg="#0E0A0A"
+          data-bg={backdrop.noir}
           className="flex min-h-[70vh] flex-col justify-center"
         >
           <p className="text-xs uppercase tracking-[0.3em] text-muted">
@@ -34,7 +35,7 @@ export default function NosotrosPage() {
         </section>
 
         <section
-          data-bg="#3D1A1A"
+          data-bg={backdrop.crimsonLight}
           className="flex min-h-[70vh] flex-col justify-center"
         >
           <h2 className="font-display text-3xl italic text-cream sm:text-4xl">
@@ -52,7 +53,7 @@ export default function NosotrosPage() {
         </section>
 
         <section
-          data-bg="#0E0A0A"
+          data-bg={backdrop.noir}
           className="flex min-h-[70vh] flex-col justify-center"
         >
           <h2 className="font-display text-3xl italic text-cream sm:text-4xl">

@@ -1,9 +1,11 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import emailjs from "@emailjs/browser";
+import { DatePicker } from "@/components/DatePicker";
 import { servicioOptions } from "@/lib/servicioOptions";
+import { todayISO } from "@/lib/date";
 import { site } from "@/lib/site";
 
 const SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
@@ -13,8 +15,6 @@ const PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
 type FieldName = "nombre" | "servicio" | "fecha" | "telefono";
 type Errors = Partial<Record<FieldName, string>>;
 type Status = "idle" | "sending" | "success" | "error";
-
-const todayISO = () => new Date().toISOString().slice(0, 10);
 
 const inputClass =
   "w-full border border-crimson-light bg-transparent px-4 py-3 text-cream placeholder:text-muted focus:border-sand focus:outline-none";
@@ -51,7 +51,13 @@ function Field({
 export function ReservationForm() {
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<Status>("idle");
+  const [fecha, setFecha] = useState("");
+  // Resolved after mount: this is a static export, so calling todayISO()
+  // during render would bake the build date into the HTML.
+  const [minDate, setMinDate] = useState("");
   const sending = useRef(false);
+
+  useEffect(() => setMinDate(todayISO()), []);
 
   function validate(data: FormData): Errors {
     const next: Errors = {};
@@ -81,6 +87,7 @@ export function ReservationForm() {
     if (data.get("website")) {
       setStatus("success");
       form.reset();
+      setFecha("");
       return;
     }
 
@@ -111,6 +118,7 @@ export function ReservationForm() {
       );
       setStatus("success");
       form.reset();
+      setFecha("");
       setErrors({});
     } catch (error) {
       console.error("EmailJS error:", error);
@@ -173,15 +181,14 @@ export function ReservationForm() {
       </Field>
 
       <Field id="fecha" label="Fecha preferida" error={errors.fecha}>
-        <input
+        <DatePicker
           id="fecha"
           name="fecha"
-          type="date"
-          required
-          min={todayISO()}
-          aria-invalid={Boolean(errors.fecha)}
-          aria-describedby={errors.fecha ? "fecha-error" : undefined}
-          className={inputClass}
+          value={fecha}
+          onChange={setFecha}
+          min={minDate}
+          invalid={Boolean(errors.fecha)}
+          describedBy={errors.fecha ? "fecha-error" : undefined}
         />
       </Field>
 
