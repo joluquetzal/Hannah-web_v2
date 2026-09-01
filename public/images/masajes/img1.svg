@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Placeholder MASAJE 1">
+  <rect width="400" height="500" fill="#241010"/>
+  <rect x="12" y="12" width="376" height="476" fill="none" stroke="#C9A27A" stroke-opacity="0.5"/>
+  <text x="200" y="248" font-family="Georgia, 'Times New Roman', serif" font-size="30" font-style="italic" fill="#F0E8DC" text-anchor="middle">MASAJE</text>
+  <text x="200" y="288" font-family="Georgia, serif" font-size="15" letter-spacing="5" fill="#C9A27A" text-anchor="middle">01</text>
+</svg>

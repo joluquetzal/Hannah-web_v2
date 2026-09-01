@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { PagePlaceholder } from "@/components/PagePlaceholder";
+import { ServiceCard } from "@/components/ServiceCard";
+import { servicios } from "@/data/servicios";
 
 export const metadata: Metadata = {
   title: "Servicios",
@@ -8,5 +9,23 @@ export const metadata: Metadata = {
 };
 
 export default function ServiciosPage() {
-  return <PagePlaceholder title="Servicios" phase="Fase 2" />;
+  return (
+    <div className="mx-auto max-w-6xl px-6 pb-24 pt-40">
+      <header className="max-w-2xl">
+        <h1 className="font-display text-4xl italic text-cream sm:text-5xl">
+          Servicios
+        </h1>
+        <p className="mt-4 leading-relaxed text-sand">
+          Tres formas de cuidar tu piel y tu bienestar. Elige una categoría para
+          conocer los tratamientos.
+        </p>
+      </header>
+
+      <div className="mt-14 grid gap-6 md:grid-cols-3">
+        {servicios.map((category) => (
+          <ServiceCard key={category.slug} category={category} />
+        ))}
+      </div>
+    </div>
+  );
 }
