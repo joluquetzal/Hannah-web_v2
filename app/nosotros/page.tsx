@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { PagePlaceholder } from "@/components/PagePlaceholder";
+import { ScrollBackdrop } from "@/components/ScrollBackdrop";
+import { ButtonLink } from "@/components/ButtonLink";
 
 export const metadata: Metadata = {
   title: "Nosotros",
@@ -7,6 +8,76 @@ export const metadata: Metadata = {
     "Conoce HannaH: nuestra filosofía, el equipo y la forma en que cuidamos tu piel.",
 };
 
+/* TODO: reemplazar todo el texto de esta página con el copy real del cliente. */
 export default function NosotrosPage() {
-  return <PagePlaceholder title="Nosotros" phase="Fase 3" />;
+  return (
+    <>
+      <ScrollBackdrop />
+
+      <article className="mx-auto max-w-3xl px-6 pb-32 pt-40">
+        <section
+          data-bg="#0E0A0A"
+          className="flex min-h-[70vh] flex-col justify-center"
+        >
+          <p className="text-xs uppercase tracking-[0.3em] text-muted">
+            Nosotros
+          </p>
+          <h1 className="mt-6 font-display text-4xl italic text-cream sm:text-5xl">
+            Un espacio para el cuidado, sin prisa
+          </h1>
+          <p className="mt-6 leading-relaxed text-sand">
+            HannaH es una clínica de belleza y estética en México. Combinamos
+            aparatología, cosmética profesional y un trato cercano para cuidar la
+            piel y el bienestar de cada persona que nos visita.
+          </p>
+        </section>
+
+        <section
+          data-bg="#3D1A1A"
+          className="flex min-h-[70vh] flex-col justify-center"
+        >
+          <h2 className="font-display text-3xl italic text-cream sm:text-4xl">
+            Filosofía
+          </h2>
+          <p className="mt-6 leading-relaxed text-sand">
+            Creemos en los resultados que se construyen con constancia y en
+            tratamientos diseñados para cada tipo de piel. Nada de fórmulas
+            genéricas: primero escuchamos, después proponemos.
+          </p>
+          <p className="mt-4 leading-relaxed text-sand">
+            Cada sesión es también una pausa. Un momento para bajar el ritmo y
+            reconectar con una misma.
+          </p>
+        </section>
+
+        <section
+          data-bg="#0E0A0A"
+          className="flex min-h-[70vh] flex-col justify-center"
+        >
+          <h2 className="font-display text-3xl italic text-cream sm:text-4xl">
+            Equipo
+          </h2>
+          <p className="mt-6 leading-relaxed text-sand">
+            Un equipo de especialistas en estética facial y corporal, en
+            formación continua para ofrecer técnicas actuales y seguras.
+          </p>
+          <p className="mt-4 text-sm text-muted">
+            (Perfiles del equipo pendientes de contenido del cliente.)
+          </p>
+        </section>
+
+        <section className="flex min-h-[50vh] flex-col justify-center border-t border-crimson-light pt-16">
+          <h2 className="font-display text-3xl italic text-cream sm:text-4xl">
+            ¿Nos visitas?
+          </h2>
+          <p className="mt-4 leading-relaxed text-sand">
+            Cuéntanos qué necesitas y agendamos tu cita.
+          </p>
+          <div className="mt-8">
+            <ButtonLink href="/contacto">Reservar una cita</ButtonLink>
+          </div>
+        </section>
+      </article>
+    </>
+  );
 }
