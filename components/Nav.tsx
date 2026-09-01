@@ -16,6 +16,7 @@ const links = [
 export function Nav() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -31,7 +32,7 @@ export function Nav() {
     <header
       className={clsx(
         "fixed inset-x-0 top-0 z-50 transition-colors duration-300",
-        scrolled ? "bg-noir/90 backdrop-blur-sm" : "bg-transparent",
+        scrolled || menuOpen ? "bg-noir/90 backdrop-blur-sm" : "bg-transparent",
       )}
     >
       <nav
@@ -56,7 +57,7 @@ export function Nav() {
             </Link>
           </li>
 
-          <NavDropdown />
+          <NavDropdown onOpenChange={setMenuOpen} />
 
           {links.map((link) => {
             const active = pathname.startsWith(link.href);

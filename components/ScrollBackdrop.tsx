@@ -24,6 +24,9 @@ export function ScrollBackdrop() {
         if (cancelled || !ref.current) return;
         gsap.registerPlugin(ScrollTrigger);
 
+        // No scope argument: gsap.context(fn, scope) would scope the
+        // "[data-bg]" selector to the backdrop div, which contains none of
+        // the page's sections. The sections live across the whole document.
         ctx = gsap.context(() => {
           gsap.utils.toArray<HTMLElement>("[data-bg]").forEach((section) => {
             const color = section.dataset.bg;
@@ -44,7 +47,7 @@ export function ScrollBackdrop() {
             });
           });
           ScrollTrigger.refresh();
-        }, ref.current);
+        });
       },
     );
 

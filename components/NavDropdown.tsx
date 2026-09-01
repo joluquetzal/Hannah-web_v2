@@ -8,15 +8,23 @@ import clsx from "clsx";
 import { servicios } from "@/data/servicios";
 
 /**
- * "Servicios" nav item with a submenu of the three categories.
+ * "Servicios" nav item with a full-width panel beneath the header.
+ *
+ * The panel is `absolute inset-x-0` and the <header> is the positioned
+ * ancestor, so it spans the header's width rather than the list item's.
  *
  * Disclosure pattern (button + aria-expanded), not role="menu": the panel
  * holds plain links, so browsers and screen readers treat them normally.
- * Opens on hover for pointers and on click / Enter / Space / ArrowDown for
- * keyboards. Closes on Escape (returning focus), outside click, focus leaving
- * the group, and route change.
+ * Opens on hover and on click / Enter / Space / ArrowDown; closes on Escape
+ * (restoring focus), outside pointerdown, focus leaving the group, and
+ * route change.
  */
-export function NavDropdown() {
+export function NavDropdown({
+  onOpenChange,
+}: {
+  /** Lets the header go solid while the panel is showing. */
+  onOpenChange?: (open: boolean) => void;
+}) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const panelId = useId();
@@ -30,13 +38,17 @@ export function NavDropdown() {
   const cancelClose = useCallback(() => clearTimeout(closeTimer.current), []);
   const closeSoon = useCallback(() => {
     cancelClose();
-    closeTimer.current = setTimeout(() => setOpen(false), 140);
+    closeTimer.current = setTimeout(() => setOpen(false), 160);
   }, [cancelClose]);
 
   // Close on navigation.
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    onOpenChange?.(open);
+  }, [open, onOpenChange]);
 
   // Close when a pointer goes down outside the group.
   useEffect(() => {
@@ -82,7 +94,6 @@ export function NavDropdown() {
   return (
     <li
       ref={containerRef}
-      className="relative"
       onMouseEnter={() => {
         cancelClose();
         setOpen(true);
@@ -97,9 +108,10 @@ export function NavDropdown() {
         aria-expanded={open}
         aria-controls={panelId}
         onClick={() => setOpen((v) => !v)}
+        onFocus={cancelClose}
         className={clsx(
           "inline-flex items-center gap-1.5 transition-colors hover:text-cream",
-          active ? "text-cream" : "text-sand",
+          active || open ? "text-cream" : "text-sand",
         )}
       >
         Servicios
@@ -121,38 +133,59 @@ export function NavDropdown() {
         </svg>
       </button>
 
+      {/* Spans the header: <header> is the positioned ancestor. */}
       <div
         id={panelId}
         hidden={!open}
-        className="absolute left-0 top-full z-50 min-w-[13rem] border border-crimson-light bg-noir/95 py-2 backdrop-blur-sm"
+        onMouseEnter={cancelClose}
+        onMouseLeave={closeSoon}
+        className="absolute inset-x-0 top-full border-y border-crimson-light bg-noir/95 backdrop-blur-md"
       >
-        <ul className="text-sm">
-          <li>
+        <div className="mx-auto max-w-6xl px-6 py-8">
+          <div className="flex items-baseline justify-between">
+            <p className="text-xs uppercase tracking-[0.3em] text-muted">
+              Nuestros servicios
+            </p>
             <Link
               data-menu-item
               href="/servicios"
-              aria-current={pathname === "/servicios" ? "page" : undefined}
-              className="block px-4 py-2 text-sand transition-colors hover:bg-crimson-light hover:text-cream"
+              className="text-xs uppercase tracking-[0.2em] text-sand transition-colors hover:text-cream"
             >
               Ver todos
             </Link>
-          </li>
-          {servicios.map((category) => (
-            <li key={category.slug}>
-              <Link
-                data-menu-item
-                href={category.href}
-                aria-current={pathname === category.href ? "page" : undefined}
-                className={clsx(
-                  "block px-4 py-2 transition-colors hover:bg-crimson-light hover:text-cream",
-                  pathname === category.href ? "text-cream" : "text-sand",
-                )}
-              >
-                {category.titulo}
-              </Link>
-            </li>
-          ))}
-        </ul>
+          </div>
+
+          <ul className="mt-6 grid gap-4 sm:grid-cols-3">
+            {servicios.map((category) => {
+              const current = pathname === category.href;
+              return (
+                <li key={category.slug}>
+                  <Link
+                    data-menu-item
+                    href={category.href}
+                    aria-current={current ? "page" : undefined}
+                    className={clsx(
+                      "group block h-full border p-5 transition-colors",
+                      current
+                        ? "border-sand/50 bg-crimson-light/40"
+                        : "border-crimson-light hover:border-sand/50 hover:bg-crimson-light/40",
+                    )}
+                  >
+                    <p className="font-display text-2xl italic text-cream">
+                      {category.titulo}
+                    </p>
+                    <p className="mt-2 text-sm leading-relaxed text-sand">
+                      {category.descripcion}
+                    </p>
+                    <span className="mt-4 inline-block text-[11px] uppercase tracking-[0.2em] text-muted transition-colors group-hover:text-sand">
+                      Ver tratamientos
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
     </li>
   );

@@ -1,7 +1,8 @@
 "use client";
 
-import { DayPicker } from "react-day-picker";
+import { DayPicker, getDefaultClassNames } from "react-day-picker";
 import { es } from "react-day-picker/locale";
+import "react-day-picker/style.css";
 import { fromISODate, toISODate, todayISO } from "@/lib/date";
 
 type Props = {
@@ -16,15 +17,37 @@ type Props = {
 
 /**
  * The calendar itself. Kept in its own module so DatePicker can load it
- * lazily — react-day-picker is ~23 kB and is only needed once someone opens
- * the field.
+ * lazily — react-day-picker is ~23 kB and is only needed once someone
+ * opens the field.
+ *
+ * The library's own stylesheet supplies the layout (table sizing, nav
+ * placement, dropdown positioning). We only re-theme it, through its CSS
+ * variables plus colour-only classes appended to the default class names —
+ * replacing those class names outright would strip the layout CSS.
  */
-export default function Calendar({
-  value,
-  min,
-  monthsAhead,
-  onSelect,
-}: Props) {
+
+/** Palette, mirrored from tailwind.config.ts. GSAP-free, plain CSS values. */
+const theme = [
+  "[--rdp-accent-color:#6B1414]",
+  "[--rdp-accent-background-color:#3D1A1A]",
+  "[--rdp-today-color:#C9A27A]",
+  "[--rdp-day_button-border-radius:0px]",
+  "[--rdp-day_button-border:1px_solid_transparent]",
+  "[--rdp-selected-border:1px_solid_#C9A27A]",
+  "[--rdp-day-width:2.5rem]",
+  "[--rdp-day-height:2.5rem]",
+  "[--rdp-day_button-width:2.5rem]",
+  "[--rdp-day_button-height:2.5rem]",
+  "[--rdp-nav_button-width:1.75rem]",
+  "[--rdp-nav_button-height:1.75rem]",
+  "[--rdp-disabled-opacity:0.25]",
+  "[--rdp-outside-opacity:0.4]",
+  "[--rdp-weekday-opacity:1]",
+].join(" ");
+
+export default function Calendar({ value, min, monthsAhead, onSelect }: Props) {
+  const defaults = getDefaultClassNames();
+
   const minDate = min ? fromISODate(min) : undefined;
   const selected = value ? fromISODate(value) : undefined;
   const startMonth = minDate ?? fromISODate(todayISO());
@@ -45,38 +68,24 @@ export default function Calendar({
       defaultMonth={selected ?? startMonth}
       startMonth={startMonth}
       endMonth={endMonth}
-      disabled={minDate ? { before: minDate } : undefined}
+      // Closed on Sundays — the clinic runs Monday to Saturday.
+      disabled={[...(minDate ? [{ before: minDate }] : []), { dayOfWeek: [0] }]}
       onSelect={(date) => {
         if (date) onSelect(toISODate(date));
       }}
       classNames={{
-        root: "text-sand",
-        months: "flex flex-col",
-        month: "w-full",
-        nav: "flex items-center justify-between pb-2",
-        button_previous:
-          "inline-flex h-7 w-7 items-center justify-center text-sand transition-colors hover:text-cream disabled:cursor-not-allowed disabled:opacity-30",
-        button_next:
-          "inline-flex h-7 w-7 items-center justify-center text-sand transition-colors hover:text-cream disabled:cursor-not-allowed disabled:opacity-30",
-        chevron: "h-3.5 w-3.5 fill-current",
-        month_caption: "flex items-center justify-center pb-3",
-        caption_label: "font-display text-lg italic capitalize text-cream",
-        dropdowns: "flex items-center justify-center gap-2",
-        dropdown_root: "relative",
-        dropdown:
-          "cursor-pointer border border-crimson-light bg-noir px-2 py-1 text-sm capitalize text-cream focus:border-sand focus:outline-none",
-        month_grid: "w-full border-collapse",
-        weekday:
-          "pb-2 text-center text-[10px] font-normal uppercase tracking-widest text-muted",
-        day: "p-0 text-center",
-        day_button:
-          "flex aspect-square w-full items-center justify-center text-sm transition-colors hover:bg-crimson-light hover:text-cream focus:outline-none focus-visible:ring-1 focus-visible:ring-sand",
-        selected: "[&>button]:bg-crimson [&>button]:text-cream",
-        today: "[&>button]:underline [&>button]:underline-offset-4",
-        outside: "[&>button]:text-muted/50",
-        disabled:
-          "[&>button]:cursor-not-allowed [&>button]:text-muted/40 [&>button]:hover:bg-transparent [&>button]:hover:text-muted/40",
-        hidden: "invisible",
+        ...defaults,
+        root: `${defaults.root} ${theme} text-sand`,
+        month_caption: `${defaults.month_caption} font-display text-lg italic capitalize text-cream`,
+        caption_label: `${defaults.caption_label} font-display text-lg italic capitalize text-cream`,
+        dropdown: `${defaults.dropdown} cursor-pointer border border-crimson-light bg-noir capitalize text-cream [&_option]:bg-noir [&_option]:text-cream`,
+        button_previous: `${defaults.button_previous} text-sand transition-colors hover:text-cream`,
+        button_next: `${defaults.button_next} text-sand transition-colors hover:text-cream`,
+        chevron: `${defaults.chevron} fill-current`,
+        weekday: `${defaults.weekday} text-[10px] font-normal uppercase tracking-widest text-muted`,
+        day_button: `${defaults.day_button} text-sm transition-colors hover:bg-crimson-light hover:text-cream focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sand`,
+        today: `${defaults.today} font-medium`,
+        disabled: `${defaults.disabled} line-through`,
       }}
     />
   );

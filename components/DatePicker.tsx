@@ -130,7 +130,7 @@ export function DatePicker({
         hidden={!open}
         role="dialog"
         aria-label="Elige una fecha"
-        className="absolute left-0 top-full z-40 mt-2 w-[20.5rem] border border-crimson-light bg-noir/95 p-4 backdrop-blur-sm"
+        className="absolute left-0 top-full z-40 mt-2 w-max max-w-[calc(100vw-3rem)] border border-crimson-light bg-noir/95 p-4 backdrop-blur-sm"
       >
         {/* Mounted only while open: this is a static export, so anything
             date-dependent in the server HTML would freeze at build time. */}
