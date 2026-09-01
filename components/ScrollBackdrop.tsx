@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 /**
  * Fixed backdrop whose colour crossfades as each `[data-bg]` section
  * scrolls through the viewport. Same idea as the old site.
- * Renders a static `noir` backdrop and does nothing under reduced motion.
+ * GSAP + ScrollTrigger are imported lazily (kept out of the initial
+ * bundle); renders a static `noir` backdrop and no-ops under reduced motion.
  */
 export function ScrollBackdrop() {
   const ref = useRef<HTMLDivElement>(null);
@@ -17,31 +16,42 @@ export function ScrollBackdrop() {
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    gsap.registerPlugin(ScrollTrigger);
+    let cancelled = false;
+    let ctx: { revert: () => void } | undefined;
 
-    const ctx = gsap.context(() => {
-      gsap.utils.toArray<HTMLElement>("[data-bg]").forEach((section) => {
-        const color = section.dataset.bg;
-        if (!color) return;
-        ScrollTrigger.create({
-          trigger: section,
-          start: "top 55%",
-          end: "bottom 55%",
-          onToggle: (self) => {
-            if (self.isActive) {
-              gsap.to(el, {
-                backgroundColor: color,
-                duration: 0.8,
-                overwrite: "auto",
-              });
-            }
-          },
-        });
-      });
-      ScrollTrigger.refresh();
-    });
+    void Promise.all([import("gsap"), import("gsap/ScrollTrigger")]).then(
+      ([{ gsap }, { ScrollTrigger }]) => {
+        if (cancelled || !ref.current) return;
+        gsap.registerPlugin(ScrollTrigger);
 
-    return () => ctx.revert();
+        ctx = gsap.context(() => {
+          gsap.utils.toArray<HTMLElement>("[data-bg]").forEach((section) => {
+            const color = section.dataset.bg;
+            if (!color) return;
+            ScrollTrigger.create({
+              trigger: section,
+              start: "top 55%",
+              end: "bottom 55%",
+              onToggle: (self) => {
+                if (self.isActive) {
+                  gsap.to(el, {
+                    backgroundColor: color,
+                    duration: 0.8,
+                    overwrite: "auto",
+                  });
+                }
+              },
+            });
+          });
+          ScrollTrigger.refresh();
+        }, ref.current);
+      },
+    );
+
+    return () => {
+      cancelled = true;
+      ctx?.revert();
+    };
   }, []);
 
   return (

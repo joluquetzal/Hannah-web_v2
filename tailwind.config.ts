@@ -12,7 +12,9 @@ const config: Config = {
         },
         sand: "#C9A27A",
         cream: "#F0E8DC",
-        muted: "#7A6E65",
+        // Nudged lighter than the design-doc #7A6E65 (which is ~3.98:1 on
+        // noir and fails WCAG AA for body text). #847A6F is ~4.74:1.
+        muted: "#847A6F",
       },
       fontFamily: {
         display: ["var(--font-cormorant)", "Georgia", "Cambria", "serif"],

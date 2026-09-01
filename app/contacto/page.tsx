@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Contacto",
   description:
     "Solicita tu reservación en HannaH. Dirección, teléfono, horarios y WhatsApp.",
+  alternates: { canonical: "/contacto" },
 };
 
 export default function ContactoPage() {

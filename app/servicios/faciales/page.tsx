@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Faciales",
   description:
     "Tratamientos faciales en HannaH: hidratante, anti acné, hidrodermoabrasión, Facial HannaH, rejuvenecedor y microdermoabrasión.",
+  alternates: { canonical: "/servicios/faciales" },
 };
 
 export default function FacialesPage() {

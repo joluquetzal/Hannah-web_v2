@@ -28,9 +28,10 @@ Copia `.env.example` a `.env.local` y completa las claves de EmailJS.
 ## Estado
 
 - [x] Fase 1 — Fundación: scaffold, layout global, Nav, Footer, tokens de diseño
-- [ ] Fase 2 — Contenido y páginas de servicios
-- [ ] Fase 3 — Landing y Nosotros + animaciones GSAP
-- [ ] Fase 4 — Contacto (formulario EmailJS, mapa, SEO)
-- [ ] Fase 5 — Pulido y rendimiento
+- [x] Fase 2 — Contenido y páginas de servicios
+- [x] Fase 3 — Landing y Nosotros + animaciones GSAP
+- [x] Fase 4 — Contacto (formulario EmailJS, mapa, SEO)
+- [x] Fase 5 — Pulido y rendimiento (GSAP lazy, 404, favicon, canonical, contraste)
+- [ ] Deploy — Vercel (pendiente)
 
 Convenciones de código en `.claude/rules/`.

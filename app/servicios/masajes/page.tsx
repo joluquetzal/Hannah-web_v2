@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Masajes",
   description:
     "Masajes en HannaH: relajante, piedras calientes, deportivo y modelador.",
+  alternates: { canonical: "/servicios/masajes" },
 };
 
 export default function MasajesPage() {

@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Servicios",
   description:
     "Faciales, masajes y tratamientos especiales en HannaH, clínica de belleza y estética.",
+  alternates: { canonical: "/servicios" },
 };
 
 export default function ServiciosPage() {

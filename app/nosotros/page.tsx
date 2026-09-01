@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Nosotros",
   description:
     "Conoce HannaH: nuestra filosofía, el equipo y la forma en que cuidamos tu piel.",
+  alternates: { canonical: "/nosotros" },
 };
 
 /* TODO: reemplazar todo el texto de esta página con el copy real del cliente. */

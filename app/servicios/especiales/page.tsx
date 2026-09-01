@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Especiales",
   description:
     "Tratamientos especiales en HannaH: skin booster, hilos tensores, nanobotox y mesobotox.",
+  alternates: { canonical: "/servicios/especiales" },
 };
 
 export default function EspecialesPage() {

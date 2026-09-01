@@ -7,7 +7,6 @@ import clsx from "clsx";
 import { site } from "@/lib/site";
 
 const links = [
-  { href: "/", label: "Inicio" },
   { href: "/servicios", label: "Servicios" },
   { href: "/nosotros", label: "Nosotros" },
   { href: "/contacto", label: "Contacto" },
@@ -42,12 +41,9 @@ export function Nav() {
           {site.name}
         </Link>
 
-        <ul className="flex items-center gap-6 text-sm">
+        <ul className="flex items-center gap-5 text-[13px] sm:gap-7 sm:text-sm">
           {links.map((link) => {
-            const active =
-              link.href === "/"
-                ? pathname === "/"
-                : pathname.startsWith(link.href);
+            const active = pathname.startsWith(link.href);
             return (
               <li key={link.href}>
                 <Link
