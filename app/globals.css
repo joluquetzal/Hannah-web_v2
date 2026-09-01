@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    @apply bg-noir font-body text-sand antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display font-light text-cream;
+  }
+
+  ::selection {
+    @apply bg-crimson text-cream;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-sand;
+  }
+}
