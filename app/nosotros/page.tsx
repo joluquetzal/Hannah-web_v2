@@ -70,13 +70,13 @@ export default function NosotrosPage() {
 
         <section className="flex min-h-[50vh] flex-col justify-center border-t border-crimson-light pt-16">
           <h2 className="font-display text-3xl italic text-cream sm:text-4xl">
-            ¿Nos visitas?
+            ¿Hablamos?
           </h2>
           <p className="mt-4 leading-relaxed text-sand">
-            Cuéntanos qué necesitas y agendamos tu cita.
+            Cuéntanos qué necesitas y te respondemos pronto.
           </p>
           <div className="mt-8">
-            <ButtonLink href="/contacto">Reservar una cita</ButtonLink>
+            <ButtonLink href="/contacto">Contáctanos</ButtonLink>
           </div>
         </section>
       </article>

@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { ReservationForm } from "@/components/ReservationForm";
+import { ContactForm } from "@/components/ContactForm";
 import { ClinicInfo } from "@/components/ClinicInfo";
 
 export const metadata: Metadata = {
   title: "Contacto",
   description:
-    "Solicita tu reservación en HannaH. Dirección, teléfono, horarios y WhatsApp.",
+    "Ponte en contacto con HannaH. Escríbenos y te respondemos pronto. Dirección, teléfono, horarios y WhatsApp.",
   alternates: { canonical: "/contacto" },
 };
 
@@ -17,13 +17,12 @@ export default function ContactoPage() {
           Contacto
         </h1>
         <p className="mt-4 leading-relaxed text-sand">
-          Déjanos tus datos y la fecha que prefieres. Te contactamos para
-          confirmar tu cita.
+          Déjanos un mensaje con tus datos y te respondemos lo antes posible.
         </p>
       </header>
 
       <div className="mt-14 grid gap-14 md:grid-cols-[1.4fr_1fr]">
-        <ReservationForm />
+        <ContactForm />
         <ClinicInfo />
       </div>
     </div>

@@ -1,12 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 import emailjs from "@emailjs/browser";
 import clsx from "clsx";
-import { DatePicker } from "@/components/DatePicker";
-import { servicioOptions } from "@/lib/servicioOptions";
-import { fromISODate, todayISO } from "@/lib/date";
 import { site } from "@/lib/site";
 
 const SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
@@ -15,31 +12,16 @@ const PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
 
 const MAX_MENSAJE = 500;
 
-type FieldName =
-  | "nombre"
-  | "email"
-  | "servicio"
-  | "fecha"
-  | "telefono"
-  | "mensaje";
+type FieldName = "nombre" | "email" | "telefono" | "mensaje";
 type Values = Record<FieldName, string>;
 type Errors = Partial<Record<FieldName, string>>;
 type Status = "idle" | "sending" | "success" | "error";
 
-const FIELDS: readonly FieldName[] = [
-  "nombre",
-  "email",
-  "servicio",
-  "fecha",
-  "telefono",
-  "mensaje",
-];
+const FIELDS: readonly FieldName[] = ["nombre", "email", "telefono", "mensaje"];
 
 const EMPTY: Values = {
   nombre: "",
   email: "",
-  servicio: "",
-  fecha: "",
   telefono: "",
   mensaje: "",
 };
@@ -64,17 +46,6 @@ function validateField(name: FieldName, values: Values): string | undefined {
         return "Revisa tu correo electrónico.";
       return undefined;
 
-    case "servicio":
-      if (!value) return "Elige un servicio.";
-      return undefined;
-
-    case "fecha":
-      if (!value) return "Elige una fecha.";
-      if (value < todayISO()) return "La fecha no puede ser en el pasado.";
-      if (fromISODate(value).getDay() === 0)
-        return "Los domingos no abrimos. Elige otro día.";
-      return undefined;
-
     case "telefono": {
       const digits = digitsOf(value);
       if (!digits) return "Escribe tu teléfono.";
@@ -84,8 +55,8 @@ function validateField(name: FieldName, values: Values): string | undefined {
     }
 
     case "mensaje":
-      if (value.length > MAX_MENSAJE)
-        return `Máximo ${MAX_MENSAJE} caracteres.`;
+      if (!value) return "Escribe tu mensaje.";
+      if (value.length > MAX_MENSAJE) return `Máximo ${MAX_MENSAJE} caracteres.`;
       return undefined;
   }
 }
@@ -130,18 +101,13 @@ function Field({
   );
 }
 
-export function ReservationForm() {
+export function ContactForm() {
   const [values, setValues] = useState<Values>(EMPTY);
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<Status>("idle");
-  // Resolved after mount: this is a static export, so calling todayISO()
-  // during render would bake the build date into the HTML.
-  const [minDate, setMinDate] = useState("");
 
   const sending = useRef(false);
   const honeypotRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => setMinDate(todayISO()), []);
 
   function setField(name: FieldName, value: string) {
     const next = { ...values, [name]: value };
@@ -215,15 +181,14 @@ export function ReservationForm() {
       <div role="status" className="border border-crimson-light p-8 text-sand">
         <p className="font-display text-3xl italic text-cream">Gracias.</p>
         <p className="mt-3 text-sm leading-relaxed">
-          Recibimos tu solicitud y te contactaremos pronto para confirmar tu
-          cita.
+          Recibimos tu mensaje y te responderemos lo antes posible.
         </p>
         <button
           type="button"
           onClick={() => setStatus("idle")}
           className="mt-6 text-xs uppercase tracking-[0.2em] text-muted transition-colors hover:text-sand"
         >
-          Enviar otra solicitud
+          Enviar otro mensaje
         </button>
       </div>
     );
@@ -265,7 +230,11 @@ export function ReservationForm() {
         id="email"
         label="Correo electrónico"
         error={errors.email}
-        hint={<span className="text-[10px] uppercase tracking-widest text-muted">Opcional</span>}
+        hint={
+          <span className="text-[10px] uppercase tracking-widest text-muted">
+            Opcional
+          </span>
+        }
       >
         <input
           {...fieldProps("email")}
@@ -278,77 +247,9 @@ export function ReservationForm() {
         />
       </Field>
 
-      <Field id="servicio" label="Servicio" error={errors.servicio}>
-        <div className="relative">
-          <select
-            {...fieldProps("servicio")}
-            onChange={(e) => setField("servicio", e.target.value)}
-            className={clsx(
-              inputClass,
-              borderClass(Boolean(errors.servicio)),
-              "cursor-pointer appearance-none pr-11",
-              // Native dropdown lists ignore the control's colours, so the
-              // options need their own or they render light-on-light.
-              "[&_optgroup]:bg-noir [&_optgroup]:text-muted",
-              "[&_option]:bg-noir [&_option]:text-cream",
-              values.servicio ? "text-cream" : "text-muted",
-            )}
-          >
-            <option value="">Elige un servicio</option>
-            {servicioOptions.map((group) => (
-              <optgroup key={group.grupo} label={group.grupo}>
-                {group.opciones.map((nombre) => (
-                  <option key={nombre} value={nombre}>
-                    {nombre}
-                  </option>
-                ))}
-              </optgroup>
-            ))}
-          </select>
-          <svg
-            aria-hidden
-            viewBox="0 0 10 6"
-            className="pointer-events-none absolute right-4 top-1/2 h-1.5 w-2.5 -translate-y-1/2 text-sand"
-          >
-            <path
-              d="M1 1l4 4 4-4"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-          </svg>
-        </div>
-      </Field>
-
-      <Field
-        id="fecha"
-        label="Fecha preferida"
-        error={errors.fecha}
-        hint={
-          <span className="text-[10px] uppercase tracking-widest text-muted">
-            Lun a Sáb
-          </span>
-        }
-      >
-        <DatePicker
-          id="fecha"
-          name="fecha"
-          value={values.fecha}
-          onChange={(iso) => {
-            const next = { ...values, fecha: iso };
-            setValues(next);
-            setErrors({ ...errors, fecha: validateField("fecha", next) });
-          }}
-          min={minDate}
-          invalid={Boolean(errors.fecha)}
-          describedBy={errors.fecha ? "fecha-error" : undefined}
-        />
-      </Field>
-
       <Field
         id="mensaje"
-        label="Mensaje (opcional)"
+        label="Mensaje"
         error={errors.mensaje}
         hint={
           <span
@@ -363,9 +264,9 @@ export function ReservationForm() {
       >
         <textarea
           {...fieldProps("mensaje")}
-          rows={4}
+          rows={5}
           maxLength={MAX_MENSAJE}
-          placeholder="¿Algo que debamos saber antes de tu cita?"
+          placeholder="¿En qué podemos ayudarte?"
           onChange={(e) => setField("mensaje", e.target.value)}
           className={clsx(
             inputClass,
@@ -392,7 +293,7 @@ export function ReservationForm() {
       <div aria-live="polite" className="min-h-[1.25rem] text-sm">
         {status === "error" && (
           <p className="text-crimson">
-            No pudimos enviar tu solicitud. Inténtalo de nuevo o escríbenos por{" "}
+            No pudimos enviar tu mensaje. Inténtalo de nuevo o escríbenos por{" "}
             <a
               href={site.whatsapp}
               target="_blank"
@@ -411,7 +312,7 @@ export function ReservationForm() {
         disabled={status === "sending"}
         className="inline-flex items-center justify-center bg-crimson px-7 py-3 text-xs uppercase tracking-[0.2em] text-cream transition-colors hover:bg-crimson-light disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {status === "sending" ? "Enviando…" : "Enviar solicitud"}
+        {status === "sending" ? "Enviando…" : "Enviar mensaje"}
       </button>
     </form>
   );
