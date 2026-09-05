@@ -59,7 +59,7 @@ export function Footer() {
             © {year} {site.legalName}. Todos los derechos reservados.
           </p>
           <Link href="/contacto" className="hover:text-sand">
-            Reservar una cita
+            Contáctanos
           </Link>
         </div>
       </div>

@@ -8,7 +8,7 @@ Frontend estático, sin backend.
 - Next.js 14 (App Router, `output: 'export'`)
 - Tailwind CSS v3
 - GSAP + ScrollTrigger (animaciones)
-- EmailJS (formulario de reservación, sin backend)
+- EmailJS (formulario de contacto, sin backend)
 - Deploy: Vercel
 
 ## Comandos

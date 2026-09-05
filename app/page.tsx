@@ -45,7 +45,7 @@ export default function HomePage() {
           <div data-reveal className="mt-10 flex flex-wrap gap-4">
             <ButtonLink href="/servicios">Ver servicios</ButtonLink>
             <ButtonLink href="/contacto" variant="ghost">
-              Reservar
+              Contacto
             </ButtonLink>
           </div>
         </div>

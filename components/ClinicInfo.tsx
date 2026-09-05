@@ -49,13 +49,23 @@ export function ClinicInfo() {
       </dl>
 
       {site.mapEmbedUrl ? (
-        <iframe
-          src={site.mapEmbedUrl}
-          title="Ubicación de HannaH en el mapa"
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          className="aspect-[4/3] w-full border border-crimson-light"
-        />
+        <div>
+          <iframe
+            src={site.mapEmbedUrl}
+            title="Ubicación de HannaH en el mapa"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            className="aspect-[4/3] w-full border border-crimson-light"
+          />
+          <a
+            href={site.mapLinkUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-block text-xs uppercase tracking-[0.2em] text-muted transition-colors hover:text-sand"
+          >
+            Abrir en Google Maps
+          </a>
+        </div>
       ) : (
         <div className="flex aspect-[4/3] w-full items-center justify-center border border-dashed border-crimson-light text-sm text-muted">
           Mapa pendiente

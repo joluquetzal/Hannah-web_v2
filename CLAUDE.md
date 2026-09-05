@@ -2,7 +2,7 @@
 
 ## What this project is
 
-HannaH is a beauty and aesthetics clinic based in Mexico. This is their **marketing/showcase website** — frontend only, no backend, no ecommerce. The goal is to present the clinic's services, tell their story, and allow visitors to make a reservation request.
+HannaH is a beauty and aesthetics clinic based in Mexico. This is their **marketing/showcase website** — frontend only, no backend, no ecommerce. The goal is to present the clinic's services, tell their story, and let visitors get in touch. There is **no appointment/booking flow** — the site links to a plain contact form.
 
 ## Tech stack
 
@@ -34,7 +34,7 @@ app/
     masajes/page.tsx      # /servicios/masajes
     especiales/page.tsx   # /servicios/especiales
   nosotros/page.tsx       # /nosotros — about us
-  contacto/page.tsx       # /contacto — contact + reservation form
+  contacto/page.tsx       # /contacto — contact form + clinic info
 components/
   Nav.tsx                 # fixed nav, transparent → solid on scroll
   Footer.tsx
@@ -83,7 +83,7 @@ All tokens are defined in `tailwind.config.ts` under `theme.extend`.
 
 ### `/` — Landing
 
-Hero only. Brand statement, atmospheric image or video, CTA buttons ("Ver Servicios" → `/servicios`, "Reservar" → `/contacto`). No service listings here.
+Hero only. Brand statement, atmospheric image or video, CTA buttons ("Ver Servicios" → `/servicios`, "Contacto" → `/contacto`). No service listings here.
 
 ### `/servicios` — Hub
 
@@ -107,7 +107,7 @@ About the clinic: who they are, their philosophy, the team. Content TBD — plac
 
 ### `/contacto`
 
-Reservation form: nombre, servicio (select), fecha preferida, teléfono, mensaje. Submits via EmailJS. Also shows: address, phone, hours, WhatsApp link, map embed.
+Contact form: nombre, teléfono, correo electrónico (optional), mensaje. Submits via EmailJS. No date picker, no service selector — it is not a booking form. Also shows: address, phone, hours, WhatsApp link, map embed.
 
 ## Service data
 
@@ -191,7 +191,7 @@ Reservation form: nombre, servicio (select), fecha preferida, teléfono, mensaje
 
 - No backend, no API routes, no database
 - No authentication
-- Reservations = EmailJS form only (no calendar booking system)
+- No reservations/booking — a plain EmailJS contact form only (no calendar, no service selector)
 - Static export (`output: 'export'` in next.config.ts)
 - Each service category has its own route (`/servicios/faciales`, not anchor links)
 - Landing page (`/`) contains NO service listings

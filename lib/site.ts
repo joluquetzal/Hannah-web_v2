@@ -18,21 +18,25 @@ export const site = {
   email: "contacto@hannah.mx",
   emailHref: "mailto:contacto@hannah.mx",
 
-  // Location — TODO
+  // Location — TODO: confirm exact street number and postal code with client
   address: {
-    street: "Calle Sin Nombre 000",
-    neighborhood: "Colonia",
+    street: "Eugenia 1309",
+    neighborhood: "Col. Narvarte",
     city: "Ciudad de México",
     state: "CDMX",
-    postalCode: "00000",
+    postalCode: "03020",
     country: "MX",
   },
 
   // Hours — TODO
   hours: "Lunes a sábado, 10:00 – 19:00",
 
-  // Embeds — TODO
-  mapEmbedUrl: "",
+  // Google Maps embed (keyless `?q=…&output=embed` form) + a plain link
+  // for "abrir en Google Maps". Both point at the address above.
+  mapEmbedUrl:
+    "https://www.google.com/maps?q=Eugenia%201309%2C%20Col.%20Narvarte%2C%20CDMX%2C%20M%C3%A9xico&output=embed",
+  mapLinkUrl:
+    "https://www.google.com/maps/search/?api=1&query=Eugenia%201309%2C%20Col.%20Narvarte%2C%20CDMX%2C%20M%C3%A9xico",
 
   // Social — TODO
   social: {
