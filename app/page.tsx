@@ -22,7 +22,7 @@ export default function HomePage() {
       <div className="absolute inset-0 bg-gradient-to-b from-noir/50 via-noir/40 to-noir" />
 
       <HeroReveal>
-        <div className="relative mx-auto w-full max-w-4xl px-6">
+        <div className="relative mx-auto w-full max-w-4xl px-gutter">
           <p
             data-reveal
             className="text-xs uppercase tracking-[0.3em] text-muted"
@@ -31,7 +31,7 @@ export default function HomePage() {
           </p>
           <h1
             data-reveal
-            className="mt-6 font-display text-5xl italic leading-[1.05] text-cream sm:text-7xl"
+            className="mt-6 font-display text-display-lg italic leading-[1.05] text-cream"
           >
             El cuidado de tu piel, como un ritual
           </h1>

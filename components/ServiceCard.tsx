@@ -6,7 +6,7 @@ export function ServiceCard({ category }: { category: ServiceCategory }) {
   return (
     <Link
       href={category.href}
-      className="group relative flex min-h-[65vh] flex-col justify-end overflow-hidden border border-crimson-light"
+      className="group relative flex aspect-[4/5] flex-col justify-end overflow-hidden border border-crimson-light"
     >
       <Image
         src={category.cover}
@@ -16,7 +16,7 @@ export function ServiceCard({ category }: { category: ServiceCategory }) {
         className="object-cover opacity-50 transition duration-700 group-hover:scale-105 group-hover:opacity-70"
       />
       <div className="relative z-10 bg-gradient-to-t from-noir via-noir/70 to-transparent p-8">
-        <h2 className="font-display text-3xl italic text-cream">
+        <h2 className="font-display text-display-sm italic text-cream">
           {category.titulo}
         </h2>
         <p className="mt-2 max-w-xs text-sm text-sand">{category.descripcion}</p>

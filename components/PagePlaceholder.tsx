@@ -10,8 +10,8 @@ export function PagePlaceholder({
   phase: string;
 }) {
   return (
-    <section className="mx-auto max-w-3xl px-6 pb-24 pt-40">
-      <h1 className="font-display text-4xl italic text-cream sm:text-5xl">
+    <section className="px-gutter pb-section-b pt-top-clear">
+      <h1 className="font-display text-display-md italic text-cream">
         {title}
       </h1>
       <p className="mt-4 text-sm text-muted">

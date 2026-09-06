@@ -47,7 +47,7 @@ export function TreatmentRow({
 
       <div className={clsx(imageRight ? "md:order-1" : "md:order-2")}>
         <div className="flex items-baseline gap-3">
-          <h2 className="font-display text-3xl italic text-cream sm:text-4xl">
+          <h2 className="font-display text-display-sm italic text-cream">
             {treatment.nombre}
           </h2>
           {treatment.destacado && (

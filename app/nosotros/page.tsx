@@ -16,15 +16,15 @@ export default function NosotrosPage() {
     <>
       <ScrollBackdrop />
 
-      <article className="mx-auto max-w-3xl px-6 pb-32 pt-40">
+      <article className="px-gutter pb-section-b-lg pt-top-clear">
         <section
           data-bg={backdrop.noir}
-          className="flex min-h-[70vh] flex-col justify-center"
+          className="mx-auto flex min-h-[70vh] max-w-prose flex-col justify-center"
         >
           <p className="text-xs uppercase tracking-[0.3em] text-muted">
             Nosotros
           </p>
-          <h1 className="mt-6 font-display text-4xl italic text-cream sm:text-5xl">
+          <h1 className="mt-6 font-display text-display-md italic text-cream">
             Un espacio para el cuidado, sin prisa
           </h1>
           <p className="mt-6 leading-relaxed text-sand">
@@ -36,9 +36,9 @@ export default function NosotrosPage() {
 
         <section
           data-bg={backdrop.crimsonLight}
-          className="flex min-h-[70vh] flex-col justify-center"
+          className="mx-auto flex min-h-[70vh] max-w-prose flex-col justify-center"
         >
-          <h2 className="font-display text-3xl italic text-cream sm:text-4xl">
+          <h2 className="font-display text-display-sm italic text-cream">
             Filosofía
           </h2>
           <p className="mt-6 leading-relaxed text-sand">
@@ -54,9 +54,9 @@ export default function NosotrosPage() {
 
         <section
           data-bg={backdrop.noir}
-          className="flex min-h-[70vh] flex-col justify-center"
+          className="mx-auto flex min-h-[70vh] max-w-prose flex-col justify-center"
         >
-          <h2 className="font-display text-3xl italic text-cream sm:text-4xl">
+          <h2 className="font-display text-display-sm italic text-cream">
             Equipo
           </h2>
           <p className="mt-6 leading-relaxed text-sand">
@@ -68,8 +68,8 @@ export default function NosotrosPage() {
           </p>
         </section>
 
-        <section className="flex min-h-[50vh] flex-col justify-center border-t border-crimson-light pt-16">
-          <h2 className="font-display text-3xl italic text-cream sm:text-4xl">
+        <section className="mx-auto flex min-h-[50vh] max-w-prose flex-col justify-center border-t border-crimson-light pt-16">
+          <h2 className="font-display text-display-sm italic text-cream">
             ¿Hablamos?
           </h2>
           <p className="mt-4 leading-relaxed text-sand">

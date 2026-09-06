@@ -178,7 +178,10 @@ export function ContactForm() {
 
   if (status === "success") {
     return (
-      <div role="status" className="border border-crimson-light p-8 text-sand">
+      <div
+        role="status"
+        className="flex h-full flex-col justify-center border border-crimson-light p-8 text-sand"
+      >
         <p className="font-display text-3xl italic text-cream">Gracias.</p>
         <p className="mt-3 text-sm leading-relaxed">
           Recibimos tu mensaje y te responderemos lo antes posible.
@@ -197,7 +200,11 @@ export function ContactForm() {
   const mensajeLeft = MAX_MENSAJE - values.mensaje.length;
 
   return (
-    <form onSubmit={onSubmit} noValidate className="space-y-6">
+    <form
+      onSubmit={onSubmit}
+      noValidate
+      className="flex h-full flex-col justify-center space-y-6"
+    >
       <Field id="nombre" label="Nombre" error={errors.nombre}>
         <input
           {...fieldProps("nombre")}

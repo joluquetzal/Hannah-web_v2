@@ -141,7 +141,7 @@ export function NavDropdown({
         onMouseLeave={closeSoon}
         className="absolute inset-x-0 top-full border-y border-crimson-light bg-noir/95 backdrop-blur-md"
       >
-        <div className="mx-auto max-w-6xl px-6 py-8">
+        <div className="px-gutter py-8">
           <div className="flex items-baseline justify-between">
             <p className="text-xs uppercase tracking-[0.3em] text-muted">
               Nuestros servicios

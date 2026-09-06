@@ -16,9 +16,9 @@ export default function MasajesPage() {
     <>
       <ScrollBackdrop />
 
-      <div className="mx-auto max-w-5xl px-6 pb-24 pt-40">
-        <header data-bg={backdrop.noir} className="max-w-2xl">
-          <h1 className="font-display text-4xl italic text-cream sm:text-5xl">
+      <div className="px-gutter pb-section-b pt-top-clear">
+        <header data-bg={backdrop.noir} className="max-w-prose">
+          <h1 className="font-display text-display-md italic text-cream">
             Masajes
           </h1>
           <p className="mt-4 leading-relaxed text-sand">
