@@ -2,7 +2,7 @@ import { site } from "@/lib/site";
 
 export function ClinicInfo() {
   return (
-    <div className="space-y-8">
+    <div className="flex h-full flex-col justify-center space-y-8">
       <div>
         <h2 className="font-display text-2xl italic text-cream">Visítanos</h2>
         <address className="mt-3 not-italic leading-relaxed text-sand">

@@ -6,7 +6,7 @@ export function Footer() {
 
   return (
     <footer className="border-t border-crimson-light bg-noir">
-      <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 sm:grid-cols-3">
+      <div className="grid gap-10 px-gutter py-14 sm:grid-cols-3">
         <div>
           <p className="font-display text-2xl italic text-cream">{site.name}</p>
           <p className="mt-2 text-sm text-muted">{site.tagline}</p>
@@ -54,7 +54,7 @@ export function Footer() {
       </div>
 
       <div className="border-t border-crimson-light">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-6 text-xs text-muted sm:flex-row sm:justify-between">
+        <div className="flex flex-col gap-2 px-gutter py-6 text-xs text-muted sm:flex-row sm:justify-between">
           <p>
             © {year} {site.legalName}. Todos los derechos reservados.
           </p>
