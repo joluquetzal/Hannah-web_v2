@@ -64,7 +64,7 @@ export function TreatmentRow({
             {nombre}
           </h2>
           {treatment.destacado && (
-            <span className="text-crimson" aria-label={t.signature}>
+            <span className="text-crimson-bright" aria-label={t.signature}>
               ★
             </span>
           )}

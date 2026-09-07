@@ -79,11 +79,12 @@ All tokens are defined in `tailwind.config.ts` under `theme.extend`.
 | Token | Hex | Use |
 |---|---|---|
 | `noir` | `#0E0A0A` | Dark ground, backgrounds |
-| `crimson` | `#6B1414` | Deep red accent (brand) |
-| `crimson-light` | `#3D1A1A` | Mid-dark surface |
+| `crimson` | `#6B1414` | Deep red accent (brand) — **background only**, fails as text/border on noir (1.63:1) |
+| `crimson-light` | `#3D1A1A` | Mid-dark surface, borders |
+| `crimson-bright` | `#E0938A` | Error / alert text and borders on dark (~8.2:1 on noir) |
 | `sand` | `#C9A27A` | Warm gold — body text on dark |
 | `cream` | `#F0E8DC` | Light headings on dark |
-| `muted` | `#7A6E65` | Secondary text |
+| `muted` | `#847A6F` | Secondary text (min. that passes AA on noir — don't darken) |
 
 ### Typography
 
@@ -329,4 +330,4 @@ Per `.claude/rules/layout-responsive.md` §Verification:
 ### Out of scope for this pass
 
 - **Placeholder art.** `public/images/**` holds ~600-byte SVG stubs and 42-byte GIFs. They render exactly as coded; image regions will look empty until real photos arrive. That is a content gap, not a CSS bug — do not "fix" it in CSS and do not replace the files.
-- **Accessibility debt** surfaced by the conventions but not by this review, and touching files this pass does not: `text-crimson` on `noir` measures 1.63:1 and is currently the colour of form validation errors in `ContactForm.tsx`; touch targets are under-size (footer and `ClinicInfo` links 16px tall, submit 40px, CTAs 42px, mobile menu button 40×40). Run these as a separate pass.
+- **Accessibility debt** surfaced by the conventions but not by this review: touch targets are under-size (footer and `ClinicInfo` links 16px tall, submit 40px, CTAs 42px, mobile menu button 40×40). Still a separate pass. *(The `text-crimson`-on-`noir` error-colour issue is fixed — `crimson-bright` token added; see `.claude/rules/accessibility-seo.md`.)*

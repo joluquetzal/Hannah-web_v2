@@ -85,7 +85,7 @@ const inputClass =
   "w-full border bg-transparent px-4 py-3 text-cream placeholder:text-muted focus:outline-none";
 
 const borderClass = (invalid: boolean) =>
-  invalid ? "border-crimson" : "border-crimson-light focus:border-sand";
+  invalid ? "border-crimson-bright" : "border-crimson-light focus:border-sand";
 
 function Field({
   id,
@@ -113,7 +113,11 @@ function Field({
       </div>
       <div className="mt-2">{children}</div>
       {error && (
-        <p id={`${id}-error`} role="alert" className="mt-1 text-sm text-crimson">
+        <p
+          id={`${id}-error`}
+          role="alert"
+          className="mt-1 text-sm text-crimson-bright"
+        >
           {error}
         </p>
       )}
@@ -353,7 +357,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
 
       <div aria-live="polite" className="min-h-[1.25rem] text-sm">
         {status === "error" && (
-          <p className="text-crimson">
+          <p className="text-crimson-bright">
             {t.errorLead}{" "}
             <a
               href={site.whatsapp}

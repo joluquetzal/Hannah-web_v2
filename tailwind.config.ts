@@ -7,8 +7,9 @@ const config: Config = {
       colors: {
         noir: "#0E0A0A",
         crimson: {
-          DEFAULT: "#6B1414",
-          light: "#3D1A1A",
+          DEFAULT: "#6B1414", // brand red — BACKGROUND only (1.63:1 on noir, fails as text)
+          light: "#3D1A1A", // mid-dark surface
+          bright: "#E0938A", // error / alert TEXT and borders on dark — ~8.2:1 on noir
         },
         sand: "#C9A27A",
         cream: "#F0E8DC",

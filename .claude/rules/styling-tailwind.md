@@ -1,7 +1,9 @@
 # Styling — Tailwind CSS v3
 
 - Tailwind utilities only. No inline `style={{}}` (except computed values GSAP must read/write), no CSS modules, no styled-components.
-- Use design tokens from `tailwind.config.ts` — `text-sand`, `bg-noir`, `text-cream`, `border-crimson`, etc. Never raw hex in JSX or arbitrary values like `text-[#6B1414]` when a token exists.
+- Use design tokens from `tailwind.config.ts` — `text-sand`, `bg-noir`, `text-cream`, `border-crimson-light`, etc. Never raw hex in JSX or arbitrary values like `text-[#6B1414]` when a token exists.
+- **Arbitrary values are inline styles with extra syntax.** `[70vh]`, `[1.4fr_1fr]`, `[0.3em]`, `min-h-[45vh]` bypass the design system, can't be reviewed at a glance, and fail *silently* when mistyped. An arbitrary value needs either a token in `tailwind.config.ts` or a short comment saying why the scale doesn't cover it. (Never size a content section by viewport height — `layout-responsive.md` §5.)
+- **A new `tailwind.config.ts` token needs a dev-server restart to take effect.** Until then the class emits nothing — no error, no style. If a style change appears to do nothing, restart the dev server before debugging further.
 - Font families via the configured families: `font-display` (Cormorant Garamond) for headings/treatment names, `font-body` (DM Sans) for everything else.
 - Class order: layout → box model → typography → color → state/variants. Keep it consistent; if `prettier-plugin-tailwindcss` is installed let it sort.
 - Extract a repeated cluster of 6+ classes into a component, not a `@apply` soup.

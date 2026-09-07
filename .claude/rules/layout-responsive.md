@@ -106,12 +106,14 @@ Minimum 4.5:1 for body text, 3:1 for large text. Measured against `noir` (#0E0A0
 | `cream` on `crimson` button | 9.96:1 | ✅ |
 | `sand` on `crimson-light` | 6.56:1 | ✅ |
 | `muted` #847A6F | 4.68:1 | ✅ (just passes — don't darken it) |
-| **`crimson` #6B1414 as text** | **1.63:1** | ❌ **fails at any size** |
+| `crimson-bright` #E0938A as text | 8.17:1 | ✅ (error / alert text + borders) |
+| **`crimson` #6B1414 as text or border** | **1.63:1** | ❌ **fails at any size** |
 
-**`crimson` is a background colour, never a text colour on `noir`.** It is currently used
-for form validation errors and the send-failure message in `ContactForm.tsx`, where it is
-effectively invisible. Error text must use a light colour (e.g. `cream`, or a lighter red
-added to the palette).
+**`crimson` is a background colour, never a text or border colour on `noir`.** A
+`crimson-bright` token (#E0938A, ~8:1) was added for this: `ContactForm.tsx` validation
+errors, the invalid-field border and the send-failure message now use it, as does the
+signature-treatment ★ and the draft banner on the legal pages. If you see `text-crimson`
+or `border-crimson` on a dark surface, it's a bug — use `crimson-bright` or `cream`.
 
 Keep the colour table in `CLAUDE.md` in sync with `tailwind.config.ts` — the doc currently
 lists `muted` as `#7A6E65`, which measures 3.98:1 and fails; the config correctly uses

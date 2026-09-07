@@ -24,7 +24,7 @@ export function LegalPageView({
           {legal.lastUpdatedLabel} {legal.lastUpdated}
         </p>
 
-        <p className="mt-6 border-l-2 border-crimson pl-4 text-sm text-muted">
+        <p className="mt-6 border-l-2 border-crimson-bright pl-4 text-sm text-crimson-bright">
           {legal.placeholderNote}
         </p>
 
