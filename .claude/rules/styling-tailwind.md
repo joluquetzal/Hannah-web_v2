@@ -5,6 +5,7 @@
 - **Arbitrary values are inline styles with extra syntax.** `[70vh]`, `[1.4fr_1fr]`, `[0.3em]`, `min-h-[45vh]` bypass the design system, can't be reviewed at a glance, and fail *silently* when mistyped. An arbitrary value needs either a token in `tailwind.config.ts` or a short comment saying why the scale doesn't cover it. (Never size a content section by viewport height — `layout-responsive.md` §5.)
 - **A new `tailwind.config.ts` token needs a dev-server restart to take effect.** Until then the class emits nothing — no error, no style. If a style change appears to do nothing, restart the dev server before debugging further.
 - Font families via the configured families: `font-display` (Cormorant Garamond) for headings/treatment names, `font-body` (DM Sans) for everything else.
+- Text sizes and letter-spacing come from the **closed scale** in `layout-responsive.md` §7: `text-display-*` / `text-2xl` / `text-lg` / base / `text-sm` / `text-xs`, plus `tracking-label` (0.2em) and `tracking-eyebrow` (0.3em) for uppercase. No `text-[Npx]`, no `tracking-[…em]`, nothing below `text-xs` (12px), and uppercase text is always tracked.
 - Class order: layout → box model → typography → color → state/variants. Keep it consistent; if `prettier-plugin-tailwindcss` is installed let it sort.
 - Extract a repeated cluster of 6+ classes into a component, not a `@apply` soup.
 - Responsive: mobile-first. Base styles are mobile; layer `sm:` `md:` `lg:` upward. Don't write desktop-first with `max-*`.

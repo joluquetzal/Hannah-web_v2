@@ -14,7 +14,7 @@ export function ButtonLink({ href, children, variant = "solid", className }: Pro
     <Link
       href={href}
       className={clsx(
-        "inline-flex items-center justify-center px-7 py-3 text-xs uppercase tracking-[0.2em] transition-colors",
+        "inline-flex items-center justify-center px-7 py-3 text-xs uppercase tracking-label transition-colors",
         variant === "solid"
           ? "bg-crimson text-cream hover:bg-crimson-light"
           : "border border-sand/40 text-sand hover:border-sand hover:text-cream",

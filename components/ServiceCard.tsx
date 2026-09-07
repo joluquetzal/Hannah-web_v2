@@ -31,7 +31,7 @@ export function ServiceCard({
         <p className="mt-2 max-w-xs text-sm text-sand">
           {category.descripcion[lang]}
         </p>
-        <span className="mt-5 inline-block text-xs uppercase tracking-[0.2em] text-muted transition-colors group-hover:text-sand">
+        <span className="mt-5 inline-block text-xs uppercase tracking-label text-muted transition-colors group-hover:text-sand">
           {t.nav.servicesCardCta}
         </span>
       </div>

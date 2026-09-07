@@ -29,7 +29,7 @@ export function LanguageSwitch({ className }: { className?: string }) {
     <div
       aria-label={t.label}
       className={clsx(
-        "flex items-center text-xs uppercase tracking-[0.15em]",
+        "flex items-center text-xs uppercase tracking-label",
         className,
       )}
     >

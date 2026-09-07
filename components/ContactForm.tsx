@@ -105,7 +105,7 @@ function Field({
       <div className="flex items-baseline justify-between gap-3">
         <label
           htmlFor={id}
-          className="block text-xs uppercase tracking-[0.2em] text-muted"
+          className="block text-xs uppercase tracking-label text-muted"
         >
           {label}
         </label>
@@ -221,7 +221,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
         <button
           type="button"
           onClick={() => setStatus("idle")}
-          className="mt-6 text-xs uppercase tracking-[0.2em] text-muted transition-colors hover:text-sand"
+          className="mt-6 text-xs uppercase tracking-label text-muted transition-colors hover:text-sand"
         >
           {t.successAgain}
         </button>
@@ -296,7 +296,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
         label={t.email}
         error={errors.email}
         hint={
-          <span className="text-[10px] uppercase tracking-widest text-muted">
+          <span className="text-xs uppercase tracking-label text-muted">
             {t.optional}
           </span>
         }
@@ -319,7 +319,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
         hint={
           <span
             className={clsx(
-              "text-[10px] uppercase tracking-widest",
+              "text-xs uppercase tracking-label",
               mensajeLeft < 50 ? "text-sand" : "text-muted",
             )}
           >
@@ -386,7 +386,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
       <button
         type="submit"
         disabled={status === "sending" || !isComplete}
-        className="inline-flex items-center justify-center bg-crimson px-7 py-3 text-xs uppercase tracking-[0.2em] text-cream transition-colors hover:bg-crimson-light disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex items-center justify-center bg-crimson px-7 py-3 text-xs uppercase tracking-label text-cream transition-colors hover:bg-crimson-light disabled:cursor-not-allowed disabled:opacity-60"
       >
         {status === "sending" ? t.submitting : t.submit}
       </button>

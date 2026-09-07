@@ -71,7 +71,7 @@ export function TreatmentRow({
         </div>
 
         {treatment.duracion && (
-          <p className="mt-2 text-xs uppercase tracking-[0.2em] text-muted">
+          <p className="mt-2 text-xs uppercase tracking-label text-muted">
             {treatment.duracion[lang]}
           </p>
         )}
@@ -82,7 +82,7 @@ export function TreatmentRow({
 
         {treatment.incluye && (
           <div className="mt-6">
-            <p className="text-xs uppercase tracking-[0.2em] text-muted">
+            <p className="text-xs uppercase tracking-label text-muted">
               {t.includes}
             </p>
             <ul className="mt-3 space-y-1.5 text-sm text-sand">
@@ -97,7 +97,7 @@ export function TreatmentRow({
 
         {treatment.zonas && (
           <div className="mt-6">
-            <p className="text-xs uppercase tracking-[0.2em] text-muted">
+            <p className="text-xs uppercase tracking-label text-muted">
               {t.zones}
             </p>
             <p className="mt-3 text-sm text-sand">

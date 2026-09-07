@@ -75,7 +75,7 @@ export function Nav() {
 
         {/* Desktop nav — hidden on mobile */}
         <div className="hidden items-center gap-5 md:flex md:gap-7">
-          <ul className="flex items-center gap-5 text-[13px] md:gap-7 md:text-sm">
+          <ul className="flex items-center gap-5 text-sm md:gap-7">
             <li>
               <Link
                 href={path("/")}
@@ -150,7 +150,7 @@ export function Nav() {
 
             {/* Servicios — flat list, no hover needed on touch */}
             <div>
-              <p className="mb-3 text-xs uppercase tracking-[0.3em] text-muted">
+              <p className="mb-3 text-xs uppercase tracking-eyebrow text-muted">
                 {t.nav.services}
               </p>
               <div className="flex flex-col gap-4 border-l border-crimson-light pl-4">
@@ -166,7 +166,7 @@ export function Nav() {
                 ))}
                 <Link
                   href={path("/servicios")}
-                  className="text-xs uppercase tracking-[0.2em] text-muted transition-colors hover:text-sand"
+                  className="text-xs uppercase tracking-label text-muted transition-colors hover:text-sand"
                 >
                   {t.nav.servicesViewAllLong}
                 </Link>

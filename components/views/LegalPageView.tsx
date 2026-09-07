@@ -20,7 +20,7 @@ export function LegalPageView({
         <h1 className="font-display text-display-md italic text-cream">
           {page.title}
         </h1>
-        <p className="mt-2 text-xs uppercase tracking-[0.2em] text-muted">
+        <p className="mt-2 text-xs uppercase tracking-label text-muted">
           {legal.lastUpdatedLabel} {legal.lastUpdated}
         </p>
 

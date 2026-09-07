@@ -10,7 +10,7 @@ export function NotFoundView() {
 
   return (
     <section className="mx-auto flex min-h-[70vh] max-w-2xl flex-col justify-center px-gutter py-top-clear text-center">
-      <p className="text-xs uppercase tracking-[0.3em] text-sand">{nf.eyebrow}</p>
+      <p className="text-xs uppercase tracking-eyebrow text-sand">{nf.eyebrow}</p>
       <h1 className="mt-6 font-display text-display-md italic text-cream">
         {nf.title}
       </h1>

@@ -15,7 +15,7 @@ export function HomeView({ lang }: { lang: Lang }) {
           <div>
             <p
               data-reveal
-              className="text-xs uppercase tracking-[0.3em] text-muted"
+              className="text-xs uppercase tracking-eyebrow text-muted"
             >
               {t.site.tagline}
             </p>

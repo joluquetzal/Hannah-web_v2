@@ -41,6 +41,13 @@ const config: Config = {
         "display-md": "clamp(2.25rem, 1.95rem + 1.5vw, 3rem)",
         "display-sm": "clamp(1.875rem, 1.65rem + 0.9vw, 2.25rem)",
       },
+      // Tracking for the two uppercase-caps roles. Uppercase text is always
+      // tracked (see styling-tailwind rule); these replace the repeated
+      // arbitrary `tracking-[0.2em]` / `tracking-[0.3em]`.
+      letterSpacing: {
+        label: "0.2em", // inline labels, button text, small caps CTAs
+        eyebrow: "0.3em", // section eyebrows above a heading
+      },
       // Fluid prose width: page intros and long-form copy grow with the
       // viewport instead of hitting a fixed breakpoint cap. The upper bound
       // is the readable-measure ceiling: 36rem keeps even the densest 18px
