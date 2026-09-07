@@ -2,7 +2,7 @@ import { site } from "@/lib/site";
 
 export function ClinicInfo() {
   return (
-    <div className="flex h-full flex-col justify-center space-y-8">
+    <div className="flex h-full flex-col justify-start space-y-8">
       <div>
         <h2 className="font-display text-2xl italic text-cream">Visítanos</h2>
         <address className="mt-3 not-italic leading-relaxed text-sand">
@@ -29,7 +29,13 @@ export function ClinicInfo() {
           <dt className="text-xs uppercase tracking-[0.2em] text-muted">
             Horario
           </dt>
-          <dd className="mt-1 text-sand">{site.hours}</dd>
+          <dd className="mt-1 space-y-0.5 text-sand">
+            {site.hours.schedule.map((h) => (
+              <p key={h.days}>
+                {h.days}: {h.time}
+              </p>
+            ))}
+          </dd>
         </div>
         <div>
           <dt className="text-xs uppercase tracking-[0.2em] text-muted">
@@ -43,6 +49,29 @@ export function ClinicInfo() {
               className="text-sand hover:text-cream"
             >
               Escríbenos
+            </a>
+          </dd>
+        </div>
+        <div>
+          <dt className="text-xs uppercase tracking-[0.2em] text-muted">
+            Redes
+          </dt>
+          <dd className="mt-1 flex gap-4">
+            <a
+              href={site.social.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sand hover:text-cream"
+            >
+              Instagram
+            </a>
+            <a
+              href={site.social.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sand hover:text-cream"
+            >
+              Facebook
             </a>
           </dd>
         </div>

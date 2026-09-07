@@ -11,6 +11,7 @@ export function BusinessJsonLd() {
     telephone: site.phone,
     email: site.email,
     priceRange: "$$",
+    sameAs: [site.social.instagram, site.social.facebook].filter(Boolean),
     address: {
       "@type": "PostalAddress",
       streetAddress: site.address.street,
@@ -19,7 +20,14 @@ export function BusinessJsonLd() {
       postalCode: site.address.postalCode,
       addressCountry: site.address.country,
     },
-    openingHours: "Mo-Sa 10:00-19:00",
+    openingHoursSpecification: site.hours.schedule
+      .filter((h) => h.opens && h.closes)
+      .map((h) => ({
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: h.dayOfWeek,
+        opens: h.opens,
+        closes: h.closes,
+      })),
     areaServed: "MX",
   };
 

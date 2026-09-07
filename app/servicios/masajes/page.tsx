@@ -16,12 +16,12 @@ export default function MasajesPage() {
     <>
       <ScrollBackdrop />
 
-      <div className="px-gutter pb-section-b pt-top-clear">
+      <div className="mx-auto max-w-shell px-gutter pb-section-b pt-top-clear">
         <header data-bg={backdrop.noir} className="max-w-prose">
           <h1 className="font-display text-display-md italic text-cream">
             Masajes
           </h1>
-          <p className="mt-4 leading-relaxed text-sand">
+          <p className="mt-4 text-lg leading-relaxed text-sand">
             Cuatro masajes para relajar el cuerpo, aliviar la tensión muscular y
             renovar la energía.
           </p>

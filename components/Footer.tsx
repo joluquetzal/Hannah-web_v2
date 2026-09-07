@@ -35,6 +35,26 @@ export function Footer() {
                 WhatsApp
               </a>
             </li>
+            <li>
+              <a
+                href={site.social.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-sand"
+              >
+                Instagram
+              </a>
+            </li>
+            <li>
+              <a
+                href={site.social.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-sand"
+              >
+                Facebook
+              </a>
+            </li>
           </ul>
         </div>
 
@@ -48,7 +68,7 @@ export function Footer() {
               {site.address.city}, {site.address.state}{" "}
               {site.address.postalCode}
             </p>
-            <p>{site.hours}</p>
+            <p>{site.hours.summary}</p>
           </address>
         </div>
       </div>

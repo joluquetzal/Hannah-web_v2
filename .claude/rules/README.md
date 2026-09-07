@@ -7,6 +7,7 @@ Conventions for this project, split by topic. These expand on the "Coding conven
 | `typescript.md` | Strictness, no `any`, deriving types from `data/` |
 | `react-nextjs.md` | Server/client split, static-export constraints, component rules |
 | `styling-tailwind.md` | Tokens only, mobile-first, class order, no inline styles |
+| `layout-responsive.md` | Max-width shell, content-driven heights, measure, verification |
 | `animations-gsap.md` | `gsap.context`, reduced-motion, transform/opacity only, CSS hover swap |
 | `forms-emailjs.md` | Env keys, validation, submit UX, accessibility, spam guard |
 | `images-assets.md` | `next/image`, alt text, SVG/GIF pairs, lazy GIFs |

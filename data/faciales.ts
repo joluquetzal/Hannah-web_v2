@@ -15,8 +15,8 @@ export const faciales = [
       "Ácido hialurónico",
       "Crema hidratante",
     ],
-    img: "/images/faciales/img1.svg",
-    gif: "/images/faciales/video1.gif",
+    img: "/images/facials/img1.svg",
+    gif: "/images/facials/video1.gif",
   },
   {
     slug: "anti-acne-piel-grasa",
@@ -32,8 +32,8 @@ export const faciales = [
       "Mascarilla de arcilla o barro negro",
       "Hidratación",
     ],
-    img: "/images/faciales/img2.svg",
-    gif: "/images/faciales/video2.gif",
+    img: "/images/facials/img2.svg",
+    gif: "/images/facials/video2.gif",
   },
   {
     slug: "hidrodermoabrasion",
@@ -48,8 +48,8 @@ export const faciales = [
       "Mascarilla hidroplástica",
       "Hidratación",
     ],
-    img: "/images/faciales/img3.svg",
-    gif: "/images/faciales/video3.gif",
+    img: "/images/facials/img3.svg",
+    gif: "/images/facials/video3.gif",
   },
   {
     slug: "facial-hannah",
@@ -67,8 +67,8 @@ export const faciales = [
     ],
     recomendacion: "2 sesiones",
     destacado: true,
-    img: "/images/faciales/img4.svg",
-    gif: "/images/faciales/video4.gif",
+    img: "/images/facials/img4.svg",
+    gif: "/images/facials/video4.gif",
   },
   {
     slug: "facial-rejuvenecedor",
@@ -84,8 +84,8 @@ export const faciales = [
       "Máscara LED",
     ],
     recomendacion: "8 a 10 sesiones periódicas",
-    img: "/images/faciales/img5.svg",
-    gif: "/images/faciales/video5.gif",
+    img: "/images/facials/img5.svg",
+    gif: "/images/facials/video5.gif",
   },
   {
     slug: "microdermoabrasion",
@@ -100,8 +100,8 @@ export const faciales = [
       "Mascarilla hidroplástica",
       "Hidratación",
     ],
-    img: "/images/faciales/img6.svg",
-    gif: "/images/faciales/video6.gif",
+    img: "/images/facials/img6.svg",
+    gif: "/images/facials/video6.gif",
   },
 ] as const satisfies readonly Treatment[];
 

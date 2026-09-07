@@ -11,12 +11,12 @@ export const metadata: Metadata = {
 
 export default function ContactoPage() {
   return (
-    <div className="px-gutter pb-section-b pt-top-clear">
+    <div className="mx-auto max-w-shell px-gutter pb-section-b pt-top-clear">
       <header className="max-w-prose">
         <h1 className="font-display text-display-md italic text-cream">
           Contacto
         </h1>
-        <p className="mt-4 leading-relaxed text-sand">
+        <p className="mt-4 text-lg leading-relaxed text-sand">
           Déjanos un mensaje con tus datos y te respondemos lo antes posible.
         </p>
       </header>

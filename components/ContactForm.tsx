@@ -12,17 +12,24 @@ const PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
 
 const MAX_MENSAJE = 500;
 
-type FieldName = "nombre" | "email" | "telefono" | "mensaje";
+type FieldName = "nombre" | "email" | "telefono" | "servicio" | "mensaje";
 type Values = Record<FieldName, string>;
 type Errors = Partial<Record<FieldName, string>>;
 type Status = "idle" | "sending" | "success" | "error";
 
-const FIELDS: readonly FieldName[] = ["nombre", "email", "telefono", "mensaje"];
+const FIELDS: readonly FieldName[] = [
+  "nombre",
+  "telefono",
+  "servicio",
+  "email",
+  "mensaje",
+];
 
 const EMPTY: Values = {
   nombre: "",
   email: "",
   telefono: "",
+  servicio: "",
   mensaje: "",
 };
 
@@ -53,6 +60,10 @@ function validateField(name: FieldName, values: Values): string | undefined {
       if (digits.length > 15) return "Tiene demasiados dígitos.";
       return undefined;
     }
+
+    case "servicio":
+      if (!value) return "Selecciona el servicio que te interesa.";
+      return undefined;
 
     case "mensaje":
       if (!value) return "Escribe tu mensaje.";
@@ -199,11 +210,16 @@ export function ContactForm() {
 
   const mensajeLeft = MAX_MENSAJE - values.mensaje.length;
 
+  // Enable "Enviar mensaje" only once every required field is valid. `email`
+  // is optional, and validateField returns undefined for an empty email, so
+  // it only blocks submission when filled in with a malformed address.
+  const isComplete = FIELDS.every((name) => !validateField(name, values));
+
   return (
     <form
       onSubmit={onSubmit}
       noValidate
-      className="flex h-full flex-col justify-center space-y-6"
+      className="flex h-full flex-col justify-start space-y-6"
     >
       <Field id="nombre" label="Nombre" error={errors.nombre}>
         <input
@@ -231,6 +247,27 @@ export function ContactForm() {
           }
           className={clsx(inputClass, borderClass(Boolean(errors.telefono)))}
         />
+      </Field>
+
+      <Field id="servicio" label="Servicio" error={errors.servicio}>
+        <select
+          {...fieldProps("servicio")}
+          onChange={(e) => setField("servicio", e.target.value)}
+          className={clsx(
+            inputClass,
+            borderClass(Boolean(errors.servicio)),
+            "cursor-pointer bg-noir",
+            !values.servicio && "text-muted",
+          )}
+        >
+          <option value="" disabled>
+            ¿Qué servicio te interesa?
+          </option>
+          <option value="Faciales">Faciales</option>
+          <option value="Masajes">Masajes</option>
+          <option value="Especiales">Especiales</option>
+          <option value="Otro">Otro / No sé aún</option>
+        </select>
       </Field>
 
       <Field
@@ -316,7 +353,7 @@ export function ContactForm() {
 
       <button
         type="submit"
-        disabled={status === "sending"}
+        disabled={status === "sending" || !isComplete}
         className="inline-flex items-center justify-center bg-crimson px-7 py-3 text-xs uppercase tracking-[0.2em] text-cream transition-colors hover:bg-crimson-light disabled:cursor-not-allowed disabled:opacity-60"
       >
         {status === "sending" ? "Enviando…" : "Enviar mensaje"}

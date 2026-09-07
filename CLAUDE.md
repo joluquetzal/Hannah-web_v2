@@ -1,5 +1,19 @@
 # HannaH — Claude Code Context
 
+> ## ⚠️ Read `.claude/rules/` before any change
+>
+> The rule files in **`.claude/rules/`** are binding, not advisory — see
+> `.claude/rules/README.md` for the index. Read the ones relevant to your change before
+> touching code. Where a rule file and this document conflict, this document wins.
+>
+> For any change to markup, layout, spacing or typography, start with
+> **`.claude/rules/layout-responsive.md`**. Two rules from it that get violated most often:
+>
+> - **Verify by rendering and measuring, not by reading the diff.** Two earlier passes "fixed" layout by reading source and moved none of the actual numbers.
+> - **Never size a content section by viewport height.** Height comes from content plus padding.
+>
+> If a task requires breaking a rule, say so and get agreement — do not deviate silently.
+
 ## What this project is
 
 HannaH is a beauty and aesthetics clinic based in Mexico. This is their **marketing/showcase website** — frontend only, no backend, no ecommerce. The goal is to present the clinic's services, tell their story, and let visitors get in touch. There is **no appointment/booking flow** — the site links to a plain contact form.
@@ -49,6 +63,8 @@ public/
     faciales/             # img1.svg … img6.svg, video1.gif … video6.gif
     masajes/              # img1.svg … img4.svg, video1.gif … video4.gif
     especiales/           # img1.svg … img4.svg, video1.gif … video4.gif
+.claude/
+  rules/                  # BINDING coding rules, split by topic — read before changing code
 ```
 
 ## Design system
@@ -179,6 +195,7 @@ Contact form: nombre, teléfono, correo electrónico (optional), mensaje. Submit
 
 ## Coding conventions
 
+- **`.claude/rules/` governs all coding work** — read the relevant topic file before touching code; `.claude/rules/layout-responsive.md` for anything involving markup, layout or typography. The bullets below are the summary; the rule files are the detail.
 - **TypeScript** throughout — no plain `.js` files
 - **Components**: functional, no class components
 - **Tailwind only** for styling — no inline styles, no CSS modules (except for GSAP targets that need class names)
@@ -196,3 +213,110 @@ Contact form: nombre, teléfono, correo electrónico (optional), mensaje. Submit
 - Each service category has its own route (`/servicios/faciales`, not anchor links)
 - Landing page (`/`) contains NO service listings
 - Images are provided by the client as SVG + GIF pairs per treatment
+## Layout rework — wide-viewport pass (planned 2026-09-07)
+
+Resolves the red-marked issues from the visual review of `/`, `/nosotros`,
+`/servicios/masajes` and `/contacto` at 1920×1000.
+
+**Read `.claude/rules/layout-responsive.md` first.** It holds the reasoning, the rules and
+the reference measurements; this section holds only the phases, files and acceptance
+numbers. Do not restate rules here.
+
+### Where this starts from
+
+An earlier pass already fixed 4 of the 11 marks — those are done, do not redo them:
+the Masajes image overflow (`md:aspect-[3/2]`), the Inicio hero lead and the Masajes
+description (both now 18px), and the Contacto gap above the form (`justify-start` in
+`ContactForm.tsx` / `ClinicInfo.tsx`).
+
+What remains is a single family of defects: **horizontal voids** (Inicio right side,
+Masajes right of the text, Contacto right of "Visítanos") and **vertical voids** (Masajes
+above/below the text, Nosotros, Contacto below the submit). All of it comes from the
+missing max-width shell and from sizing sections by viewport height.
+
+### Order matters
+
+**The shell changes every downstream number.** Tuning row proportions or hero widths before
+Phase 1 means tuning against column widths that are about to change — that is exactly how
+the previous attempt chased its own tail. Do the phases in order.
+
+### Phase 0 — Baseline
+
+No code. Record the current numbers so movement is provable:
+content band 1792px · Masajes gaps 197px above / 191px below · Masajes dead space right of
+text 239px · Contacto input width 1013px · Nosotros page height 2948px, tallest section
+700px · Inicio h1 at x=64 with 1253px empty to its right.
+
+### Phase 1 — The shell
+
+`tailwind.config.ts`: add `shell: "80rem"` to `theme.extend.maxWidth`, beside `prose`.
+Then apply `mx-auto max-w-shell` to the outer page wrapper in
+`app/servicios/masajes/page.tsx`, `app/servicios/faciales/page.tsx`,
+`app/servicios/especiales/page.tsx`, `app/contacto/page.tsx`, and the `<article>` in
+`app/nosotros/page.tsx`.
+
+**Restart the dev server after the config change** — a new token silently does nothing
+until you do. This cost a full cycle previously; if a class appears to have no effect,
+restart before debugging.
+
+Accept: content band 1792 → 1152px · Contacto input 1013 → ~639px · Masajes dead-right
+239 → ≤30px.
+
+### Phase 2 — Nosotros: height follows content
+
+`app/nosotros/page.tsx`. Replace `min-h-[45vh]` / `min-h-[70vh]` / `min-h-[50vh]` on the
+four sections with `py-20`. Drop `mx-auto` from those sections so they left-align inside
+the shell (site-wide alignment decision). Keep `max-w-prose` as the measure and keep the
+`data-bg` attributes — `ScrollBackdrop` triggers on them and works fine with shorter
+sections; the colour changes simply arrive sooner.
+
+Accept: page height 2948 → ~2020px · tallest section 700 → ≤400px · sections start at the
+shell's left edge.
+
+### Phase 3 — Inicio hero
+
+Two changes, both required:
+
+1. `components/HeroReveal.tsx` — give the wrapper `className="w-full"`. It currently renders a bare `<div>` that shrink-wraps as a flex item, which is why `mx-auto` on the hero content never centred anything and the hero sat pinned at x=64.
+2. `app/page.tsx` — rebuild as two columns. Drop the full-bleed background `<Image>` (a blank placeholder at `opacity-40`, contributing nothing) and keep the gradient div. Wrap the content in
+   `<div className="relative mx-auto grid w-full max-w-shell items-center gap-12 px-gutter md:grid-cols-[1.1fr_1fr] md:gap-16">`,
+   put the existing eyebrow / h1 / paragraph / buttons in the first column, and add as the second column:
+   `<figure data-reveal className="relative hidden aspect-[4/5] overflow-hidden border border-crimson-light md:block">`
+   containing `<Image src="/images/hero.svg" alt="" fill priority sizes="(min-width: 768px) 45vw, 100vw" className="object-cover" />`.
+   `hidden md:block` keeps mobile text-only.
+
+Accept: h1 at x=384, aligned with every other page · figure ~518×648 at 1920 · figure
+hidden at 390 · no horizontal overflow at 1920/1440/1024/768/390.
+
+### Phase 4 — TreatmentRow proportions
+
+`components/TreatmentRow.tsx`. With the shell live the columns are ~520/574 instead of
+868/868, so re-proportion: figure `md:aspect-[16/11]` (replacing `md:aspect-[3/2]`) and the
+grid `md:grid-cols-[1fr_1.1fr]`, giving the text slightly more room than the image. Keep
+`items-center`.
+
+Accept: empty band above the treatment text 197 → ≤80px, below 191 → ≤80px.
+
+### Phase 5 — Typography
+
+Add `text-lg` to the page intro `<p>` in `app/servicios/{masajes,faciales,especiales}/page.tsx`
+and `app/contacto/page.tsx`, and to the remaining 16px paragraph in `app/nosotros/page.tsx`.
+In `tailwind.config.ts`, cap `maxWidth.prose` at `50rem` instead of `56rem` so long-form
+text stays within measure on large monitors.
+
+Accept: no body paragraph renders at 16px · no line exceeds 75ch at 2560px wide.
+
+### Phase 6 — Verify
+
+Per `.claude/rules/layout-responsive.md` §Verification:
+
+1. `npm run build`.
+2. Load all four routes at 390 / 768 / 1024 / 1440 / 2560.
+3. `document.documentElement.scrollWidth - window.innerWidth === 0` at every width.
+4. Report the Phase 0 numbers against their new values. A phase whose numbers did not move
+   was not implemented — say so rather than marking it done.
+
+### Out of scope for this pass
+
+- **Placeholder art.** `public/images/**` holds ~600-byte SVG stubs and 42-byte GIFs. They render exactly as coded; image regions will look empty until real photos arrive. That is a content gap, not a CSS bug — do not "fix" it in CSS and do not replace the files.
+- **Accessibility debt** surfaced by the conventions but not by this review, and touching files this pass does not: `text-crimson` on `noir` measures 1.63:1 and is currently the colour of form validation errors in `ContactForm.tsx`; touch targets are under-size (footer and `ClinicInfo` links 16px tall, submit 40px, CTAs 42px, mobile menu button 40×40). Run these as a separate pass.

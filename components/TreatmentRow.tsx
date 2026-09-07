@@ -2,6 +2,7 @@ import Image from "next/image";
 import clsx from "clsx";
 import type { Treatment } from "@/data/types";
 import { backdrop } from "@/lib/backdrop";
+import { ButtonLink } from "@/components/ButtonLink";
 
 /**
  * Alternating image/text row. Even index: image left. Odd index: image right.
@@ -19,11 +20,16 @@ export function TreatmentRow({
   return (
     <article
       data-bg={imageRight ? backdrop.crimsonLight : backdrop.noir}
-      className="grid items-center gap-8 md:grid-cols-2 md:gap-14"
+      className={clsx(
+        "grid items-center gap-8 md:gap-14",
+        // Text always gets the wider column so the image frame stays the same
+        // height on both alternations — `order` alone would swap the columns.
+        imageRight ? "md:grid-cols-[1.1fr_1fr]" : "md:grid-cols-[1fr_1.1fr]",
+      )}
     >
       <figure
         className={clsx(
-          "group relative aspect-[4/5] overflow-hidden border border-crimson-light",
+          "group relative aspect-[4/5] overflow-hidden border border-crimson-light md:aspect-[16/11]",
           imageRight ? "md:order-2" : "md:order-1",
         )}
       >
@@ -63,7 +69,9 @@ export function TreatmentRow({
           </p>
         )}
 
-        <p className="mt-4 leading-relaxed text-sand">{treatment.descripcion}</p>
+        <p className="mt-4 text-lg leading-relaxed text-sand">
+          {treatment.descripcion}
+        </p>
 
         {treatment.incluye && (
           <div className="mt-6">
@@ -94,6 +102,12 @@ export function TreatmentRow({
             Recomendación: {treatment.recomendacion}
           </p>
         )}
+
+        <div className="mt-8">
+          <ButtonLink href="/contacto" variant="ghost">
+            Agendar cita
+          </ButtonLink>
+        </div>
       </div>
     </article>
   );

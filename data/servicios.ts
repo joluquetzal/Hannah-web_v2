@@ -7,7 +7,7 @@ export const servicios = [
     descripcion:
       "Limpieza profunda, hidratación y rejuvenecimiento para cada tipo de piel.",
     href: "/servicios/faciales",
-    cover: "/images/faciales/img1.svg",
+    cover: "/images/facials/img1.svg",
   },
   {
     slug: "masajes",
@@ -15,7 +15,7 @@ export const servicios = [
     descripcion:
       "Relajación, alivio muscular y bienestar en cada sesión.",
     href: "/servicios/masajes",
-    cover: "/images/masajes/img1.svg",
+    cover: "/images/massages/img1.svg",
   },
   {
     slug: "especiales",
@@ -23,6 +23,6 @@ export const servicios = [
     descripcion:
       "Tratamientos avanzados: skin booster, hilos tensores y toxina botulínica.",
     href: "/servicios/especiales",
-    cover: "/images/especiales/img1.svg",
+    cover: "/images/specials/img1.svg",
   },
 ] as const satisfies readonly ServiceCategory[];
