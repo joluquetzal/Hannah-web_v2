@@ -8,7 +8,7 @@ export const masajes = [
     descripcion:
       "Favorece la circulación, reduce el estrés y mejora el estado de ánimo.",
     img: "/images/massages/img1.svg",
-    gif: "/images/massages/video1.gif",
+    video: "/images/massages/video1.mp4",
   },
   {
     slug: "masaje-piedras-calientes",
@@ -17,7 +17,7 @@ export const masajes = [
     descripcion:
       "Masaje Zen. Mejora la calidad del sueño y reduce los dolores musculares.",
     img: "/images/massages/img2.svg",
-    gif: "/images/massages/video2.gif",
+    video: "/images/massages/video2.mp4",
   },
   {
     slug: "masaje-deportivo",
@@ -26,7 +26,7 @@ export const masajes = [
     descripcion:
       "Mejora el dolor en contracturas, disminuye el estrés y relaja los músculos.",
     img: "/images/massages/img3.svg",
-    gif: "/images/massages/video3.gif",
+    video: "/images/massages/video3.mp4",
   },
   {
     slug: "masaje-modelador",
@@ -35,7 +35,7 @@ export const masajes = [
     descripcion:
       "Drenaje linfático, compresas de lodo del Mar Muerto, cavitación y radiofrecuencia.",
     img: "/images/massages/img4.svg",
-    gif: "/images/massages/video4.gif",
+    video: "/images/massages/video4.mp4",
   },
 ] as const satisfies readonly Treatment[];
 

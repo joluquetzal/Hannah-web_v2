@@ -60,9 +60,9 @@ data/
   especiales.ts
 public/
   images/
-    faciales/             # img1.svg … img6.svg, video1.gif … video6.gif
-    masajes/              # img1.svg … img4.svg, video1.gif … video4.gif
-    especiales/           # img1.svg … img4.svg, video1.gif … video4.gif
+    facials/              # img1.svg … img6.svg, video1.mp4 … video6.mp4
+    massages/             # img1.svg … img4.svg, video1.mp4 … video4.mp4
+    specials/             # img1.svg … img4.svg, video1.mp4 … video4.mp4
 .claude/
   rules/                  # BINDING coding rules, split by topic — read before changing code
 ```
@@ -91,7 +91,7 @@ All tokens are defined in `tailwind.config.ts` under `theme.extend`.
 ### Motion principles
 
 - GSAP ScrollTrigger for section background color shifts (same approach as the old site)
-- Hover on treatment images: static image → GIF swap (CSS only, `group-hover`)
+- Hover on treatment images: static image → muted looping `<video>` swap (CSS only, `group-hover`)
 - Page transitions: subtle fade via Tailwind + Next.js view transitions
 - Respect `prefers-reduced-motion` — wrap all GSAP in a check
 
@@ -107,7 +107,7 @@ Three large editorial cards: Faciales, Masajes, Especiales. Each links to its ow
 
 ### `/servicios/faciales`
 
-Six treatments rendered with `TreatmentRow`. Alternating layout (odd: image left, even: image right). Hover reveals GIF.
+Six treatments rendered with `TreatmentRow`. Alternating layout (odd: image left, even: image right). Hover crossfades to a muted looping clip.
 
 ### `/servicios/masajes`
 
@@ -212,7 +212,7 @@ Contact form: nombre, teléfono, correo electrónico (optional), mensaje. Submit
 - Static export (`output: 'export'` in next.config.ts)
 - Each service category has its own route (`/servicios/faciales`, not anchor links)
 - Landing page (`/`) contains NO service listings
-- Images are provided by the client as SVG + GIF pairs per treatment
+- Images are provided by the client as SVG + video pairs per treatment (GIFs converted to H.264 MP4 at build-prep time; source GIFs not committed)
 ## Layout rework — wide-viewport pass (planned 2026-09-07)
 
 Resolves the red-marked issues from the visual review of `/`, `/nosotros`,

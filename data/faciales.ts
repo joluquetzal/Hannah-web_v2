@@ -16,7 +16,7 @@ export const faciales = [
       "Crema hidratante",
     ],
     img: "/images/facials/img1.svg",
-    gif: "/images/facials/video1.gif",
+    video: "/images/facials/video1.mp4",
   },
   {
     slug: "anti-acne-piel-grasa",
@@ -33,7 +33,7 @@ export const faciales = [
       "Hidratación",
     ],
     img: "/images/facials/img2.svg",
-    gif: "/images/facials/video2.gif",
+    video: "/images/facials/video2.mp4",
   },
   {
     slug: "hidrodermoabrasion",
@@ -49,7 +49,7 @@ export const faciales = [
       "Hidratación",
     ],
     img: "/images/facials/img3.svg",
-    gif: "/images/facials/video3.gif",
+    video: "/images/facials/video3.mp4",
   },
   {
     slug: "facial-hannah",
@@ -68,7 +68,7 @@ export const faciales = [
     recomendacion: "2 sesiones",
     destacado: true,
     img: "/images/facials/img4.svg",
-    gif: "/images/facials/video4.gif",
+    video: "/images/facials/video4.mp4",
   },
   {
     slug: "facial-rejuvenecedor",
@@ -85,7 +85,7 @@ export const faciales = [
     ],
     recomendacion: "8 a 10 sesiones periódicas",
     img: "/images/facials/img5.svg",
-    gif: "/images/facials/video5.gif",
+    video: "/images/facials/video5.mp4",
   },
   {
     slug: "microdermoabrasion",
@@ -101,7 +101,7 @@ export const faciales = [
       "Hidratación",
     ],
     img: "/images/facials/img6.svg",
-    gif: "/images/facials/video6.gif",
+    video: "/images/facials/video6.mp4",
   },
 ] as const satisfies readonly Treatment[];
 

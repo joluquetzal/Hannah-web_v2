@@ -7,7 +7,7 @@ export const especiales = [
     descripcion: "Hidratación profunda con ácido hialurónico.",
     incluye: ["4 sesiones", "1 sesión cada 15 días"],
     img: "/images/specials/img1.svg",
-    gif: "/images/specials/video1.gif",
+    video: "/images/specials/video1.mp4",
   },
   {
     slug: "hilos-tensores",
@@ -23,7 +23,7 @@ export const especiales = [
       "Cuello",
     ],
     img: "/images/specials/img2.svg",
-    gif: "/images/specials/video2.gif",
+    video: "/images/specials/video2.mp4",
   },
   {
     slug: "nanobotox",
@@ -32,7 +32,7 @@ export const especiales = [
       "Combinación de pequeñas dosis de toxina botulínica y ácido hialurónico.",
     incluye: ["Una aplicación", "Un refuerzo"],
     img: "/images/specials/img3.svg",
-    gif: "/images/specials/video3.gif",
+    video: "/images/specials/video3.mp4",
   },
   {
     slug: "mesobotox",
@@ -41,7 +41,7 @@ export const especiales = [
       "Pequeñas dosis de toxina botulínica en el tercio superior del rostro. Trata arrugas y líneas de expresión suaves.",
     incluye: ["Una aplicación", "Un refuerzo"],
     img: "/images/specials/img4.svg",
-    gif: "/images/specials/video4.gif",
+    video: "/images/specials/video4.mp4",
   },
 ] as const satisfies readonly Treatment[];
 

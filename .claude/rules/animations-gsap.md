@@ -11,6 +11,6 @@
   Or use `gsap.matchMedia()` with a `(prefers-reduced-motion: no-preference)` condition.
 - Animate transform and opacity. Avoid animating `width`, `height`, `top`, `left`, box-shadow, or background-color per-frame where a transform/opacity equivalent exists.
 - Section background color shifts via ScrollTrigger are the intended pattern — pin to section, use `scrub`, keep the color list in sync with the Tailwind tokens.
-- Hover image → GIF swap is **CSS only** (`group-hover`), never JS. No GSAP for hover states.
+- Hover image → video swap is **CSS only** (`group-hover` opacity crossfade), never JS. No GSAP for hover states. The `<video>` is `autoPlay muted loop playsInline` and always playing; only the opacity is toggled.
 - Set sensible ScrollTrigger `start` / `end`; call `ScrollTrigger.refresh()` after layout-affecting async (fonts, images) if jumps appear.
 - Never animate layout on first paint in a way that causes CLS — set the initial state in the same tick, ideally via a `gsap.set` before paint.

@@ -6,7 +6,8 @@ import { ButtonLink } from "@/components/ButtonLink";
 
 /**
  * Alternating image/text row. Even index: image left. Odd index: image right.
- * Hover swaps the static image for its GIF — CSS only, via `group-hover`.
+ * Hover crossfades the static image to a muted looping clip — CSS only, via
+ * `group-hover`. The clip is hidden entirely under `prefers-reduced-motion`.
  */
 export function TreatmentRow({
   treatment,
@@ -40,14 +41,15 @@ export function TreatmentRow({
           sizes="(min-width: 768px) 50vw, 100vw"
           className="object-cover transition-opacity duration-500 group-hover:opacity-0"
         />
-        <Image
-          src={treatment.gif}
-          alt=""
+        <video
+          src={treatment.video}
+          poster={treatment.img}
           aria-hidden
-          fill
-          unoptimized
-          sizes="(min-width: 768px) 50vw, 100vw"
-          className="object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100 motion-reduce:hidden"
         />
       </figure>
 
