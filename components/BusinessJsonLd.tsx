@@ -1,13 +1,21 @@
-import { site } from "@/lib/site";
+"use client";
 
-/** LocalBusiness structured data, rendered site-wide from the root layout. */
+import { site } from "@/lib/site";
+import { getDictionary } from "@/lib/i18n";
+import { useLang } from "@/lib/i18n/useLang";
+
+/** LocalBusiness structured data for the current page's language. */
 export function BusinessJsonLd() {
+  const lang = useLang();
+  const t = getDictionary(lang);
+
   const json = {
     "@context": "https://schema.org",
     "@type": "HealthAndBeautyBusiness",
     name: site.name,
-    description: site.description,
-    url: site.url,
+    description: t.site.description,
+    url: lang === "es" ? site.url : `${site.url}/en`,
+    inLanguage: lang === "es" ? "es-MX" : "en-US",
     telephone: site.phone,
     email: site.email,
     priceRange: "$$",
@@ -20,14 +28,12 @@ export function BusinessJsonLd() {
       postalCode: site.address.postalCode,
       addressCountry: site.address.country,
     },
-    openingHoursSpecification: site.hours.schedule
-      .filter((h) => h.opens && h.closes)
-      .map((h) => ({
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: h.dayOfWeek,
-        opens: h.opens,
-        closes: h.closes,
-      })),
+    openingHoursSpecification: site.openingHours.map((h) => ({
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: h.dayOfWeek,
+      opens: h.opens,
+      closes: h.closes,
+    })),
     areaServed: "MX",
   };
 

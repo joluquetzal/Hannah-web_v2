@@ -25,7 +25,7 @@ HannaH is a beauty and aesthetics clinic based in Mexico. This is their **market
 - **Animations**: GSAP + ScrollTrigger
 - **Forms**: EmailJS (client-side email, no backend needed)
 - **Deployment**: Vercel (static export)
-- **Language**: Spanish (all user-facing content is in Spanish)
+- **Languages**: Spanish (`es`, default, unprefixed URLs) + English (`en`, under `/en`). Spanish is the source of truth. Every user-facing string is maintained in both — see `.claude/rules/content-i18n.md`.
 
 ## Commands
 
@@ -40,24 +40,27 @@ npm run lint      # lint
 
 ```
 app/
-  layout.tsx              # global layout: Nav + Footer
-  page.tsx                # / landing page
-  servicios/
-    page.tsx              # /servicios — service hub (3 category cards)
-    faciales/page.tsx     # /servicios/faciales
-    masajes/page.tsx      # /servicios/masajes
-    especiales/page.tsx   # /servicios/especiales
-  nosotros/page.tsx       # /nosotros — about us
-  contacto/page.tsx       # /contacto — contact form + clinic info
+  layout.tsx              # global layout: Nav + Footer (<html lang="es">)
+  page.tsx                # / — Spanish, delegates to components/views/HomeView
+  servicios/…             # Spanish service pages (thin wrappers over views/)
+  nosotros/page.tsx
+  contacto/page.tsx
+  en/                     # English mirror: /en, /en/servicios/…, /en/contacto …
+                          # same thin wrappers, lang="en"
 components/
-  Nav.tsx                 # fixed nav, transparent → solid on scroll
+  Nav.tsx                 # fixed nav; contains LanguageSwitch (ES | EN)
   Footer.tsx
-  ServiceCard.tsx         # card used on /servicios hub
-  TreatmentRow.tsx        # alternating image/text row used on service pages
+  LanguageSwitch.tsx      # swaps to the same page in the other language
+  ServiceCard.tsx / TreatmentRow.tsx   # take a `lang` prop
+  views/                  # HomeView, ServiciosView, CategoryView, NosotrosView,
+                          # ContactoView — the real page bodies, param'd by lang
 data/
-  faciales.ts
-  masajes.ts
-  especiales.ts
+  faciales.ts / masajes.ts / especiales.ts / servicios.ts
+                          # translatable fields are Localized<T> = { es, en }
+lib/
+  i18n/                   # config (locales, localizedPath), dictionaries/{es,en}.ts,
+                          # getDictionary, useLang/useI18n, buildMetadata
+  site.ts                 # language-neutral NAP only
 public/
   images/
     facials/              # img1.svg … img6.svg, video1.mp4 … video6.mp4
@@ -96,6 +99,9 @@ All tokens are defined in `tailwind.config.ts` under `theme.extend`.
 - Respect `prefers-reduced-motion` — wrap all GSAP in a check
 
 ## Pages
+
+Every route below also exists in English under `/en` (e.g. `/en/servicios/faciales`),
+rendered from the same `components/views/*` component with `lang="en"`.
 
 ### `/` — Landing
 
@@ -213,6 +219,7 @@ Contact form: nombre, teléfono, correo electrónico (optional), mensaje. Submit
 - Each service category has its own route (`/servicios/faciales`, not anchor links)
 - Landing page (`/`) contains NO service listings
 - Images are provided by the client as SVG + video pairs per treatment (GIFs converted to H.264 MP4 at build-prep time; source GIFs not committed)
+- Bilingual `es` (default, `/`) + `en` (`/en`) — no `[lang]` dynamic segment; the English tree is an explicit `app/en/` mirror of thin wrappers over shared `components/views/*`. Strings in `lib/i18n/dictionaries/{es,en}.ts` (`en` typed `satisfies Dictionary`) and `Localized<T>` fields in `data/`.
 ## Layout rework — wide-viewport pass (planned 2026-09-07)
 
 Resolves the red-marked issues from the visual review of `/`, `/nosotros`,

@@ -6,6 +6,8 @@ import { useCallback, useEffect, useId, useRef, useState } from "react";
 import type { FocusEvent, KeyboardEvent } from "react";
 import clsx from "clsx";
 import { servicios } from "@/data/servicios";
+import { localizedPath, stripLocale } from "@/lib/i18n";
+import { useI18n } from "@/lib/i18n/useLang";
 
 /**
  * "Servicios" nav item with a full-width panel beneath the header.
@@ -26,6 +28,8 @@ export function NavDropdown({
   onOpenChange?: (open: boolean) => void;
 }) {
   const pathname = usePathname();
+  const { lang, t } = useI18n();
+  const { rest } = stripLocale(pathname || "/");
   const [open, setOpen] = useState(false);
   const panelId = useId();
 
@@ -33,7 +37,8 @@ export function NavDropdown({
   const triggerRef = useRef<HTMLButtonElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout>>();
 
-  const active = pathname.startsWith("/servicios");
+  const active = rest.startsWith("/servicios");
+  const path = (p: string) => localizedPath(p, lang);
 
   const cancelClose = useCallback(() => clearTimeout(closeTimer.current), []);
   const closeSoon = useCallback(() => {
@@ -114,7 +119,7 @@ export function NavDropdown({
           active || open ? "text-cream" : "text-sand",
         )}
       >
-        Servicios
+        {t.nav.services}
         <svg
           aria-hidden
           viewBox="0 0 10 6"
@@ -144,25 +149,25 @@ export function NavDropdown({
         <div className="px-gutter py-8">
           <div className="flex items-baseline justify-between">
             <p className="text-xs uppercase tracking-[0.3em] text-muted">
-              Nuestros servicios
+              {t.nav.servicesMenuHeading}
             </p>
             <Link
               data-menu-item
-              href="/servicios"
+              href={path("/servicios")}
               className="text-xs uppercase tracking-[0.2em] text-sand transition-colors hover:text-cream"
             >
-              Ver todos
+              {t.nav.servicesViewAll}
             </Link>
           </div>
 
           <ul className="mt-6 grid gap-4 sm:grid-cols-3">
             {servicios.map((category) => {
-              const current = pathname === category.href;
+              const current = rest === category.href;
               return (
                 <li key={category.slug}>
                   <Link
                     data-menu-item
-                    href={category.href}
+                    href={path(category.href)}
                     aria-current={current ? "page" : undefined}
                     className={clsx(
                       "group block h-full border p-5 transition-colors",
@@ -172,13 +177,13 @@ export function NavDropdown({
                     )}
                   >
                     <p className="font-display text-2xl italic text-cream">
-                      {category.titulo}
+                      {category.titulo[lang]}
                     </p>
                     <p className="mt-2 text-sm leading-relaxed text-sand">
-                      {category.descripcion}
+                      {category.descripcion[lang]}
                     </p>
                     <span className="mt-4 inline-block text-[11px] uppercase tracking-[0.2em] text-muted transition-colors group-hover:text-sand">
-                      Ver tratamientos
+                      {t.nav.servicesCardCta}
                     </span>
                   </Link>
                 </li>

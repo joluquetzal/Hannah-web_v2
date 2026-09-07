@@ -5,17 +5,16 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
 import { NavDropdown } from "@/components/NavDropdown";
+import { LanguageSwitch } from "@/components/LanguageSwitch";
 import { site } from "@/lib/site";
 import { servicios } from "@/data/servicios";
-
-/** Links after the dropdown. "Inicio" and "Servicios" are rendered separately. */
-const links = [
-  { href: "/nosotros", label: "Nosotros" },
-  { href: "/contacto", label: "Contacto" },
-] as const;
+import { localizedPath, stripLocale } from "@/lib/i18n";
+import { useI18n } from "@/lib/i18n/useLang";
 
 export function Nav() {
   const pathname = usePathname();
+  const { lang, t } = useI18n();
+  const { rest } = stripLocale(pathname || "/");
   const [scrolled, setScrolled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -43,7 +42,18 @@ export function Nav() {
   const isSolid = scrolled || dropdownOpen || mobileOpen;
 
   const linkClass = (active: boolean) =>
-    clsx("transition-colors hover:text-cream", active ? "text-cream" : "text-sand");
+    clsx(
+      "transition-colors hover:text-cream",
+      active ? "text-cream" : "text-sand",
+    );
+
+  const path = (p: string) => localizedPath(p, lang);
+  const isActive = (p: string) => (p === "/" ? rest === "/" : rest.startsWith(p));
+
+  const links = [
+    { href: "/nosotros", label: t.nav.about },
+    { href: "/contacto", label: t.nav.contact },
+  ];
 
   return (
     <header
@@ -53,50 +63,51 @@ export function Nav() {
       )}
     >
       <nav
-        aria-label="Principal"
+        aria-label={t.nav.primaryLabel}
         className="flex items-center justify-between px-gutter py-5"
       >
         <Link
-          href="/"
+          href={path("/")}
           className="font-display text-2xl italic tracking-wide text-cream"
         >
           {site.name}
         </Link>
 
         {/* Desktop nav — hidden on mobile */}
-        <ul className="hidden items-center gap-5 text-[13px] md:flex md:gap-7 md:text-sm">
-          <li>
-            <Link
-              href="/"
-              aria-current={pathname === "/" ? "page" : undefined}
-              className={linkClass(pathname === "/")}
-            >
-              Inicio
-            </Link>
-          </li>
+        <div className="hidden items-center gap-5 md:flex md:gap-7">
+          <ul className="flex items-center gap-5 text-[13px] md:gap-7 md:text-sm">
+            <li>
+              <Link
+                href={path("/")}
+                aria-current={isActive("/") ? "page" : undefined}
+                className={linkClass(isActive("/"))}
+              >
+                {t.nav.home}
+              </Link>
+            </li>
 
-          <NavDropdown onOpenChange={setDropdownOpen} />
+            <NavDropdown onOpenChange={setDropdownOpen} />
 
-          {links.map((link) => {
-            const active = pathname.startsWith(link.href);
-            return (
+            {links.map((link) => (
               <li key={link.href}>
                 <Link
-                  href={link.href}
-                  aria-current={active ? "page" : undefined}
-                  className={linkClass(active)}
+                  href={path(link.href)}
+                  aria-current={isActive(link.href) ? "page" : undefined}
+                  className={linkClass(isActive(link.href))}
                 >
                   {link.label}
                 </Link>
               </li>
-            );
-          })}
-        </ul>
+            ))}
+          </ul>
+
+          <LanguageSwitch className="border-l border-crimson-light pl-4" />
+        </div>
 
         {/* Hamburger button — mobile only */}
         <button
           type="button"
-          aria-label={mobileOpen ? "Cerrar menú" : "Abrir menú"}
+          aria-label={mobileOpen ? t.nav.closeMenu : t.nav.openMenu}
           aria-expanded={mobileOpen}
           onClick={() => setMobileOpen((v) => !v)}
           className="flex h-10 w-10 flex-col items-center justify-center gap-[5px] md:hidden"
@@ -126,58 +137,54 @@ export function Nav() {
       {mobileOpen && (
         <div className="border-t border-crimson-light bg-noir/95 backdrop-blur-md md:hidden">
           <nav
-            aria-label="Menú móvil"
+            aria-label={t.nav.mobileLabel}
             className="flex flex-col gap-7 px-gutter py-8 text-sm"
           >
             <Link
-              href="/"
-              aria-current={pathname === "/" ? "page" : undefined}
-              className={linkClass(pathname === "/")}
+              href={path("/")}
+              aria-current={isActive("/") ? "page" : undefined}
+              className={linkClass(isActive("/"))}
             >
-              Inicio
+              {t.nav.home}
             </Link>
 
             {/* Servicios — flat list, no hover needed on touch */}
             <div>
               <p className="mb-3 text-xs uppercase tracking-[0.3em] text-muted">
-                Servicios
+                {t.nav.services}
               </p>
               <div className="flex flex-col gap-4 border-l border-crimson-light pl-4">
-                {servicios.map((cat) => {
-                  const active = pathname.startsWith(cat.href);
-                  return (
-                    <Link
-                      key={cat.slug}
-                      href={cat.href}
-                      aria-current={active ? "page" : undefined}
-                      className={linkClass(active)}
-                    >
-                      {cat.titulo}
-                    </Link>
-                  );
-                })}
+                {servicios.map((cat) => (
+                  <Link
+                    key={cat.slug}
+                    href={path(cat.href)}
+                    aria-current={isActive(cat.href) ? "page" : undefined}
+                    className={linkClass(isActive(cat.href))}
+                  >
+                    {cat.titulo[lang]}
+                  </Link>
+                ))}
                 <Link
-                  href="/servicios"
+                  href={path("/servicios")}
                   className="text-xs uppercase tracking-[0.2em] text-muted transition-colors hover:text-sand"
                 >
-                  Ver todos los servicios
+                  {t.nav.servicesViewAllLong}
                 </Link>
               </div>
             </div>
 
-            {links.map((link) => {
-              const active = pathname.startsWith(link.href);
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  aria-current={active ? "page" : undefined}
-                  className={linkClass(active)}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
+            {links.map((link) => (
+              <Link
+                key={link.href}
+                href={path(link.href)}
+                aria-current={isActive(link.href) ? "page" : undefined}
+                className={linkClass(isActive(link.href))}
+              >
+                {link.label}
+              </Link>
+            ))}
+
+            <LanguageSwitch className="pt-2" />
           </nav>
         </div>
       )}

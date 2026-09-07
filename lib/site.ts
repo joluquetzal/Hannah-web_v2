@@ -1,15 +1,13 @@
 /**
  * Single source of truth for the clinic's NAP (name, address, phone) and
- * contact details. Reused by Nav, Footer, /contacto and JSON-LD.
+ * contact details. Language-neutral only — translatable copy (tagline,
+ * descriptions, hours labels) lives in `lib/i18n/dictionaries`.
  *
  * TODO: replace every placeholder below with real data from the client.
  */
 export const site = {
   name: "HannaH",
   legalName: "HannaH — Belleza y Estética",
-  tagline: "Clínica de belleza y estética",
-  description:
-    "Clínica de belleza y estética en México. Faciales, masajes y tratamientos especiales en un espacio pensado para el cuidado de tu piel.",
 
   // Contact
   phone: "+52 55 3956 0265",
@@ -28,17 +26,16 @@ export const site = {
     country: "MX",
   },
 
-  // Hours. `summary` for the compact footer/contact line; `schedule` drives
-  // the day-by-day list and the JSON-LD openingHoursSpecification.
-  hours: {
-    summary:
-      "Lunes a viernes de 9:00 a 19:00 h · Sábado de 9:00 a 14:00 h · Domingo cerrado",
-    schedule: [
-      { days: "Lunes a viernes", time: "9:00 – 19:00 h", opens: "09:00", closes: "19:00", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"] },
-      { days: "Sábado", time: "9:00 – 14:00 h", opens: "09:00", closes: "14:00", dayOfWeek: ["Saturday"] },
-      { days: "Domingo", time: "Cerrado", opens: null, closes: null, dayOfWeek: ["Sunday"] },
-    ],
-  },
+  // Opening hours for JSON-LD (schema.org OpeningHoursSpecification). The
+  // human-readable per-day labels live in `dictionaries.clinic.schedule`.
+  openingHours: [
+    {
+      opens: "09:00",
+      closes: "19:00",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+    },
+    { opens: "09:00", closes: "14:00", dayOfWeek: ["Saturday"] },
+  ],
 
   // Google Maps embed (keyless `?q=…&output=embed` form) + a plain link
   // for "abrir en Google Maps". Both point at the address above.
