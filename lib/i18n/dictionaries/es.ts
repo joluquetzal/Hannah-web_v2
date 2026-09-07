@@ -129,6 +129,9 @@ export const es = {
     mensaje: "Mensaje",
     mensajePlaceholder: "¿En qué podemos ayudarte?",
     charsLeftSuffix: "restantes",
+    privacyBefore: "Al enviar, aceptas nuestro ",
+    privacyLink: "Aviso de Privacidad",
+    privacyAfter: ".",
     submit: "Enviar mensaje",
     submitting: "Enviando…",
     successTitle: "Gracias.",
@@ -158,6 +161,140 @@ export const es = {
     visitUs: "Visítanos",
     rights: "Todos los derechos reservados.",
     contactCta: "Contáctanos",
+    privacy: "Aviso de Privacidad",
+    terms: "Términos y Condiciones",
+  },
+
+  legal: {
+    placeholderNote:
+      "Borrador — texto de ejemplo pendiente de revisión y aprobación legal del cliente. No publicar en producción sin validar los datos entre corchetes.",
+    lastUpdatedLabel: "Última actualización:",
+    lastUpdated: "[fecha]",
+    privacy: {
+      title: "Aviso de Privacidad",
+      intro:
+        "En HannaH valoramos tu privacidad. Este aviso describe cómo recabamos, usamos y protegemos tus datos personales cuando te pones en contacto con nosotros a través de este sitio.",
+      sections: [
+        {
+          heading: "Responsable de tus datos personales",
+          body: [
+            "[Razón social del responsable] (en adelante, «HannaH» o «el Responsable»), con domicilio en Eugenia 1309, Col. Narvarte, Ciudad de México, C.P. 03020, es responsable del tratamiento de tus datos personales conforme a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP), su Reglamento y demás normativa aplicable.",
+          ],
+        },
+        {
+          heading: "Datos personales que recabamos",
+          body: [
+            "Cuando utilizas nuestro formulario de contacto recabamos: nombre, número de teléfono, correo electrónico (opcional), el servicio de tu interés y el contenido del mensaje que decidas enviarnos.",
+            "No recabamos datos personales sensibles a través del sitio. Te pedimos no incluir información sobre tu salud u otros datos sensibles en el campo de mensaje.",
+          ],
+        },
+        {
+          heading: "Finalidades del tratamiento",
+          body: [
+            "Finalidades primarias: dar respuesta a tus solicitudes de información, contactarte para coordinar una cita y darte seguimiento como cliente o prospecto.",
+            "Finalidades secundarias: enviarte información sobre promociones, servicios y novedades de HannaH. Puedes oponerte a las finalidades secundarias en cualquier momento escribiendo a [correo de contacto de privacidad].",
+          ],
+        },
+        {
+          heading: "Transferencias de datos",
+          body: [
+            "Para el envío y la gestión de los mensajes del formulario utilizamos el servicio de un tercero (EmailJS, operado desde los Estados Unidos de América).",
+            "Fuera de lo anterior, no transferimos tus datos personales a terceros sin tu consentimiento, salvo en los casos previstos por el artículo 37 de la LFPDPPP.",
+          ],
+        },
+        {
+          heading: "Derechos ARCO",
+          body: [
+            "Tienes derecho a acceder, rectificar y cancelar tus datos personales, así como a oponerte a su tratamiento. Para ejercer estos derechos, envía tu solicitud a [correo de contacto de privacidad] indicando tu nombre, los datos sobre los que deseas ejercer el derecho y una descripción clara de tu petición. Responderemos en los plazos que establece la LFPDPPP.",
+          ],
+        },
+        {
+          heading: "Medios para limitar el uso o la divulgación",
+          body: [
+            "Puedes solicitar que limitemos el uso o la divulgación de tus datos escribiendo a [correo de contacto de privacidad]. Asimismo, puedes inscribirte en el Registro Público para Evitar Publicidad (REPEP) de la PROFECO en https://repep.profeco.gob.mx.",
+          ],
+        },
+        {
+          heading: "Cookies y tecnologías de rastreo",
+          body: [
+            "Actualmente este sitio no utiliza cookies ni tecnologías de rastreo con fines de analítica o publicidad. Si esto cambia, actualizaremos este aviso y, en su caso, solicitaremos tu consentimiento.",
+          ],
+        },
+        {
+          heading: "Cambios al aviso de privacidad",
+          body: [
+            "Nos reservamos el derecho de modificar este aviso de privacidad. Cualquier cambio se publicará en esta misma página, indicando la fecha de última actualización.",
+          ],
+        },
+        {
+          heading: "Contacto",
+          body: [
+            "Para cualquier duda sobre este aviso o el tratamiento de tus datos, contáctanos en [correo de contacto de privacidad] o al [teléfono].",
+          ],
+        },
+      ],
+    },
+    terms: {
+      title: "Términos y Condiciones",
+      intro:
+        "El acceso y uso de este sitio web (el «Sitio») implica la aceptación de los presentes Términos y Condiciones. Si no estás de acuerdo, te pedimos no utilizar el Sitio.",
+      sections: [
+        {
+          heading: "Objeto del Sitio",
+          body: [
+            "El Sitio tiene carácter informativo y de presentación de los servicios de HannaH, clínica de belleza y estética ubicada en la Ciudad de México. No permite realizar compras, pagos ni reservaciones en línea.",
+          ],
+        },
+        {
+          heading: "La información no constituye asesoría médica",
+          body: [
+            "La información publicada en el Sitio es de carácter general y no sustituye la consulta, el diagnóstico ni el tratamiento con un profesional de la salud calificado. Antes de contratar cualquier tratamiento se realizará una valoración individual.",
+          ],
+        },
+        {
+          heading: "Resultados de los tratamientos",
+          body: [
+            "Los resultados de los tratamientos estéticos varían de una persona a otra y dependen de factores individuales. Las imágenes y descripciones del Sitio son ilustrativas y no constituyen una garantía de resultados.",
+          ],
+        },
+        {
+          heading: "Propiedad intelectual",
+          body: [
+            "Los textos, imágenes, logotipos, marcas y demás contenidos del Sitio son propiedad de HannaH o de sus titulares y están protegidos por la legislación aplicable. No se permite su reproducción o uso sin autorización previa por escrito.",
+          ],
+        },
+        {
+          heading: "Enlaces a sitios de terceros",
+          body: [
+            "El Sitio puede contener enlaces a sitios de terceros (por ejemplo, redes sociales o mapas). HannaH no es responsable del contenido ni de las prácticas de privacidad de dichos sitios.",
+          ],
+        },
+        {
+          heading: "Limitación de responsabilidad",
+          body: [
+            "HannaH procura mantener la información del Sitio actualizada y correcta, pero no garantiza que esté libre de errores ni que el Sitio esté disponible de forma ininterrumpida. En la medida permitida por la ley, HannaH no será responsable por daños derivados del uso o de la imposibilidad de uso del Sitio.",
+          ],
+        },
+        {
+          heading: "Modificaciones",
+          body: [
+            "HannaH puede modificar estos Términos y Condiciones en cualquier momento. La versión vigente será la publicada en esta página.",
+          ],
+        },
+        {
+          heading: "Legislación aplicable y jurisdicción",
+          body: [
+            "Estos Términos y Condiciones se rigen por la legislación de los Estados Unidos Mexicanos. Para cualquier controversia, las partes se someten a los tribunales competentes de la Ciudad de México, salvo disposición legal en contrario.",
+          ],
+        },
+        {
+          heading: "Contacto",
+          body: [
+            "Para cualquier duda sobre estos Términos y Condiciones, escríbenos a [correo de contacto] o al [teléfono].",
+          ],
+        },
+      ],
+    },
   },
 
   notFound: {
@@ -203,6 +340,15 @@ export const es = {
       title: "Contacto",
       description:
         "Ponte en contacto con HannaH. Escríbenos y te respondemos pronto. Dirección, teléfono, horarios y WhatsApp.",
+    },
+    avisoPrivacidad: {
+      title: "Aviso de Privacidad",
+      description:
+        "Cómo HannaH recaba, usa y protege tus datos personales conforme a la LFPDPPP.",
+    },
+    terminos: {
+      title: "Términos y Condiciones",
+      description: "Condiciones de uso del sitio web de HannaH.",
     },
     notFound: { title: "Página no encontrada" },
   },

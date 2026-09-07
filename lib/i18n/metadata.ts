@@ -2,7 +2,16 @@ import type { Metadata } from "next";
 import { getDictionary } from "./index";
 import { localizedPath, type Lang } from "./config";
 
-type PageKey = "home" | "servicios" | "faciales" | "masajes" | "especiales" | "nosotros" | "contacto";
+type PageKey =
+  | "home"
+  | "servicios"
+  | "faciales"
+  | "masajes"
+  | "especiales"
+  | "nosotros"
+  | "contacto"
+  | "avisoPrivacidad"
+  | "terminos";
 
 /**
  * Per-route metadata for a locale: localized title/description, a self-canonical

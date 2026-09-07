@@ -79,13 +79,30 @@ export function Footer() {
       </div>
 
       <div className="border-t border-crimson-light">
-        <div className="flex flex-col gap-2 px-gutter py-6 text-xs text-muted sm:flex-row sm:justify-between">
+        <div className="flex flex-col gap-3 px-gutter py-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {year} {site.legalName}. {t.footer.rights}
           </p>
-          <Link href={localizedPath("/contacto", lang)} className="hover:text-sand">
-            {t.footer.contactCta}
-          </Link>
+          <nav className="flex flex-wrap gap-x-5 gap-y-2">
+            <Link
+              href={localizedPath("/aviso-de-privacidad", lang)}
+              className="hover:text-sand"
+            >
+              {t.footer.privacy}
+            </Link>
+            <Link
+              href={localizedPath("/terminos", lang)}
+              className="hover:text-sand"
+            >
+              {t.footer.terms}
+            </Link>
+            <Link
+              href={localizedPath("/contacto", lang)}
+              className="hover:text-sand"
+            >
+              {t.footer.contactCta}
+            </Link>
+          </nav>
         </div>
       </div>
     </footer>

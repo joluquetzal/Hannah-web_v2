@@ -4,8 +4,9 @@ import { useRef, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 import emailjs from "@emailjs/browser";
 import clsx from "clsx";
+import Link from "next/link";
 import { site } from "@/lib/site";
-import { getDictionary, type Lang } from "@/lib/i18n";
+import { getDictionary, localizedPath, type Lang } from "@/lib/i18n";
 import type { Dictionary } from "@/lib/i18n";
 
 const SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
@@ -366,6 +367,17 @@ export function ContactForm({ lang }: { lang: Lang }) {
           </p>
         )}
       </div>
+
+      <p className="text-xs leading-relaxed text-muted">
+        {t.privacyBefore}
+        <Link
+          href={localizedPath("/aviso-de-privacidad", lang)}
+          className="underline hover:text-sand"
+        >
+          {t.privacyLink}
+        </Link>
+        {t.privacyAfter}
+      </p>
 
       <button
         type="submit"

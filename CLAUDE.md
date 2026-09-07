@@ -103,6 +103,9 @@ All tokens are defined in `tailwind.config.ts` under `theme.extend`.
 Every route below also exists in English under `/en` (e.g. `/en/servicios/faciales`),
 rendered from the same `components/views/*` component with `lang="en"`.
 
+`/aviso-de-privacidad` and `/terminos` (+ `/en/…`) are legal pages —
+**placeholder copy** in `dictionaries.legal`, pending the client's legal review.
+
 ### `/` — Landing
 
 Hero only. Brand statement, atmospheric image or video, CTA buttons ("Ver Servicios" → `/servicios`, "Contacto" → `/contacto`). No service listings here.

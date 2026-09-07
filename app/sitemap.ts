@@ -10,6 +10,8 @@ const routes = [
   "/servicios/especiales",
   "/nosotros",
   "/contacto",
+  "/aviso-de-privacidad",
+  "/terminos",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
