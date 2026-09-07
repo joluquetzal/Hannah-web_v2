@@ -6,8 +6,8 @@ export const especiales = [
     nombre: "SKIN BOOSTER",
     descripcion: "Hidratación profunda con ácido hialurónico.",
     incluye: ["4 sesiones", "1 sesión cada 15 días"],
-    img: "/images/especiales/img1.svg",
-    gif: "/images/especiales/video1.gif",
+    img: "/images/specials/img1.svg",
+    gif: "/images/specials/video1.gif",
   },
   {
     slug: "hilos-tensores",
@@ -22,8 +22,8 @@ export const especiales = [
       "Líneas de marioneta",
       "Cuello",
     ],
-    img: "/images/especiales/img2.svg",
-    gif: "/images/especiales/video2.gif",
+    img: "/images/specials/img2.svg",
+    gif: "/images/specials/video2.gif",
   },
   {
     slug: "nanobotox",
@@ -31,8 +31,8 @@ export const especiales = [
     descripcion:
       "Combinación de pequeñas dosis de toxina botulínica y ácido hialurónico.",
     incluye: ["Una aplicación", "Un refuerzo"],
-    img: "/images/especiales/img3.svg",
-    gif: "/images/especiales/video3.gif",
+    img: "/images/specials/img3.svg",
+    gif: "/images/specials/video3.gif",
   },
   {
     slug: "mesobotox",
@@ -40,8 +40,8 @@ export const especiales = [
     descripcion:
       "Pequeñas dosis de toxina botulínica en el tercio superior del rostro. Trata arrugas y líneas de expresión suaves.",
     incluye: ["Una aplicación", "Un refuerzo"],
-    img: "/images/especiales/img4.svg",
-    gif: "/images/especiales/video4.gif",
+    img: "/images/specials/img4.svg",
+    gif: "/images/specials/video4.gif",
   },
 ] as const satisfies readonly Treatment[];
 

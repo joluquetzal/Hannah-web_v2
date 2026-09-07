@@ -41,12 +41,18 @@ const config: Config = {
         "display-sm": "clamp(1.875rem, 1.65rem + 0.9vw, 2.25rem)",
       },
       // Fluid prose width: page intros and long-form copy grow with the
-      // viewport instead of hitting a fixed breakpoint cap. That fixed cap
-      // (max-w-2xl/3xl) is what was leaving a wall of empty space beside
-      // left-aligned headers/paragraphs on wide monitors — this keeps the
-      // measure readable while letting it breathe on bigger screens.
+      // viewport instead of hitting a fixed breakpoint cap. The upper bound
+      // is the readable-measure ceiling: 36rem keeps even the densest 18px
+      // body line (narrow-glyph Spanish sentences on the service pages) inside
+      // the 50–75ch target on monitors up to 2560px — rendered and counted,
+      // not estimated. A wider cap (50rem ≈ 90ch, 40rem ≈ 80ch on those lines)
+      // blows past that on wide screens.
       maxWidth: {
-        prose: "clamp(30rem, 22rem + 22vw, 56rem)",
+        prose: "clamp(30rem, 22rem + 18vw, 36rem)",
+        // The 1280px content cap. Every page's content lives in a centered
+        // shell (`mx-auto max-w-shell px-gutter`) so wide monitors don't
+        // stretch columns to the viewport edge — see layout-responsive rule §4.
+        shell: "80rem",
       },
     },
   },

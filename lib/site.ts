@@ -11,12 +11,12 @@ export const site = {
   description:
     "Clínica de belleza y estética en México. Faciales, masajes y tratamientos especiales en un espacio pensado para el cuidado de tu piel.",
 
-  // Contact — TODO
-  phone: "+52 55 0000 0000",
-  phoneHref: "tel:+525500000000",
-  whatsapp: "https://wa.me/525500000000",
-  email: "contacto@hannah.mx",
-  emailHref: "mailto:contacto@hannah.mx",
+  // Contact
+  phone: "+52 55 3956 0265",
+  phoneHref: "tel:+525539560265",
+  whatsapp: "https://wa.me/525539560265",
+  email: "hannah.spa19@gmail.com",
+  emailHref: "mailto:hannah.spa19@gmail.com",
 
   // Location — TODO: confirm exact street number and postal code with client
   address: {
@@ -28,8 +28,17 @@ export const site = {
     country: "MX",
   },
 
-  // Hours — TODO
-  hours: "Lunes a sábado, 10:00 – 19:00",
+  // Hours. `summary` for the compact footer/contact line; `schedule` drives
+  // the day-by-day list and the JSON-LD openingHoursSpecification.
+  hours: {
+    summary:
+      "Lunes a viernes de 9:00 a 19:00 h · Sábado de 9:00 a 14:00 h · Domingo cerrado",
+    schedule: [
+      { days: "Lunes a viernes", time: "9:00 – 19:00 h", opens: "09:00", closes: "19:00", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"] },
+      { days: "Sábado", time: "9:00 – 14:00 h", opens: "09:00", closes: "14:00", dayOfWeek: ["Saturday"] },
+      { days: "Domingo", time: "Cerrado", opens: null, closes: null, dayOfWeek: ["Sunday"] },
+    ],
+  },
 
   // Google Maps embed (keyless `?q=…&output=embed` form) + a plain link
   // for "abrir en Google Maps". Both point at the address above.
@@ -38,10 +47,10 @@ export const site = {
   mapLinkUrl:
     "https://www.google.com/maps/search/?api=1&query=Eugenia%201309%2C%20Col.%20Narvarte%2C%20CDMX%2C%20M%C3%A9xico",
 
-  // Social — TODO
+  // Social
   social: {
-    instagram: "",
-    facebook: "",
+    instagram: "https://www.instagram.com/hannah.spa.cdmx/",
+    facebook: "https://www.facebook.com/people/Hannah-Spa/61553359328074/",
   },
 
   // Deployment

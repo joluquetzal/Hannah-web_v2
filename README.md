@@ -34,4 +34,3 @@ Copia `.env.example` a `.env.local` y completa las claves de EmailJS.
 - [x] Fase 5 — Pulido y rendimiento (GSAP lazy, 404, favicon, canonical, contraste)
 - [ ] Deploy — Vercel (pendiente)
 
-Convenciones de código en `.claude/rules/`.

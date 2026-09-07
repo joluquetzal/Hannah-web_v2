@@ -16,12 +16,12 @@ export default function FacialesPage() {
     <>
       <ScrollBackdrop />
 
-      <div className="px-gutter pb-section-b pt-top-clear">
+      <div className="mx-auto max-w-shell px-gutter pb-section-b pt-top-clear">
         <header data-bg={backdrop.noir} className="max-w-prose">
           <h1 className="font-display text-display-md italic text-cream">
             Faciales
           </h1>
-          <p className="mt-4 leading-relaxed text-sand">
+          <p className="mt-4 text-lg leading-relaxed text-sand">
             Seis faciales para hidratar, equilibrar y rejuvenecer según tu tipo de
             piel.
           </p>
