@@ -16,7 +16,7 @@ export function NosotrosView({ lang }: { lang: Lang }) {
           data-bg={backdrop.noir}
           className="mx-auto flex min-h-[45vh] max-w-prose flex-col justify-center"
         >
-          <p className="text-xs uppercase tracking-eyebrow text-muted">
+          <p className="text-xs uppercase tracking-eyebrow text-muted-strong">
             {t.eyebrow}
           </p>
           <h1 className="mt-6 font-display text-display-md italic text-cream">

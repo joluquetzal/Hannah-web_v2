@@ -116,6 +116,7 @@ Minimum 4.5:1 for body text, 3:1 for large text. Measured against `noir` (#0E0A0
 | `cream` on `crimson` button | 9.96:1 | ✅ |
 | `sand` on `crimson-light` | 6.56:1 | ✅ |
 | `muted` #847A6F | 4.68:1 | ✅ (just passes — don't darken it) |
+| `muted-strong` #A99C8D | 7.34:1 | ✅ (12px uppercase micro-labels) |
 | `crimson-bright` #E0938A as text | 8.17:1 | ✅ (error / alert text + borders) |
 | **`crimson` #6B1414 as text or border** | **1.63:1** | ❌ **fails at any size** |
 
@@ -124,6 +125,16 @@ Minimum 4.5:1 for body text, 3:1 for large text. Measured against `noir` (#0E0A0
 errors, the invalid-field border and the send-failure message now use it, as does the
 signature-treatment ★ and the draft banner on the legal pages. If you see `text-crimson`
 or `border-crimson` on a dark surface, it's a bug — use `crimson-bright` or `cream`.
+
+**`muted` vs `muted-strong`.** `muted` at 4.68:1 clears AA for normal text but reads thin
+on 12px uppercase set with `tracking-label` / `tracking-eyebrow` — letter-spaced caps that
+small need more headroom. Those micro-labels (eyebrows, field labels, treatment times,
+`Incluye` / `Zonas`, clinic-info `<dt>`, card CTAs, the legal "last updated" line, the
+ES/EN switch) use `muted-strong` (#A99C8D, 7.34:1). `muted` stays for de-emphasized
+*running* text only: footer fine print, the contact-form helper paragraph, `next/image`
+placeholder boxes, input placeholders. A `text-muted` on a `text-xs uppercase` element is
+now a bug — use `muted-strong`. Where such a label had `hover:text-sand`, the hover target
+moved to `text-cream` so the state change stays legible.
 
 Keep the colour table in `CLAUDE.md` in sync with `tailwind.config.ts` — the doc currently
 lists `muted` as `#7A6E65`, which measures 3.98:1 and fails; the config correctly uses

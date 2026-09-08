@@ -11,5 +11,5 @@
 - Responsive: mobile-first. Base styles are mobile; layer `sm:` `md:` `lg:` upward. Don't write desktop-first with `max-*`.
 - Conditional classes: use `clsx` / `cn` helper, never string concatenation with template literals.
 - Alternating TreatmentRow layout is driven by index parity (`index % 2`) → a class toggle, not duplicated markup.
-- Dark ground is the default surface (`bg-noir`). Ensure text contrast: `cream` for headings, `sand` for body, `muted` only for de-emphasized secondary text.
+- Dark ground is the default surface (`bg-noir`). Ensure text contrast: `cream` for headings, `sand` for body, `muted-strong` for 12px uppercase micro-labels (eyebrows, field labels, treatment times), `muted` only for de-emphasized *running* text (footer fine print, helper paragraphs, placeholders). `text-muted` on a `text-xs uppercase` element is a bug — see `layout-responsive.md` §8.
 - No arbitrary z-index values — keep a small documented scale (nav above content, modal/overlay above nav).

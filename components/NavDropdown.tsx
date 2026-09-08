@@ -148,7 +148,7 @@ export function NavDropdown({
       >
         <div className="px-gutter py-8">
           <div className="flex items-baseline justify-between">
-            <p className="text-xs uppercase tracking-eyebrow text-muted">
+            <p className="text-xs uppercase tracking-eyebrow text-muted-strong">
               {t.nav.servicesMenuHeading}
             </p>
             <Link
@@ -182,7 +182,7 @@ export function NavDropdown({
                     <p className="mt-2 text-sm leading-relaxed text-sand">
                       {category.descripcion[lang]}
                     </p>
-                    <span className="mt-4 inline-block text-xs uppercase tracking-label text-muted transition-colors group-hover:text-sand">
+                    <span className="mt-4 inline-block text-xs uppercase tracking-label text-muted-strong transition-colors group-hover:text-cream">
                       {t.nav.servicesCardCta}
                     </span>
                   </Link>

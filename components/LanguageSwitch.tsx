@@ -18,7 +18,7 @@ export function LanguageSwitch({ className }: { className?: string }) {
       title={title}
       className={clsx(
         "px-2 py-1.5 transition-colors",
-        lang === target ? "text-cream" : "text-muted hover:text-sand",
+        lang === target ? "text-cream" : "text-muted-strong hover:text-cream",
       )}
     >
       {label}
@@ -34,7 +34,7 @@ export function LanguageSwitch({ className }: { className?: string }) {
       )}
     >
       {item("es", t.es, t.toEs)}
-      <span aria-hidden className="text-muted">
+      <span aria-hidden className="text-muted-strong">
         /
       </span>
       {item("en", t.en, t.toEn)}

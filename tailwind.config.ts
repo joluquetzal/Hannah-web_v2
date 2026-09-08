@@ -16,6 +16,12 @@ const config: Config = {
         // Nudged lighter than the design-doc #7A6E65 (which is ~3.98:1 on
         // noir and fails WCAG AA for body text). #847A6F is ~4.74:1.
         muted: "#847A6F",
+        // Brighter partner to `muted` for the 12px uppercase micro-labels
+        // (eyebrows, field labels, treatment times). Letter-spaced caps that
+        // small read as thin at muted's 4.68:1; #A99C8D is ~7.34:1 on noir
+        // (AAA). `muted` stays for de-emphasized running text — footer fine
+        // print, helper paragraphs, input placeholders.
+        "muted-strong": "#A99C8D",
       },
       fontFamily: {
         display: ["var(--font-cormorant)", "Georgia", "Cambria", "serif"],

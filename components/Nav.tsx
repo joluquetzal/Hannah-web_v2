@@ -150,7 +150,7 @@ export function Nav() {
 
             {/* Servicios — flat list, no hover needed on touch */}
             <div>
-              <p className="mb-3 text-xs uppercase tracking-eyebrow text-muted">
+              <p className="mb-3 text-xs uppercase tracking-eyebrow text-muted-strong">
                 {t.nav.services}
               </p>
               <div className="flex flex-col gap-4 border-l border-crimson-light pl-4">
@@ -166,7 +166,7 @@ export function Nav() {
                 ))}
                 <Link
                   href={path("/servicios")}
-                  className="text-xs uppercase tracking-label text-muted transition-colors hover:text-sand"
+                  className="text-xs uppercase tracking-label text-muted-strong transition-colors hover:text-cream"
                 >
                   {t.nav.servicesViewAllLong}
                 </Link>

@@ -105,7 +105,7 @@ function Field({
       <div className="flex items-baseline justify-between gap-3">
         <label
           htmlFor={id}
-          className="block text-xs uppercase tracking-label text-muted"
+          className="block text-xs uppercase tracking-label text-muted-strong"
         >
           {label}
         </label>
@@ -221,7 +221,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
         <button
           type="button"
           onClick={() => setStatus("idle")}
-          className="mt-6 text-xs uppercase tracking-label text-muted transition-colors hover:text-sand"
+          className="mt-6 text-xs uppercase tracking-label text-muted-strong transition-colors hover:text-cream"
         >
           {t.successAgain}
         </button>
@@ -296,7 +296,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
         label={t.email}
         error={errors.email}
         hint={
-          <span className="text-xs uppercase tracking-label text-muted">
+          <span className="text-xs uppercase tracking-label text-muted-strong">
             {t.optional}
           </span>
         }
@@ -320,7 +320,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
           <span
             className={clsx(
               "text-xs uppercase tracking-label",
-              mensajeLeft < 50 ? "text-sand" : "text-muted",
+              mensajeLeft < 50 ? "text-sand" : "text-muted-strong",
             )}
           >
             {mensajeLeft} {t.charsLeftSuffix}
