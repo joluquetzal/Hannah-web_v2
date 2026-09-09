@@ -82,18 +82,28 @@ Use the Tailwind scale (`4/8/12/16/24…`) plus the project's fluid tokens, and 
 
 Don't invent one-off values. If a value is needed twice, it's a token.
 
-## 7. Typography and measure
+## 7. Typography, size scale and measure
 
-- Display/headings: Cormorant Garamond, light italic, via the fluid `text-display-lg|md|sm` tokens.
-- Body/UI: DM Sans. **Lead and body paragraphs are 18px (`text-lg`)** — this applies to page intros, hero subtext and treatment descriptions alike. A 16px body paragraph is a bug, not a variant.
-- Labels/eyebrows: 12px uppercase with wide tracking. Never below 12px.
+**The text-size scale is closed. Use these and nothing else:**
+
+| Class | px | Role |
+|---|---|---|
+| `text-display-lg / -md / -sm` | fluid | Page headings (`<h1>`, major section `<h2>`) — Cormorant Garamond, light italic |
+| `text-2xl` (`text-3xl` sparingly) | 24 / 30 | Component headings — footer brand, clinic-info subhead, menu-card titles — Cormorant italic |
+| `text-lg` | 18 | Lead **and** body paragraphs — page intros, hero subtext, treatment descriptions. A 16px body paragraph is a bug, not a variant. |
+| base (no size class) | 16 | Form controls (`<input>` / `<select>` / `<textarea>`). Below 16px iOS Safari zooms the viewport on focus — **never** put `text-sm` on a form control. |
+| `text-sm` | 14 | Dense secondary content only — "incluye" lists, the clinic `<dl>`, footer, card copy. Never a running paragraph. |
+| `text-xs` | 12 | Uppercase eyebrows, labels, button text, small-caps CTAs. **The floor — nothing smaller.** No `text-[10px]` / `[11px]` / `[13px]`. |
+
 - Visual hierarchy comes from size, weight and contrast — never from a heading tag chosen for its default size.
+- **Uppercase text is always tracked:** `tracking-label` (0.2em) for inline labels / buttons / small CTAs, `tracking-eyebrow` (0.3em) for the eyebrow line above a heading. Uppercase with no tracking is a bug. **Never uppercase running text** — only labels, eyebrows and ≤ ~4-word CTAs.
+- **Leading by role:** `leading-relaxed` on body and lead paragraphs; tight on display headings (`leading-[1.05]` on the hero `<h1>` is the one sanctioned arbitrary value). Never `leading-none` on anything that can wrap.
 
-**Line length: 50–75 characters.** Measured today: body copy runs 46–68ch, which is
-healthy. Two things to watch:
+**Measure — line length 50–75 characters — applies to every multi-line text block, not
+just `max-w-prose`.** Card copy, clinic info and form text get a `max-w-*` or a bounded
+column so nothing runs to ~100ch on a wide monitor.
 
-- The one remaining 16px paragraph measures **76ch** — fixing it to `text-lg` also fixes the measure.
-- `max-w-prose` clamps up to `56rem`, which reaches ~79ch on a 2560px monitor. Cap the token near **70ch** rather than 56rem.
+- `max-w-prose` is the long-form measure token. It clamps to **`36rem`** (~72ch at 18px, rendered and counted — see the comment in `tailwind.config.ts`). Don't raise it.
 
 ## 8. Color and contrast
 
@@ -106,12 +116,14 @@ Minimum 4.5:1 for body text, 3:1 for large text. Measured against `noir` (#0E0A0
 | `cream` on `crimson` button | 9.96:1 | ✅ |
 | `sand` on `crimson-light` | 6.56:1 | ✅ |
 | `muted` #847A6F | 4.68:1 | ✅ (just passes — don't darken it) |
-| **`crimson` #6B1414 as text** | **1.63:1** | ❌ **fails at any size** |
+| `crimson-bright` #E0938A as text | 8.17:1 | ✅ (error / alert text + borders) |
+| **`crimson` #6B1414 as text or border** | **1.63:1** | ❌ **fails at any size** |
 
-**`crimson` is a background colour, never a text colour on `noir`.** It is currently used
-for form validation errors and the send-failure message in `ContactForm.tsx`, where it is
-effectively invisible. Error text must use a light colour (e.g. `cream`, or a lighter red
-added to the palette).
+**`crimson` is a background colour, never a text or border colour on `noir`.** A
+`crimson-bright` token (#E0938A, ~8:1) was added for this: `ContactForm.tsx` validation
+errors, the invalid-field border and the send-failure message now use it, as does the
+signature-treatment ★ and the draft banner on the legal pages. If you see `text-crimson`
+or `border-crimson` on a dark surface, it's a bug — use `crimson-bright` or `cream`.
 
 Keep the colour table in `CLAUDE.md` in sync with `tailwind.config.ts` — the doc currently
 lists `muted` as `#7A6E65`, which measures 3.98:1 and fails; the config correctly uses

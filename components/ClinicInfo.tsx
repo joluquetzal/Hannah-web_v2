@@ -1,10 +1,13 @@
 import { site } from "@/lib/site";
+import { getDictionary, type Lang } from "@/lib/i18n";
 
-export function ClinicInfo() {
+export function ClinicInfo({ lang }: { lang: Lang }) {
+  const t = getDictionary(lang).clinic;
+
   return (
     <div className="flex h-full flex-col justify-start space-y-8">
       <div>
-        <h2 className="font-display text-2xl italic text-cream">Visítanos</h2>
+        <h2 className="font-display text-2xl italic text-cream">{t.visitUs}</h2>
         <address className="mt-3 not-italic leading-relaxed text-sand">
           {site.address.street}
           <br />
@@ -16,8 +19,8 @@ export function ClinicInfo() {
 
       <dl className="space-y-4 text-sm">
         <div>
-          <dt className="text-xs uppercase tracking-[0.2em] text-muted">
-            Teléfono
+          <dt className="text-xs uppercase tracking-label text-muted">
+            {t.phone}
           </dt>
           <dd className="mt-1">
             <a href={site.phoneHref} className="text-sand hover:text-cream">
@@ -26,20 +29,20 @@ export function ClinicInfo() {
           </dd>
         </div>
         <div>
-          <dt className="text-xs uppercase tracking-[0.2em] text-muted">
-            Horario
+          <dt className="text-xs uppercase tracking-label text-muted">
+            {t.hours}
           </dt>
           <dd className="mt-1 space-y-0.5 text-sand">
-            {site.hours.schedule.map((h) => (
-              <p key={h.days}>
-                {h.days}: {h.time}
+            {t.schedule.map((row) => (
+              <p key={row.days}>
+                {row.days}: {row.time}
               </p>
             ))}
           </dd>
         </div>
         <div>
-          <dt className="text-xs uppercase tracking-[0.2em] text-muted">
-            WhatsApp
+          <dt className="text-xs uppercase tracking-label text-muted">
+            {t.whatsapp}
           </dt>
           <dd className="mt-1">
             <a
@@ -48,13 +51,13 @@ export function ClinicInfo() {
               rel="noopener noreferrer"
               className="text-sand hover:text-cream"
             >
-              Escríbenos
+              {t.whatsappCta}
             </a>
           </dd>
         </div>
         <div>
-          <dt className="text-xs uppercase tracking-[0.2em] text-muted">
-            Redes
+          <dt className="text-xs uppercase tracking-label text-muted">
+            {t.social}
           </dt>
           <dd className="mt-1 flex gap-4">
             <a
@@ -81,7 +84,7 @@ export function ClinicInfo() {
         <div>
           <iframe
             src={site.mapEmbedUrl}
-            title="Ubicación de HannaH en el mapa"
+            title={t.mapTitle}
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
             className="aspect-[4/3] w-full border border-crimson-light"
@@ -90,14 +93,14 @@ export function ClinicInfo() {
             href={site.mapLinkUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-2 inline-block text-xs uppercase tracking-[0.2em] text-muted transition-colors hover:text-sand"
+            className="mt-2 inline-block text-xs uppercase tracking-label text-muted transition-colors hover:text-sand"
           >
-            Abrir en Google Maps
+            {t.mapCta}
           </a>
         </div>
       ) : (
         <div className="flex aspect-[4/3] w-full items-center justify-center border border-dashed border-crimson-light text-sm text-muted">
-          Mapa pendiente
+          {t.mapPending}
         </div>
       )}
     </div>

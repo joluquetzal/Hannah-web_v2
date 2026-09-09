@@ -4,7 +4,10 @@ import { useRef, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 import emailjs from "@emailjs/browser";
 import clsx from "clsx";
+import Link from "next/link";
 import { site } from "@/lib/site";
+import { getDictionary, localizedPath, type Lang } from "@/lib/i18n";
+import type { Dictionary } from "@/lib/i18n";
 
 const SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
 const TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
@@ -16,6 +19,7 @@ type FieldName = "nombre" | "email" | "telefono" | "servicio" | "mensaje";
 type Values = Record<FieldName, string>;
 type Errors = Partial<Record<FieldName, string>>;
 type Status = "idle" | "sending" | "success" | "error";
+type FormText = Dictionary["form"];
 
 const FIELDS: readonly FieldName[] = [
   "nombre",
@@ -35,39 +39,44 @@ const EMPTY: Values = {
 
 const digitsOf = (value: string) => value.replace(/\D/g, "");
 
-function validateField(name: FieldName, values: Values): string | undefined {
+function validateField(
+  name: FieldName,
+  values: Values,
+  t: FormText,
+): string | undefined {
   const value = values[name].trim();
+  const e = t.errors;
 
   switch (name) {
     case "nombre":
-      if (!value) return "Escribe tu nombre.";
-      if (value.length < 2) return "El nombre es demasiado corto.";
-      if (value.length > 60) return "El nombre es demasiado largo.";
-      if (!/\p{L}/u.test(value)) return "Escribe un nombre válido.";
-      if (/\d/.test(value)) return "El nombre no debe llevar números.";
+      if (!value) return e.nombreRequired;
+      if (value.length < 2) return e.nombreShort;
+      if (value.length > 60) return e.nombreLong;
+      if (!/\p{L}/u.test(value)) return e.nombreInvalid;
+      if (/\d/.test(value)) return e.nombreNoDigits;
       return undefined;
 
     case "email":
       if (!value) return undefined; // Opcional.
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value))
-        return "Revisa tu correo electrónico.";
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)) return e.emailInvalid;
       return undefined;
 
     case "telefono": {
       const digits = digitsOf(value);
-      if (!digits) return "Escribe tu teléfono.";
-      if (digits.length < 10) return "Debe tener al menos 10 dígitos.";
-      if (digits.length > 15) return "Tiene demasiados dígitos.";
+      if (!digits) return e.telefonoRequired;
+      if (digits.length < 10) return e.telefonoShort;
+      if (digits.length > 15) return e.telefonoLong;
       return undefined;
     }
 
     case "servicio":
-      if (!value) return "Selecciona el servicio que te interesa.";
+      if (!value) return e.servicioRequired;
       return undefined;
 
     case "mensaje":
-      if (!value) return "Escribe tu mensaje.";
-      if (value.length > MAX_MENSAJE) return `Máximo ${MAX_MENSAJE} caracteres.`;
+      if (!value) return e.mensajeRequired;
+      if (value.length > MAX_MENSAJE)
+        return `${e.mensajeLongPrefix} ${MAX_MENSAJE} ${e.mensajeLongSuffix}`;
       return undefined;
   }
 }
@@ -76,7 +85,7 @@ const inputClass =
   "w-full border bg-transparent px-4 py-3 text-cream placeholder:text-muted focus:outline-none";
 
 const borderClass = (invalid: boolean) =>
-  invalid ? "border-crimson" : "border-crimson-light focus:border-sand";
+  invalid ? "border-crimson-bright" : "border-crimson-light focus:border-sand";
 
 function Field({
   id,
@@ -96,7 +105,7 @@ function Field({
       <div className="flex items-baseline justify-between gap-3">
         <label
           htmlFor={id}
-          className="block text-xs uppercase tracking-[0.2em] text-muted"
+          className="block text-xs uppercase tracking-label text-muted"
         >
           {label}
         </label>
@@ -104,7 +113,11 @@ function Field({
       </div>
       <div className="mt-2">{children}</div>
       {error && (
-        <p id={`${id}-error`} role="alert" className="mt-1 text-sm text-crimson">
+        <p
+          id={`${id}-error`}
+          role="alert"
+          className="mt-1 text-sm text-crimson-bright"
+        >
           {error}
         </p>
       )}
@@ -112,7 +125,8 @@ function Field({
   );
 }
 
-export function ContactForm() {
+export function ContactForm({ lang }: { lang: Lang }) {
+  const t = getDictionary(lang).form;
   const [values, setValues] = useState<Values>(EMPTY);
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<Status>("idle");
@@ -125,11 +139,15 @@ export function ContactForm() {
     setValues(next);
     // Clear an error as soon as the user fixes it, but never introduce one
     // mid-typing — that only happens on blur or submit.
-    if (errors[name]) setErrors({ ...errors, [name]: validateField(name, next) });
+    if (errors[name])
+      setErrors({ ...errors, [name]: validateField(name, next, t) });
   }
 
   function handleBlur(name: FieldName) {
-    setErrors((current) => ({ ...current, [name]: validateField(name, values) }));
+    setErrors((current) => ({
+      ...current,
+      [name]: validateField(name, values, t),
+    }));
   }
 
   const fieldProps = (name: FieldName) => ({
@@ -153,7 +171,7 @@ export function ContactForm() {
 
     const found: Errors = {};
     for (const name of FIELDS) {
-      const message = validateField(name, values);
+      const message = validateField(name, values, t);
       if (message) found[name] = message;
     }
     setErrors(found);
@@ -173,9 +191,12 @@ export function ContactForm() {
     sending.current = true;
     setStatus("sending");
     try {
-      await emailjs.send(SERVICE_ID, TEMPLATE_ID, { ...values }, {
-        publicKey: PUBLIC_KEY,
-      });
+      await emailjs.send(
+        SERVICE_ID,
+        TEMPLATE_ID,
+        { ...values, lang },
+        { publicKey: PUBLIC_KEY },
+      );
       setStatus("success");
       setValues(EMPTY);
       setErrors({});
@@ -193,16 +214,16 @@ export function ContactForm() {
         role="status"
         className="flex h-full flex-col justify-center border border-crimson-light p-8 text-sand"
       >
-        <p className="font-display text-3xl italic text-cream">Gracias.</p>
-        <p className="mt-3 text-sm leading-relaxed">
-          Recibimos tu mensaje y te responderemos lo antes posible.
+        <p className="font-display text-3xl italic text-cream">
+          {t.successTitle}
         </p>
+        <p className="mt-3 text-sm leading-relaxed">{t.successBody}</p>
         <button
           type="button"
           onClick={() => setStatus("idle")}
-          className="mt-6 text-xs uppercase tracking-[0.2em] text-muted transition-colors hover:text-sand"
+          className="mt-6 text-xs uppercase tracking-label text-muted transition-colors hover:text-sand"
         >
-          Enviar otro mensaje
+          {t.successAgain}
         </button>
       </div>
     );
@@ -213,7 +234,7 @@ export function ContactForm() {
   // Enable "Enviar mensaje" only once every required field is valid. `email`
   // is optional, and validateField returns undefined for an empty email, so
   // it only blocks submission when filled in with a malformed address.
-  const isComplete = FIELDS.every((name) => !validateField(name, values));
+  const isComplete = FIELDS.every((name) => !validateField(name, values, t));
 
   return (
     <form
@@ -221,26 +242,26 @@ export function ContactForm() {
       noValidate
       className="flex h-full flex-col justify-start space-y-6"
     >
-      <Field id="nombre" label="Nombre" error={errors.nombre}>
+      <Field id="nombre" label={t.nombre} error={errors.nombre}>
         <input
           {...fieldProps("nombre")}
           type="text"
           autoComplete="name"
           maxLength={60}
-          placeholder="Tu nombre completo"
+          placeholder={t.nombrePlaceholder}
           onChange={(e) => setField("nombre", e.target.value)}
           className={clsx(inputClass, borderClass(Boolean(errors.nombre)))}
         />
       </Field>
 
-      <Field id="telefono" label="Teléfono" error={errors.telefono}>
+      <Field id="telefono" label={t.telefono} error={errors.telefono}>
         <input
           {...fieldProps("telefono")}
           type="tel"
           inputMode="tel"
           autoComplete="tel"
           maxLength={20}
-          placeholder="55 1234 5678"
+          placeholder={t.telefonoPlaceholder}
           onChange={(e) =>
             // Allow only digits and the usual separators.
             setField("telefono", e.target.value.replace(/[^\d+()\-\s]/g, ""))
@@ -249,7 +270,7 @@ export function ContactForm() {
         />
       </Field>
 
-      <Field id="servicio" label="Servicio" error={errors.servicio}>
+      <Field id="servicio" label={t.servicio} error={errors.servicio}>
         <select
           {...fieldProps("servicio")}
           onChange={(e) => setField("servicio", e.target.value)}
@@ -261,22 +282,22 @@ export function ContactForm() {
           )}
         >
           <option value="" disabled>
-            ¿Qué servicio te interesa?
+            {t.servicioPlaceholder}
           </option>
-          <option value="Faciales">Faciales</option>
-          <option value="Masajes">Masajes</option>
-          <option value="Especiales">Especiales</option>
-          <option value="Otro">Otro / No sé aún</option>
+          <option value="Faciales">{t.servicioFaciales}</option>
+          <option value="Masajes">{t.servicioMasajes}</option>
+          <option value="Especiales">{t.servicioEspeciales}</option>
+          <option value="Otro">{t.servicioOtro}</option>
         </select>
       </Field>
 
       <Field
         id="email"
-        label="Correo electrónico"
+        label={t.email}
         error={errors.email}
         hint={
-          <span className="text-[10px] uppercase tracking-widest text-muted">
-            Opcional
+          <span className="text-xs uppercase tracking-label text-muted">
+            {t.optional}
           </span>
         }
       >
@@ -285,7 +306,7 @@ export function ContactForm() {
           type="email"
           autoComplete="email"
           maxLength={120}
-          placeholder="tu@correo.com"
+          placeholder={t.emailPlaceholder}
           onChange={(e) => setField("email", e.target.value)}
           className={clsx(inputClass, borderClass(Boolean(errors.email)))}
         />
@@ -293,16 +314,16 @@ export function ContactForm() {
 
       <Field
         id="mensaje"
-        label="Mensaje"
+        label={t.mensaje}
         error={errors.mensaje}
         hint={
           <span
             className={clsx(
-              "text-[10px] uppercase tracking-widest",
+              "text-xs uppercase tracking-label",
               mensajeLeft < 50 ? "text-sand" : "text-muted",
             )}
           >
-            {mensajeLeft} restantes
+            {mensajeLeft} {t.charsLeftSuffix}
           </span>
         }
       >
@@ -310,7 +331,7 @@ export function ContactForm() {
           {...fieldProps("mensaje")}
           rows={5}
           maxLength={MAX_MENSAJE}
-          placeholder="¿En qué podemos ayudarte?"
+          placeholder={t.mensajePlaceholder}
           onChange={(e) => setField("mensaje", e.target.value)}
           className={clsx(
             inputClass,
@@ -336,27 +357,38 @@ export function ContactForm() {
 
       <div aria-live="polite" className="min-h-[1.25rem] text-sm">
         {status === "error" && (
-          <p className="text-crimson">
-            No pudimos enviar tu mensaje. Inténtalo de nuevo o escríbenos por{" "}
+          <p className="text-crimson-bright">
+            {t.errorLead}{" "}
             <a
               href={site.whatsapp}
               target="_blank"
               rel="noopener noreferrer"
               className="underline hover:text-sand"
             >
-              WhatsApp
+              {t.errorWhatsApp}
             </a>
             .
           </p>
         )}
       </div>
 
+      <p className="text-xs leading-relaxed text-muted">
+        {t.privacyBefore}
+        <Link
+          href={localizedPath("/aviso-de-privacidad", lang)}
+          className="underline hover:text-sand"
+        >
+          {t.privacyLink}
+        </Link>
+        {t.privacyAfter}
+      </p>
+
       <button
         type="submit"
         disabled={status === "sending" || !isComplete}
-        className="inline-flex items-center justify-center bg-crimson px-7 py-3 text-xs uppercase tracking-[0.2em] text-cream transition-colors hover:bg-crimson-light disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex items-center justify-center bg-crimson px-7 py-3 text-xs uppercase tracking-label text-cream transition-colors hover:bg-crimson-light disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {status === "sending" ? "Enviando…" : "Enviar mensaje"}
+        {status === "sending" ? t.submitting : t.submit}
       </button>
     </form>
   );

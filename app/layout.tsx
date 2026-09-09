@@ -4,7 +4,10 @@ import "./globals.css";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { BusinessJsonLd } from "@/components/BusinessJsonLd";
+import { SyncHtmlLang } from "@/components/SyncHtmlLang";
+import { SkipLink } from "@/components/SkipLink";
 import { site } from "@/lib/site";
+import { getDictionary } from "@/lib/i18n";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -21,19 +24,21 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
+const es = getDictionary("es");
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} — ${site.tagline}`,
+    default: es.meta.home.title,
     template: `%s · ${site.name}`,
   },
-  description: site.description,
+  description: es.meta.home.description,
   openGraph: {
     type: "website",
     locale: "es_MX",
     siteName: site.name,
-    title: `${site.name} — ${site.tagline}`,
-    description: site.description,
+    title: es.meta.home.title,
+    description: es.meta.home.description,
   },
   twitter: {
     card: "summary_large_image",
@@ -46,12 +51,8 @@ export default function RootLayout({
   return (
     <html lang="es" className={`${cormorant.variable} ${dmSans.variable}`}>
       <body className="flex min-h-screen flex-col bg-noir font-body text-sand antialiased">
-        <a
-          href="#contenido"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:bg-crimson focus:px-4 focus:py-2 focus:text-cream"
-        >
-          Saltar al contenido
-        </a>
+        <SkipLink />
+        <SyncHtmlLang />
         <Nav />
         <main id="contenido" className="flex-1">
           {children}

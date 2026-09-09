@@ -7,8 +7,9 @@ const config: Config = {
       colors: {
         noir: "#0E0A0A",
         crimson: {
-          DEFAULT: "#6B1414",
-          light: "#3D1A1A",
+          DEFAULT: "#6B1414", // brand red — BACKGROUND only (1.63:1 on noir, fails as text)
+          light: "#3D1A1A", // mid-dark surface
+          bright: "#E0938A", // error / alert TEXT and borders on dark — ~8.2:1 on noir
         },
         sand: "#C9A27A",
         cream: "#F0E8DC",
@@ -39,6 +40,13 @@ const config: Config = {
         "display-lg": "clamp(3rem, 2.5rem + 2.5vw, 4.5rem)",
         "display-md": "clamp(2.25rem, 1.95rem + 1.5vw, 3rem)",
         "display-sm": "clamp(1.875rem, 1.65rem + 0.9vw, 2.25rem)",
+      },
+      // Tracking for the two uppercase-caps roles. Uppercase text is always
+      // tracked (see styling-tailwind rule); these replace the repeated
+      // arbitrary `tracking-[0.2em]` / `tracking-[0.3em]`.
+      letterSpacing: {
+        label: "0.2em", // inline labels, button text, small caps CTAs
+        eyebrow: "0.3em", // section eyebrows above a heading
       },
       // Fluid prose width: page intros and long-form copy grow with the
       // viewport instead of hitting a fixed breakpoint cap. The upper bound

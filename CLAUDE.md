@@ -25,7 +25,7 @@ HannaH is a beauty and aesthetics clinic based in Mexico. This is their **market
 - **Animations**: GSAP + ScrollTrigger
 - **Forms**: EmailJS (client-side email, no backend needed)
 - **Deployment**: Vercel (static export)
-- **Language**: Spanish (all user-facing content is in Spanish)
+- **Languages**: Spanish (`es`, default, unprefixed URLs) + English (`en`, under `/en`). Spanish is the source of truth. Every user-facing string is maintained in both — see `.claude/rules/content-i18n.md`.
 
 ## Commands
 
@@ -40,29 +40,32 @@ npm run lint      # lint
 
 ```
 app/
-  layout.tsx              # global layout: Nav + Footer
-  page.tsx                # / landing page
-  servicios/
-    page.tsx              # /servicios — service hub (3 category cards)
-    faciales/page.tsx     # /servicios/faciales
-    masajes/page.tsx      # /servicios/masajes
-    especiales/page.tsx   # /servicios/especiales
-  nosotros/page.tsx       # /nosotros — about us
-  contacto/page.tsx       # /contacto — contact form + clinic info
+  layout.tsx              # global layout: Nav + Footer (<html lang="es">)
+  page.tsx                # / — Spanish, delegates to components/views/HomeView
+  servicios/…             # Spanish service pages (thin wrappers over views/)
+  nosotros/page.tsx
+  contacto/page.tsx
+  en/                     # English mirror: /en, /en/servicios/…, /en/contacto …
+                          # same thin wrappers, lang="en"
 components/
-  Nav.tsx                 # fixed nav, transparent → solid on scroll
+  Nav.tsx                 # fixed nav; contains LanguageSwitch (ES | EN)
   Footer.tsx
-  ServiceCard.tsx         # card used on /servicios hub
-  TreatmentRow.tsx        # alternating image/text row used on service pages
+  LanguageSwitch.tsx      # swaps to the same page in the other language
+  ServiceCard.tsx / TreatmentRow.tsx   # take a `lang` prop
+  views/                  # HomeView, ServiciosView, CategoryView, NosotrosView,
+                          # ContactoView — the real page bodies, param'd by lang
 data/
-  faciales.ts
-  masajes.ts
-  especiales.ts
+  faciales.ts / masajes.ts / especiales.ts / servicios.ts
+                          # translatable fields are Localized<T> = { es, en }
+lib/
+  i18n/                   # config (locales, localizedPath), dictionaries/{es,en}.ts,
+                          # getDictionary, useLang/useI18n, buildMetadata
+  site.ts                 # language-neutral NAP only
 public/
   images/
-    faciales/             # img1.svg … img6.svg, video1.gif … video6.gif
-    masajes/              # img1.svg … img4.svg, video1.gif … video4.gif
-    especiales/           # img1.svg … img4.svg, video1.gif … video4.gif
+    facials/              # img1.svg … img6.svg, video1.mp4 … video6.mp4
+    massages/             # img1.svg … img4.svg, video1.mp4 … video4.mp4
+    specials/             # img1.svg … img4.svg, video1.mp4 … video4.mp4
 .claude/
   rules/                  # BINDING coding rules, split by topic — read before changing code
 ```
@@ -76,11 +79,12 @@ All tokens are defined in `tailwind.config.ts` under `theme.extend`.
 | Token | Hex | Use |
 |---|---|---|
 | `noir` | `#0E0A0A` | Dark ground, backgrounds |
-| `crimson` | `#6B1414` | Deep red accent (brand) |
-| `crimson-light` | `#3D1A1A` | Mid-dark surface |
+| `crimson` | `#6B1414` | Deep red accent (brand) — **background only**, fails as text/border on noir (1.63:1) |
+| `crimson-light` | `#3D1A1A` | Mid-dark surface, borders |
+| `crimson-bright` | `#E0938A` | Error / alert text and borders on dark (~8.2:1 on noir) |
 | `sand` | `#C9A27A` | Warm gold — body text on dark |
 | `cream` | `#F0E8DC` | Light headings on dark |
-| `muted` | `#7A6E65` | Secondary text |
+| `muted` | `#847A6F` | Secondary text (min. that passes AA on noir — don't darken) |
 
 ### Typography
 
@@ -91,11 +95,17 @@ All tokens are defined in `tailwind.config.ts` under `theme.extend`.
 ### Motion principles
 
 - GSAP ScrollTrigger for section background color shifts (same approach as the old site)
-- Hover on treatment images: static image → GIF swap (CSS only, `group-hover`)
+- Hover on treatment images: static image → muted looping `<video>` swap (CSS only, `group-hover`)
 - Page transitions: subtle fade via Tailwind + Next.js view transitions
 - Respect `prefers-reduced-motion` — wrap all GSAP in a check
 
 ## Pages
+
+Every route below also exists in English under `/en` (e.g. `/en/servicios/faciales`),
+rendered from the same `components/views/*` component with `lang="en"`.
+
+`/aviso-de-privacidad` and `/terminos` (+ `/en/…`) are legal pages —
+**placeholder copy** in `dictionaries.legal`, pending the client's legal review.
 
 ### `/` — Landing
 
@@ -107,7 +117,7 @@ Three large editorial cards: Faciales, Masajes, Especiales. Each links to its ow
 
 ### `/servicios/faciales`
 
-Six treatments rendered with `TreatmentRow`. Alternating layout (odd: image left, even: image right). Hover reveals GIF.
+Six treatments rendered with `TreatmentRow`. Alternating layout (odd: image left, even: image right). Hover crossfades to a muted looping clip.
 
 ### `/servicios/masajes`
 
@@ -212,7 +222,8 @@ Contact form: nombre, teléfono, correo electrónico (optional), mensaje. Submit
 - Static export (`output: 'export'` in next.config.ts)
 - Each service category has its own route (`/servicios/faciales`, not anchor links)
 - Landing page (`/`) contains NO service listings
-- Images are provided by the client as SVG + GIF pairs per treatment
+- Images are provided by the client as SVG + video pairs per treatment (GIFs converted to H.264 MP4 at build-prep time; source GIFs not committed)
+- Bilingual `es` (default, `/`) + `en` (`/en`) — no `[lang]` dynamic segment; the English tree is an explicit `app/en/` mirror of thin wrappers over shared `components/views/*`. Strings in `lib/i18n/dictionaries/{es,en}.ts` (`en` typed `satisfies Dictionary`) and `Localized<T>` fields in `data/`.
 ## Layout rework — wide-viewport pass (planned 2026-09-07)
 
 Resolves the red-marked issues from the visual review of `/`, `/nosotros`,
@@ -319,4 +330,4 @@ Per `.claude/rules/layout-responsive.md` §Verification:
 ### Out of scope for this pass
 
 - **Placeholder art.** `public/images/**` holds ~600-byte SVG stubs and 42-byte GIFs. They render exactly as coded; image regions will look empty until real photos arrive. That is a content gap, not a CSS bug — do not "fix" it in CSS and do not replace the files.
-- **Accessibility debt** surfaced by the conventions but not by this review, and touching files this pass does not: `text-crimson` on `noir` measures 1.63:1 and is currently the colour of form validation errors in `ContactForm.tsx`; touch targets are under-size (footer and `ClinicInfo` links 16px tall, submit 40px, CTAs 42px, mobile menu button 40×40). Run these as a separate pass.
+- **Accessibility debt** surfaced by the conventions but not by this review: touch targets are under-size (footer and `ClinicInfo` links 16px tall, submit 40px, CTAs 42px, mobile menu button 40×40). Still a separate pass. *(The `text-crimson`-on-`noir` error-colour issue is fixed — `crimson-bright` token added; see `.claude/rules/accessibility-seo.md`.)*
