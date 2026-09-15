@@ -30,7 +30,7 @@ to enable the slash command, or just ask Claude Code to "continue the Concept 03
 | 3 | Sheet system — sticky stacking + cover effect | ✅ | `2541275` |
 | 4 | Inicio | ✅ | `581edb8` |
 | 5 | Servicios hub — three image columns | ⏸ waiting for gate approval | — |
-| 6 | Category pages — one treatment per window | ⬜ | — |
+| 6 | Category pages — one treatment per window | ⏸ waiting for gate approval | — |
 | 7 | Nosotros | ⬜ | — |
 | 8 | Contacto | ⬜ | — |
 | 9 | Footer, legal pages, 404 | ⬜ | — |
@@ -578,3 +578,38 @@ run in a hover-capable context.
 
 **Deferred:** `ScrollBackdrop` + `lib/backdrop.ts` now have exactly one importer left,
 `NosotrosView`. They go in Phase 7.
+
+### Phase 6 — 2026-09-15
+
+`TreatmentRow` replaced by `TreatmentWindow` (D4): one window sheet per treatment, theme
+cycling crimson → surface → sand → crimson-light, image side flipping by index parity.
+Intro sheet gains the count eyebrow, category chips and a scroll cue; closing sheets add
+"Otras categorías" and the shared talk sheet.
+
+**Accept** (all three categories, es + en, at 390 / 768 / 1024 / 1440 / 2560):
+
+| Criterion | Measured |
+|---|---|
+| Title fit — all 14 names, both languages | **0 overflows** across 30 page loads |
+| Each window ≥ space below header | **true** for every treatment sheet |
+| 1440: text and image side by side | 2 columns, tops within 5px |
+| 390: text then image | 1 column, copy at 908 / figure at 1474 |
+| Live crumb | `Inicio/Servicios/Faciales` → `…/HIDRODERMOABRASIÓN` on scroll → clears at top |
+| Deep link `#facial-hannah` | lands at **top 159**, exactly the header height |
+| Hover clip crossfade | video opacity **0 → 1**; `display: none` under reduced motion |
+| Horizontal overflow / CLS | 0 everywhere; CLS max **0.0021** |
+
+**The title fit needed the hyphenation fallback, and the measurement says why.** The binding
+name is es `HIDRODERMOABRASIÓN` — a single unbreakable 18-character word. Fitting it whole
+would cap `caps-md` at **27px at 390 and 48px at 1440**, well below `caps-sm`. Phase 6 allows
+hyphens exactly when a size that fits reads too small, so the `<h2>` takes `hyphens-auto`
+with an explicit `lang` (the static export ships `lang="es"` on `<html>` for every route, so
+the element has to carry its own) plus `break-words` as the no-dictionary safety net.
+
+That was not sufficient on its own: English still overflowed at 390 because `overflow-wrap:
+break-word` does not reduce an element's **min-content** width, so the `1fr` grid track grew
+to 419px inside a 339px column and the sheet clipped the title. `min-w-0` on the copy column
+lets the track shrink and the break take effect. Both languages are clean now.
+
+**Deferred to Phase 9:** the footer is still the old dark one and is not part of any
+`SheetStack`, so it does not yet rise over the last treatment sheet.

@@ -69,6 +69,12 @@ export const en = {
     },
   },
 
+  category: {
+    countLabel: "Services · {count} treatments",
+    scrollCue: "Scroll",
+    others: "Other categories",
+  },
+
   talk: {
     title: "Shall we talk?",
     body: "Tell us what you need and we'll get back to you soon.",

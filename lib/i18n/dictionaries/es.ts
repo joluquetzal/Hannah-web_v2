@@ -68,6 +68,13 @@ export const es = {
     },
   },
 
+  // Category pages. `{count}` is substituted with the number of treatments.
+  category: {
+    countLabel: "Servicios · {count} tratamientos",
+    scrollCue: "Desliza",
+    others: "Otras categorías",
+  },
+
   // Shared closing sheet — used by /servicios, the category pages and /nosotros.
   talk: {
     title: "¿Hablamos?",
