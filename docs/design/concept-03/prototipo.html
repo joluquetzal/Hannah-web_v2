@@ -1,0 +1,1250 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HannaH Concept 03 — Editorial Manifesto · Prototipo completo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,300;1,400;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,800&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* =====================================================================
+   HannaH — Concept 03 "Editorial Manifesto" — clickable prototype
+   Tokens are the real ones from tailwind.config.ts. Only the two brand
+   families are used: DM Sans (800 for the heavy display caps) and
+   Cormorant Garamond (italic accent words).
+   ===================================================================== */
+:root{
+  --noir:#0E0A0A; --noir-2:#151010; --crimson:#6B1414; --plum:#3D1A1A;
+  --rose:#E0938A; --sand:#C9A27A; --cream:#F0E8DC; --muted:#847A6F; --ink:#221612;
+  --f-body:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --f-serif:"Cormorant Garamond","Cormorant",Georgia,"Times New Roman",serif;
+  --ease:cubic-bezier(.2,.7,.1,1);
+  --hdr-h:0px; /* header now sits above the scroll area, nothing to clear */
+  /* header palette + type, taken from the Ronnsquare reference */
+  --h-bg:#221A08; --h-cream:#FFEBD6; --h-muted:#9C917D; --h-line:rgba(255,235,214,.14);
+  --f-hserif:"Source Serif 4","Source Serif Pro",Georgia,"Times New Roman",serif;
+  --f-grot:"Space Grotesk","DM Sans",system-ui,sans-serif;
+  --f-logo:"Anton",Impact,"Arial Narrow Bold","Arial Narrow",sans-serif;
+}
+.sr-only{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:#231a17;color:var(--cream);font-family:var(--f-body);-webkit-font-smoothing:antialiased;overflow:hidden}
+img{max-width:100%}
+[hidden]{display:none!important}
+a{color:inherit}
+button{font:inherit;color:inherit}
+
+/* ---------- device shell (desktop = full window, mobile = 390px frame) ---------- */
+.device{container:device / inline-size;position:relative;width:100%;height:100dvh;margin:0 auto;background:var(--noir);overflow:hidden;display:flex;flex-direction:column}
+.site-hdr,.stage{--gutter:clamp(1.25rem,.5rem + 3cqi,4rem);--edge:clamp(.625rem,.4rem + .8cqi,1rem)}
+.stage{position:relative;flex:1;min-height:0}
+body.is-mobile .device{width:390px;height:min(844px,calc(100dvh - 88px));margin-top:20px;border-radius:40px;outline:10px solid #0a0707;box-shadow:0 40px 80px -30px rgba(0,0,0,.8)}
+.scroller{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain}
+body.is-mobile .scroller{scrollbar-width:none}
+body.is-mobile .scroller::-webkit-scrollbar{display:none}
+.shell{width:100%;max-width:80rem;margin-inline:auto;padding-inline:var(--gutter)}
+
+/* ---------- type ---------- */
+.display{font-family:var(--f-body);font-weight:800;text-transform:uppercase;letter-spacing:-.025em;line-height:.9;margin:0;overflow-wrap:normal;word-break:normal}
+.acc{font-family:var(--f-serif);font-style:italic;font-weight:400;text-transform:none;letter-spacing:0}
+.display .acc{font-size:1.04em;line-height:.8}
+.eyebrow{font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;font-weight:700;margin:0}
+.kicker{font-family:var(--f-serif);font-style:italic;font-size:clamp(1.25rem,1rem + 1cqi,1.75rem);margin:0 0 .4rem;line-height:1.1}
+.lead{font-size:1.125rem;line-height:1.6;max-width:36rem;margin:0}
+.body{font-size:1rem;line-height:1.65;margin:0}
+
+/* ---------- buttons / links (all ≥44px tall) ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5em;min-height:48px;padding:0 1.4rem;border-radius:4px;border:1px solid transparent;
+  font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700;text-decoration:none;cursor:pointer;transition:transform .3s var(--ease),background .3s}
+.btn:hover{transform:translateY(-2px)}
+.btn-cream{background:var(--cream);color:var(--noir)}
+.btn-sand{background:var(--sand);color:var(--noir)}
+.btn-noir{background:var(--noir);color:var(--cream)}
+.btn-ghost{border-color:rgba(240,232,220,.4);color:var(--cream)}
+.arrow-link{display:inline-flex;align-items:center;gap:.4em;min-height:44px;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;text-decoration:none;
+  background:linear-gradient(currentColor,currentColor) 0 calc(100% - 8px)/100% 1px no-repeat;transition:background-size .35s var(--ease)}
+.arrow-link:hover{background-size:0 1px;background-position:100% calc(100% - 8px)}
+.actions{display:flex;flex-wrap:wrap;gap:.75rem}
+
+/* ---------- grain + macro ("photography" stand-ins) ---------- */
+.grain::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;opacity:.14;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+svg.macro{position:absolute;inset:0;width:100%;height:100%;display:block;transition:transform 1.2s var(--ease)}
+
+/* =====================================================================
+   HEADER — Ronnsquare-style: announcement strip, dark bar, breadcrumbs.
+   It sits above the scroll area, so it is always visible.
+   ===================================================================== */
+.site-hdr{position:relative;z-index:40;flex:none;background:var(--h-bg);color:var(--h-cream)}
+.skip{position:absolute;left:-9999px;top:0;background:var(--h-cream);color:var(--h-bg);padding:.75rem 1rem;z-index:50}
+.skip:focus{left:var(--edge)}
+.hdr-announce{background:var(--h-cream);color:var(--h-bg);display:flex;align-items:center;justify-content:center;gap:1.25rem;min-height:44px;padding:.35rem var(--gutter)}
+.hdr-announce p{margin:0;font-family:var(--f-hserif);font-size:.92rem}
+.hdr-announce a.ann-link{color:inherit;text-underline-offset:3px}
+.ann-btn{display:inline-flex;align-items:center;min-height:30px;padding:0 .8rem;background:var(--h-bg);color:var(--h-cream);font-family:var(--f-grot);font-size:.8rem;letter-spacing:.03em;text-transform:uppercase;text-decoration:none;white-space:nowrap}
+.ann-btn:hover{background:#000}
+.ann-long{display:none}
+.hdr-main{position:relative;display:flex;align-items:center;gap:1rem;min-height:64px;padding:.5rem var(--gutter)}
+.logo{font-family:var(--f-logo);font-weight:400;font-size:2rem;line-height:1;letter-spacing:.04em;text-transform:uppercase;text-decoration:none;color:var(--h-cream);display:inline-flex;align-items:center;min-height:44px}
+.hdr-nav{display:none}
+.hdr-nav ul{list-style:none;margin:0;padding:0;display:flex;gap:.25rem}
+.nav-link{display:inline-flex;align-items:center;gap:.45em;min-height:44px;padding:0 .9rem;font-family:var(--f-hserif);font-weight:600;font-size:.98rem;letter-spacing:-.005em;text-decoration:none;color:var(--h-cream);
+  background:linear-gradient(var(--h-cream),var(--h-cream)) .9rem calc(100% - 9px)/0 1px no-repeat;transition:background-size .35s var(--ease),opacity .2s}
+.nav-link:hover{opacity:.8}
+.nav-link.is-active{background-size:calc(100% - 1.8rem) 1px}
+.nav-link svg{width:10px;height:10px;transition:transform .3s var(--ease)}
+.has-mega:hover .nav-link svg,.has-mega.open .nav-link svg{transform:rotate(180deg)}
+.hdr-end{display:flex;align-items:center;gap:.6rem;margin-left:auto}
+.hbtn{display:none;align-items:center;justify-content:center;min-height:48px;padding:0 1rem;font-family:var(--f-grot);font-size:.9rem;letter-spacing:.02em;text-transform:uppercase;text-decoration:none;white-space:nowrap;transition:background .25s,color .25s}
+.hbtn-outline{border:1px solid var(--h-cream);color:var(--h-cream)}
+.hbtn-outline:hover{background:var(--h-cream);color:var(--h-bg)}
+.hbtn-fill{background:var(--h-cream);color:var(--h-bg);border:1px solid var(--h-cream)}
+.hbtn-fill:hover{background:transparent;color:var(--h-cream)}
+.lang{display:flex;align-items:center;font-family:var(--f-grot);font-size:.9rem}
+.lang button{background:none;border:0;min-width:36px;min-height:44px;cursor:pointer;color:var(--h-cream);opacity:.45;font-family:inherit}
+.lang button[aria-pressed="true"]{opacity:1}
+.lang span{opacity:.35}
+.burger{width:44px;height:44px;border:1px solid var(--h-cream);background:transparent;display:grid;place-content:center;gap:6px;cursor:pointer}
+.burger span{display:block;width:18px;height:1.5px;background:var(--h-cream);transition:transform .35s var(--ease)}
+.burger[aria-expanded="true"] span:first-child{transform:translateY(3.75px) rotate(45deg)}
+.burger[aria-expanded="true"] span:last-child{transform:translateY(-3.75px) rotate(-45deg)}
+.crumbs{border-top:1px solid var(--h-line);padding:0 var(--gutter);overflow-x:auto;scrollbar-width:none}
+.crumbs::-webkit-scrollbar{display:none}
+.crumbs ol{list-style:none;margin:0;padding:0;display:flex;align-items:center;min-height:46px;white-space:nowrap;font-family:var(--f-hserif);font-weight:600;font-size:.92rem}
+.crumbs li{display:flex;align-items:center}
+.crumbs li+li::before{content:"/";margin:0 .9rem;color:var(--h-cream)}
+.crumbs a{color:var(--h-muted);text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+.crumbs a:hover{color:var(--h-cream)}
+.crumbs [aria-current]{color:var(--h-cream)}
+.crumbs .crumb-live{animation:crumbIn .4s var(--ease)}
+@keyframes crumbIn{from{opacity:0;transform:translateY(4px)}}
+.hdr-progress{position:absolute;left:0;right:0;bottom:0;height:2px;overflow:hidden}
+.hdr-progress i{display:block;height:100%;background:var(--rose);transform-origin:0 50%;transform:scaleX(0)}
+
+/* services mega menu (drops from the dark bar) */
+.has-mega{position:static}
+.mega{position:absolute;top:100%;left:0;right:0;background:var(--h-bg);color:var(--h-cream);border-top:1px solid var(--h-line);padding:1.25rem var(--gutter) 1.5rem;box-shadow:0 30px 50px -20px rgba(0,0,0,.7);
+  opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .25s,transform .35s var(--ease),visibility .25s}
+.mega::before{content:"";position:absolute;left:0;right:0;top:-14px;height:14px}
+.has-mega:hover .mega,.has-mega:focus-within .mega,.has-mega.open .mega{opacity:1;visibility:visible;transform:none}
+.has-mega.closed .mega{opacity:0;visibility:hidden}
+.mega .arrow-link{white-space:nowrap;align-self:flex-start}
+.mega-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;max-width:80rem;margin-inline:auto}
+.mega-top .eyebrow{color:var(--h-muted);font-family:var(--f-hserif);letter-spacing:0;text-transform:none;font-size:.95rem;font-weight:600}
+.mega-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;max-width:80rem;margin-inline:auto}
+.mega-card{position:relative;overflow:hidden;min-height:150px;padding:1rem;display:flex;flex-direction:column;justify-content:space-between;text-decoration:none}
+.mega-card .display{font-size:1.6rem}
+.mega-card p{margin:0;font-size:.82rem;line-height:1.45;max-width:30ch}
+.mega-card>*{position:relative;z-index:2}
+
+/* mobile menu — rises from below, like the panels */
+.menu{position:absolute;inset:0;z-index:30;background:var(--h-bg);padding:1.5rem var(--gutter);display:flex;flex-direction:column;justify-content:space-between;
+  transform:translateY(100%);transition:transform .6s var(--ease);overflow-y:auto}
+.menu.open{transform:none}
+.menu nav{display:flex;flex-direction:column}
+.m-link{font-family:var(--f-hserif);font-weight:600;letter-spacing:-.01em;font-size:2.4rem;line-height:1.1;text-decoration:none;padding:.3rem 0;color:var(--h-cream)}
+.m-sub{display:flex;flex-wrap:wrap;gap:.25rem 1.25rem;margin:.1rem 0 .6rem}
+.m-sub a{font-family:var(--f-serif);font-style:italic;font-size:1.4rem;text-decoration:none;color:var(--rose);min-height:44px;display:inline-flex;align-items:center}
+.m-foot{font-size:.9rem;line-height:1.6;color:var(--h-cream);border-top:1px solid var(--h-line);padding-top:1rem;font-family:var(--f-hserif)}
+.m-btns{display:grid;gap:.5rem;margin-top:1.25rem}
+.m-btns .hbtn{display:flex}
+.m-foot a.hbtn-outline{color:var(--h-cream)}
+.m-foot a.hbtn-fill{color:var(--h-bg)}
+.m-foot a.hbtn-outline:hover{color:var(--h-bg)}
+.m-foot a.hbtn-fill:hover{color:var(--h-cream)}
+.m-foot a{color:var(--rose)}
+
+/* =====================================================================
+   STACK — every top-level section is a sticky sheet; the next one
+   rises from below and covers it.
+   ===================================================================== */
+.stack{position:relative}
+.panel{position:sticky;top:0;isolation:isolate;overflow:hidden;border-radius:18px 18px 0 0;box-shadow:0 -30px 60px -30px rgba(0,0,0,.75)}
+.stack>.panel:first-child{border-radius:0;box-shadow:none}
+.panel.window{min-height:var(--vh,100vh);display:flex;align-items:center;padding-block:calc(var(--hdr-h) + 2.5rem) clamp(2.5rem,6cqi,5rem)}
+.panel.tall{padding-bottom:calc(var(--vh,100vh) * .3)!important}
+.panel[data-static]{position:relative;top:auto!important}
+.panel-shade{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;z-index:20}
+.panel-inner{position:relative;z-index:2;width:100%;transform-origin:50% 0;will-change:transform}
+
+.theme-crimson{background:var(--crimson);color:var(--cream);--accent:var(--rose);--line:rgba(240,232,220,.22);--soft:rgba(240,232,220,.82)}
+.theme-noir{background:var(--noir-2);color:var(--cream);--accent:var(--sand);--line:rgba(201,162,122,.25);--soft:var(--sand)}
+.theme-plum{background:var(--plum);color:var(--cream);--accent:var(--rose);--line:rgba(240,232,220,.18);--soft:rgba(240,232,220,.8)}
+.theme-sand{background:var(--sand);color:var(--noir);--accent:var(--noir);--line:rgba(14,10,10,.22);--soft:var(--ink)}
+.theme-sand .btn-solid{background:var(--noir);color:var(--cream)}
+.theme-crimson .btn-solid,.theme-plum .btn-solid{background:var(--cream);color:var(--noir)}
+.theme-noir .btn-solid{background:var(--sand);color:var(--noir)}
+
+/* ---------- page intro ---------- */
+.intro{padding-block:calc(var(--hdr-h) + clamp(3rem,8cqi,7rem)) clamp(2.5rem,6cqi,5rem);background:var(--noir)}
+.intro .eyebrow{color:var(--sand);margin-bottom:1.25rem}
+.intro .kicker{color:var(--rose)}
+.intro-title{font-size:clamp(3.4rem,15cqi,13rem)}
+.intro .lead{color:var(--sand);margin-top:1.5rem}
+.intro-row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:1.5rem;margin-top:1.5rem}
+.scroll-cue{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--muted);display:flex;align-items:center;gap:.6rem}
+.scroll-cue i{display:block;width:1px;height:34px;background:linear-gradient(var(--sand),transparent);animation:cue 1.8s var(--ease) infinite}
+@keyframes cue{0%{transform:scaleY(0);transform-origin:0 0}50%{transform:scaleY(1);transform-origin:0 0}51%{transform-origin:0 100%}100%{transform:scaleY(0);transform-origin:0 100%}}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.chip{display:inline-flex;align-items:center;gap:.5em;min-height:44px;padding:0 1rem;border:1px solid rgba(201,162,122,.35);border-radius:999px;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;text-decoration:none;color:var(--sand)}
+.chip.is-active{background:var(--sand);color:var(--noir);border-color:var(--sand)}
+.chip.is-active::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--crimson)}
+
+/* ---------- HOME hero ---------- */
+.hero{background:var(--noir);min-height:0;padding-block:calc(var(--hdr-h) + clamp(4rem,12cqi,10rem)) clamp(2.5rem,6cqi,5rem)}
+.hero .macro-wrap{position:absolute;inset:0;z-index:0;opacity:.95}
+.hero .macro-wrap::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,10,10,.35) 0%,rgba(14,10,10,.1) 40%,rgba(14,10,10,.85) 100%)}
+.hero-eyebrow{color:var(--sand);line-height:1.5;margin-bottom:clamp(1.5rem,4cqi,3rem)!important}
+.hero-title{font-size:clamp(2.6rem,9.2cqi,8.5rem);color:var(--cream);text-wrap:balance;max-width:68rem}
+.hero-title .acc{color:var(--rose)}
+.hero-foot{display:grid;gap:2rem;margin-top:clamp(2rem,5cqi,4rem);align-items:end}
+.hero .lead{color:var(--cream)}
+.hero-meta{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--sand);line-height:1.9;margin:0}
+
+/* ---------- SERVICIOS hub: three big images (Flora-style) ---------- */
+.svc-cols{height:var(--vh,100vh);min-height:26rem;background:var(--noir)}
+.cols{display:grid;grid-template-rows:repeat(3,minmax(0,1fr));height:100%}
+.col{position:relative;overflow:hidden;display:flex;align-items:flex-end;text-decoration:none;color:var(--cream);isolation:isolate;outline-offset:-4px}
+.col svg.macro{filter:saturate(.45) brightness(.62) sepia(.4);transition:transform 1.2s var(--ease),filter .8s var(--ease)}
+.col-tint{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(70,20,6,.55),rgba(90,26,8,.5) 55%,rgba(30,8,4,.75));mix-blend-mode:multiply;transition:opacity .8s var(--ease)}
+.col-fade{position:absolute;left:0;right:0;bottom:0;height:55%;z-index:1;background:linear-gradient(transparent,rgba(14,10,10,.72));pointer-events:none}
+.col:hover svg.macro,.col:focus-visible svg.macro{filter:none;transform:scale(1.06)}
+.col:hover .col-tint,.col:focus-visible .col-tint{opacity:0}
+.col-body{position:relative;z-index:2;padding:clamp(1.25rem,2.4cqi,2.25rem);width:100%}
+.col-count{display:block;font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;font-weight:700;color:var(--sand);margin-bottom:.5rem}
+.col-title{display:block;font-family:var(--f-body);font-weight:800;text-transform:uppercase;letter-spacing:-.015em;line-height:.95;font-size:clamp(1.9rem,3.2cqi,3.2rem)}
+.col-more{display:grid;grid-template-rows:0fr;transition:grid-template-rows .6s var(--ease)}
+.col-more>span{overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:.5rem}
+.col-desc{display:block;margin-top:.75rem;max-width:30ch;line-height:1.5;font-size:.98rem;color:rgba(240,232,220,.9)}
+.col:hover .col-more,.col:focus-visible .col-more{grid-template-rows:1fr}
+@media (hover: none){
+  .col-tint{opacity:.35}
+  .col svg.macro{filter:saturate(.8) brightness(.85)}
+  .col-more{grid-template-rows:1fr}
+}
+
+/* ---------- SERVICE WINDOWS ---------- */
+.panel-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(1.75rem,4cqi,4.5rem);align-items:center}
+.panel-count{font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;font-weight:700;margin:0 0 1.25rem;color:var(--accent);display:flex;align-items:center;gap:.75rem}
+.panel-count::after{content:"";flex:0 0 56px;height:1px;background:var(--line)}
+.panel-count b{font-size:1rem;letter-spacing:.06em}
+.badge{display:inline-flex;align-items:center;gap:.5em;margin:0 0 1rem;padding:.4rem .8rem;border:1px solid var(--accent);border-radius:999px;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--accent)}
+.cat-title{font-size:clamp(3.2rem,12cqi,10rem)}
+.tr-title{font-size:clamp(2.4rem,6.2cqi,5.6rem)}
+.panel .kicker{color:var(--accent)}
+.panel-desc{font-size:1.125rem;line-height:1.6;max-width:34rem;margin:1.25rem 0 0;color:var(--soft)}
+.meta-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.25rem}
+.meta{display:inline-flex;align-items:center;gap:.5em;min-height:36px;padding:0 .9rem;border-radius:999px;background:rgba(255,255,255,.08);font-size:.78rem;letter-spacing:.08em;font-weight:700}
+.theme-sand .meta{background:rgba(14,10,10,.1)}
+.meta span{font-weight:500;opacity:.75;letter-spacing:.02em}
+.incl{margin-top:1.5rem;max-width:36rem}
+.incl-h{font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;font-weight:700;margin:0 0 .5rem;color:var(--accent)}
+.incl ul{list-style:none;margin:0;padding:0;display:grid;column-gap:1.5rem}
+.incl li{padding:.55rem 0;border-top:1px solid var(--line);font-size:.95rem;line-height:1.35}
+.panel .actions{margin-top:1.75rem}
+.tlist{list-style:none;margin:1.5rem 0 0;padding:0;display:grid;column-gap:1.5rem;max-width:36rem}
+.tlist li{border-top:1px solid var(--line)}
+.tlist a{display:flex;justify-content:space-between;align-items:center;min-height:44px;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;text-decoration:none}
+.tlist a span{transition:transform .3s var(--ease)}
+.tlist a:hover span{transform:translate(3px,-3px)}
+
+.media{position:relative;margin:0;border-radius:6px;overflow:hidden;aspect-ratio:4/3;background:var(--noir)}
+.media-tag{position:absolute;left:.75rem;top:.75rem;z-index:3;font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--cream);background:rgba(14,10,10,.55);padding:.35rem .6rem;border-radius:3px;backdrop-filter:blur(6px)}
+.media-tag .on{display:none}
+.media:hover .media-tag .on{display:inline}
+.media:hover .media-tag .off{display:none}
+.media:hover svg.macro{transform:scale(1.12) rotate(-2deg);animation:drift 7s linear infinite alternate}
+@keyframes drift{from{filter:hue-rotate(0deg) saturate(1)}to{filter:hue-rotate(-14deg) saturate(1.25)}}
+.player{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:1rem;background:linear-gradient(transparent,rgba(14,10,10,.85))}
+.player p{margin:0 0 .6rem;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--cream)}
+.player p .acc{font-size:1.1rem;letter-spacing:0;color:var(--sand)}
+.scrub{display:flex;align-items:center;gap:.75rem}
+.play{width:32px;height:32px;border-radius:50%;border:1px solid var(--sand);display:grid;place-items:center;color:var(--sand);font-size:.6rem;flex:none}
+.track{flex:1;height:1px;background:rgba(240,232,220,.3);position:relative}
+.track i{position:absolute;left:0;top:-2px;height:5px;width:0;border-radius:4px;background:var(--sand);animation:track 12s linear infinite}
+@keyframes track{to{width:100%}}
+
+.feature-label{font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;font-weight:700;color:var(--accent);margin:0 0 .75rem}
+.feature{display:block;text-decoration:none;position:relative;border-radius:6px;overflow:hidden;aspect-ratio:3/4;max-height:calc(var(--vh,100vh) - var(--hdr-h) - 9rem);width:100%;margin-left:auto}
+.feature .media{position:absolute;inset:0;aspect-ratio:auto;border-radius:0}
+.feature-body{position:absolute;inset:auto 0 0 0;z-index:4;padding:1.25rem;display:flex;flex-direction:column;gap:.5rem;background:linear-gradient(transparent,rgba(14,10,10,.8))}
+.feature-body .display{font-size:clamp(1.6rem,2.6cqi,2.4rem);color:var(--cream)}
+.feature-body small{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--sand)}
+.feature-body .arrow-link{color:var(--cream);align-self:flex-start}
+
+/* ---------- talk / other categories ---------- */
+.talk{background:var(--crimson);padding-block:clamp(4rem,10cqi,8rem)}
+.talk .eyebrow{color:var(--rose)}
+.talk-title{font-size:clamp(3.4rem,14cqi,12rem);margin:1rem 0 1.5rem}
+.talk .lead{margin-bottom:2rem}
+.others{background:var(--plum);padding-block:clamp(3rem,8cqi,6rem)}
+.others .eyebrow{color:var(--rose);margin-bottom:1rem}
+.other-link{display:flex;justify-content:space-between;align-items:center;gap:1rem;text-decoration:none;border-top:1px solid rgba(240,232,220,.18);padding:1rem 0}
+.other-link .display{font-size:clamp(2.4rem,9cqi,7rem);transition:transform .5s var(--ease)}
+.other-link:hover .display{transform:translateX(12px)}
+.other-link p{margin:0;max-width:28ch;color:rgba(240,232,220,.75);font-size:.95rem;line-height:1.5;display:none}
+
+/* ---------- NOSOTROS ---------- */
+.about-intro .lead{color:var(--cream)}
+.manifesto{background:linear-gradient(160deg,#8a4a3e 0%,var(--crimson) 45%,var(--plum) 100%);padding-block:calc(var(--hdr-h) + 2rem) clamp(3rem,8cqi,6rem);text-align:center}
+.manifesto .eyebrow{color:var(--rose)}
+.m-cap{max-width:40rem;margin:1rem auto 0}
+.m-cap h3{font-size:.85rem;letter-spacing:.14em;text-transform:uppercase;font-weight:800;margin:0 0 .4rem}
+.m-cap p{margin:0;color:rgba(240,232,220,.85);line-height:1.6}
+.collage{position:relative;margin:clamp(1.5rem,4cqi,3rem) auto;max-width:72rem;display:grid;place-items:center;padding-block:clamp(1rem,3cqi,2rem)}
+.big-word{font-size:clamp(3rem,11.5cqi,11rem);color:var(--cream);position:relative;z-index:3;mix-blend-mode:normal}
+.collage .center{position:relative;width:min(62%,34rem);aspect-ratio:16/10;border-radius:4px;overflow:hidden;margin:-4cqi 0;z-index:2}
+.swatch{position:absolute;width:clamp(56px,11cqi,150px);aspect-ratio:3/2;border-radius:3px;overflow:hidden;z-index:1}
+.sw1{left:6%;top:18%}.sw2{right:5%;top:38%}.sw3{left:2%;bottom:22%}.sw4{right:10%;bottom:6%;z-index:4}
+.team{background:var(--noir-2);padding-block:clamp(4rem,9cqi,7rem)}
+.team .eyebrow{color:var(--sand)}
+.team-statement{font-size:clamp(1.9rem,4.6cqi,4rem);line-height:.98;margin:1.25rem 0 2.5rem;max-width:22ch}
+.cards{display:grid;gap:.75rem}
+.tcard{border-radius:6px;padding:clamp(1.25rem,3cqi,2rem);min-height:clamp(260px,30cqi,380px);display:flex;flex-direction:column;justify-content:space-between;gap:1.5rem;position:relative;overflow:hidden}
+.tcard .q{font-family:var(--f-serif);font-size:3rem;line-height:.6;margin:0}
+.tcard h3{font-size:clamp(1.6rem,3cqi,2.4rem)}
+.tcard p{margin:0;line-height:1.55;font-size:.95rem}
+.tcard .ph{width:64px;height:64px;border-radius:50%;border:1px dashed currentColor;opacity:.6;display:grid;place-items:center;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase}
+
+/* ---------- CONTACTO ---------- */
+.contact{background:var(--noir);padding-block:calc(var(--hdr-h) + clamp(2.5rem,7cqi,5rem)) clamp(3rem,7cqi,6rem)}
+.contact-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(2rem,5cqi,4rem);align-items:start}
+.contact-side .eyebrow{font-family:var(--f-serif);font-style:italic;text-transform:none;letter-spacing:0;font-weight:400;font-size:1.6rem;color:var(--rose);margin-bottom:.5rem}
+.contact-title{font-size:clamp(3.2rem,11cqi,9.5rem)}
+.contact-side .lead{color:var(--sand);margin:1.5rem 0 2rem}
+.quick{display:grid;gap:.5rem;max-width:26rem}
+.quick a{display:flex;justify-content:space-between;align-items:center;min-height:56px;padding:0 1rem;border:1px solid rgba(201,162,122,.3);border-radius:4px;text-decoration:none;font-weight:700;letter-spacing:.06em}
+.quick a small{font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:block;font-weight:700}
+.form-card{background:var(--plum);border-radius:6px;padding:clamp(1.25rem,3.5cqi,2.5rem);position:relative}
+.form-card h2{font-size:clamp(1.8rem,3.2cqi,2.6rem);margin-bottom:1.5rem}
+.f{margin-bottom:1.1rem}
+.f label{display:flex;justify-content:space-between;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700;margin-bottom:.45rem;color:var(--cream)}
+.f .opt{color:var(--sand);letter-spacing:.12em}
+.f input,.f select,.f textarea{width:100%;min-height:48px;background:var(--noir);color:var(--cream);border:1px solid rgba(201,162,122,.35);border-radius:4px;padding:.75rem .9rem;font:inherit;font-size:1rem}
+.f textarea{min-height:130px;resize:vertical}
+.f select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--sand) 50%),linear-gradient(135deg,var(--sand) 50%,transparent 50%);background-position:calc(100% - 20px) 50%,calc(100% - 14px) 50%;background-size:6px 6px;background-repeat:no-repeat}
+.f input::placeholder,.f textarea::placeholder{color:var(--muted)}
+.f input:focus,.f select:focus,.f textarea:focus{outline:2px solid var(--sand);outline-offset:1px}
+.f.bad input,.f.bad select,.f.bad textarea{border-color:var(--rose)}
+.err{color:var(--rose);font-size:.85rem;margin:.35rem 0 0;min-height:0}
+.counter{font-size:.75rem;color:var(--muted);text-align:right;margin:.3rem 0 0}
+.privacy{font-size:.85rem;color:var(--sand);margin:.5rem 0 1.25rem;line-height:1.5}
+.privacy a{color:var(--cream)}
+.success .display{font-size:clamp(3rem,8cqi,6rem);margin-bottom:1rem}
+.success p{color:var(--sand);line-height:1.6;margin:0 0 1.5rem}
+.info{background:var(--noir-2);padding-block:clamp(3rem,7cqi,6rem)}
+.info-grid{display:grid;gap:2rem}
+.info h3{font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;font-weight:700;color:var(--sand);margin:0 0 .75rem}
+.info p,.info li{margin:0;line-height:1.65;color:var(--cream)}
+.info ul{list-style:none;margin:0;padding:0}
+.info li{display:flex;justify-content:space-between;gap:1rem;border-top:1px solid rgba(201,162,122,.2);padding:.5rem 0}
+.info li span:last-child{color:var(--sand)}
+.map{position:relative;border-radius:6px;overflow:hidden;min-height:280px;background:#1a1212}
+.map svg{position:absolute;inset:0;width:100%;height:100%}
+.map .pin{position:absolute;left:52%;top:46%;transform:translate(-50%,-100%);z-index:2;text-align:center}
+.map .pin b{display:block;width:18px;height:18px;border-radius:50% 50% 50% 0;background:var(--rose);transform:rotate(-45deg);margin:0 auto .5rem;box-shadow:0 0 0 8px rgba(224,147,138,.2)}
+.map .pin span{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;background:var(--noir);padding:.3rem .5rem;border-radius:3px}
+.map .arrow-link{position:absolute;left:1rem;bottom:.5rem;z-index:2;color:var(--cream)}
+
+/* ---------- LEGAL ---------- */
+.legal{background:var(--noir);padding-block:calc(var(--hdr-h) + clamp(3rem,8cqi,6rem)) clamp(3rem,7cqi,6rem)}
+.legal .eyebrow{color:var(--sand);margin-bottom:1rem}
+.legal-title{font-size:clamp(2.6rem,8cqi,7rem);max-width:60rem;text-wrap:balance}
+.draft{border:1px solid var(--rose);color:var(--rose);border-radius:4px;padding:1rem;margin:2rem 0 1rem;max-width:44rem;line-height:1.5;font-size:.95rem}
+.legal .updated{color:var(--muted);font-size:.85rem;margin:0 0 2rem}
+.legal-body{max-width:44rem}
+.legal-body>p{font-size:1.125rem;line-height:1.7;color:var(--cream);margin:0 0 2rem}
+.legal-body h2{font-family:var(--f-serif);font-style:italic;font-weight:400;font-size:1.8rem;margin:2rem 0 .5rem;color:var(--sand)}
+.legal-body section p{color:rgba(240,232,220,.85);line-height:1.7;margin:0 0 .8rem}
+
+/* ---------- FOOTER (last sheet) ---------- */
+.site-footer{position:relative;z-index:1;background:var(--sand);color:var(--noir);border-radius:18px 18px 0 0;box-shadow:0 -30px 60px -30px rgba(0,0,0,.75);padding-top:clamp(3rem,7cqi,5rem);overflow:hidden}
+.foot-grid{display:grid;gap:2rem}
+.site-footer h3{font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;font-weight:700;margin:0 0 .6rem;opacity:.7}
+.site-footer p{margin:0;line-height:1.6}
+.site-footer ul{list-style:none;margin:0;padding:0}
+.site-footer li a{display:inline-flex;min-height:44px;align-items:center;text-decoration:none;font-weight:500}
+.site-footer li a:hover{text-decoration:underline}
+.foot-cta{font-size:clamp(2.2rem,6cqi,4.5rem)}
+.wordmark{font-family:var(--f-serif);font-weight:500;font-size:34cqi;line-height:.72;letter-spacing:-.03em;margin:clamp(2rem,5cqi,4rem) 0 0;white-space:nowrap;color:var(--noir);text-align:center;transform:translateY(8%)}
+.foot-bottom{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.5rem 1.5rem;border-top:1px solid rgba(14,10,10,.2);padding-block:1rem;font-size:.8rem}
+.foot-bottom a{min-height:44px;display:inline-flex;align-items:center}
+
+/* reveal on scroll */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+
+/* ---------- responsive (container queries on the device) ---------- */
+@container device (min-width: 40rem){
+  .incl ul,.tlist{grid-template-columns:1fr 1fr}
+  .cards{grid-template-columns:repeat(3,1fr)}
+  .info-grid{grid-template-columns:repeat(2,1fr)}
+  .foot-grid{grid-template-columns:repeat(2,1fr)}
+  .other-link p{display:block}
+}
+@container device (min-width: 56rem){
+  .hdr-main{min-height:70px}
+  .hdr-nav{display:block;margin-left:clamp(1rem,10cqi,12rem)}
+  .hbtn{display:inline-flex}
+  .ann-long{display:inline}
+  .ann-short{display:none}
+  .burger{display:none}
+  .panel-grid{grid-template-columns:minmax(0,1.25fr) minmax(0,.85fr)}
+  .panel-grid.flip{grid-template-columns:minmax(0,.85fr) minmax(0,1.25fr)}
+  .panel-grid.flip>.panel-copy{order:2}
+  .media{aspect-ratio:4/5;max-height:calc(var(--vh,100vh) - var(--hdr-h) - 8rem);width:100%}
+  .hero-foot{grid-template-columns:1fr auto}
+  .contact-grid{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
+  .contact-side{position:sticky;top:calc(var(--hdr-h) + 2rem)}
+  .info-grid{grid-template-columns:1fr 1fr 1.4fr}
+  .info-grid .map{grid-row:span 2}
+  .foot-grid{grid-template-columns:1.4fr 1fr 1fr 1fr}
+}
+@container device (min-width: 40rem){
+  .ann-btn-wrap{display:inline-flex}
+  .cols{grid-template-rows:none;grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@container device (max-width: 39.99rem){
+  .ann-btn-wrap{display:none}
+  .logo{font-size:1.75rem}
+  .feature{aspect-ratio:4/3;max-height:none}
+  .panel.window{align-items:flex-start}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .reveal{opacity:1;transform:none}
+}
+
+/* ---------- prototype toolbar (not part of the design) ---------- */
+.proto{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:100;display:flex;align-items:center;gap:4px;padding:4px;border-radius:999px;background:rgba(20,14,12,.88);backdrop-filter:blur(10px);
+  font-family:system-ui,sans-serif;font-size:12px;color:#d9c9b4;box-shadow:0 10px 30px rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.08)}
+.proto button,.proto select{background:transparent;border:0;color:inherit;font:inherit;padding:8px 12px;border-radius:999px;cursor:pointer;min-height:34px}
+.proto button[aria-pressed="true"]{background:#d9c9b4;color:#140e0c}
+.proto select{background:#2c211d;max-width:44vw}
+.proto .min{opacity:.6}
+.proto.collapsed>*:not(.min){display:none}
+.toast{position:fixed;left:50%;top:190px;transform:translateX(-50%);z-index:101;background:var(--cream);color:var(--noir);padding:.75rem 1rem;border-radius:4px;font-size:.85rem;max-width:min(90vw,420px);box-shadow:0 10px 30px rgba(0,0,0,.5);opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+
+<div class="device" id="device">
+  <header class="site-hdr" id="hdr">
+    <a class="skip" href="#view">Saltar al contenido</a>
+    <div class="hdr-announce">
+      <p><span class="ann-long">Visítanos en Eugenia 1309, Col. Narvarte, Ciudad de México</span><a class="ann-short ann-link" href="https://www.google.com/maps/search/?api=1&amp;query=Eugenia%201309%2C%20Col.%20Narvarte%2C%20CDMX%2C%20M%C3%A9xico" target="_blank" rel="noopener">Visítanos: Eugenia 1309, Col. Narvarte</a></p>
+      <span class="ann-btn-wrap"><a class="ann-btn" href="https://www.google.com/maps/search/?api=1&amp;query=Eugenia%201309%2C%20Col.%20Narvarte%2C%20CDMX%2C%20M%C3%A9xico" target="_blank" rel="noopener">Abrir en Google Maps</a></span>
+    </div>
+    <div class="hdr-main">
+      <a class="logo" href="#/" aria-label="HannaH — Inicio">HannaH</a>
+      <nav class="hdr-nav" aria-label="Principal">
+        <ul>
+          <li class="has-mega">
+            <a href="#/servicios" class="nav-link" data-nav="servicios" aria-haspopup="true">Servicios <svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></a>
+            <div class="mega" id="mega"></div>
+          </li>
+          <li><a href="#/nosotros" class="nav-link" data-nav="nosotros">Nosotros</a></li>
+          <li><a href="#/contacto" class="nav-link" data-nav="contacto">Contacto</a></li>
+        </ul>
+      </nav>
+      <div class="hdr-end">
+        <a class="hbtn hbtn-outline" href="https://wa.me/525539560265" target="_blank" rel="noopener">WhatsApp</a>
+        <a class="hbtn hbtn-fill" href="#/contacto">Contáctanos</a>
+        <div class="lang" role="group" aria-label="Idioma">
+          <button type="button" aria-pressed="true" title="Ver en español">ES</button><span>/</span><button type="button" aria-pressed="false" title="View in English" data-en>EN</button>
+        </div>
+        <button class="burger" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu"><span></span><span></span></button>
+      </div>
+    </div>
+    <nav class="crumbs" id="crumbsNav" aria-label="Ruta de navegación"><ol id="crumbs"></ol></nav>
+    <div class="hdr-progress" aria-hidden="true"><i id="progress"></i></div>
+  </header>
+
+  <div class="stage">
+  <div class="scroller" id="app">
+    <main id="view" tabindex="-1"></main>
+  </div>
+
+  <div class="menu" id="menu" aria-hidden="true">
+    <nav aria-label="Menú móvil">
+      <a class="m-link" href="#/">Inicio</a>
+      <a class="m-link" href="#/servicios">Servicios</a>
+      <div class="m-sub">
+        <a href="#/servicios/faciales">Faciales</a>
+        <a href="#/servicios/masajes">Masajes</a>
+        <a href="#/servicios/especiales">Especiales</a>
+      </div>
+      <a class="m-link" href="#/nosotros">Nosotros</a>
+      <a class="m-link" href="#/contacto">Contacto</a>
+    </nav>
+    <div class="m-foot">
+      <p style="margin:0 0 .5rem">Eugenia 1309, Col. Narvarte, Ciudad de México</p>
+      <p style="margin:0"><a href="tel:+525539560265">+52 55 3956 0265</a></p>
+      <div class="m-btns">
+        <a class="hbtn hbtn-outline" href="https://wa.me/525539560265" target="_blank" rel="noopener">WhatsApp</a>
+        <a class="hbtn hbtn-fill" href="#/contacto">Contáctanos</a>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+<div class="proto" id="proto" role="toolbar" aria-label="Controles del prototipo">
+  <button type="button" data-mode="desktop" aria-pressed="true">Escritorio</button>
+  <button type="button" data-mode="mobile" aria-pressed="false">Móvil</button>
+  <select id="jump" aria-label="Ir a página">
+    <option value="#/">Inicio</option>
+    <option value="#/servicios">Servicios</option>
+    <option value="#/servicios/faciales">Faciales</option>
+    <option value="#/servicios/masajes">Masajes</option>
+    <option value="#/servicios/especiales">Especiales</option>
+    <option value="#/nosotros">Nosotros</option>
+    <option value="#/contacto">Contacto</option>
+    <option value="#/aviso-de-privacidad">Aviso de Privacidad</option>
+    <option value="#/terminos">Términos</option>
+  </select>
+  <button type="button" class="min" id="protoMin" aria-label="Ocultar controles">—</button>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(() => {
+"use strict";
+
+/* =====================================================================
+   CONTENT — copied from lib/i18n/dictionaries/es.ts, lib/site.ts and
+   data/{servicios,faciales,masajes,especiales}.ts (ES, source of truth)
+   ===================================================================== */
+const SITE = {
+  tagline: "Clínica de belleza y estética",
+  phone: "+52 55 3956 0265", phoneHref: "tel:+525539560265",
+  whatsapp: "https://wa.me/525539560265",
+  email: "hannah.spa19@gmail.com",
+  address: ["Eugenia 1309", "Col. Narvarte", "Ciudad de México, CDMX", "C.P. 03020"],
+  mapLink: "https://www.google.com/maps/search/?api=1&query=Eugenia%201309%2C%20Col.%20Narvarte%2C%20CDMX%2C%20M%C3%A9xico",
+  instagram: "https://www.instagram.com/hannah.spa.cdmx/",
+  facebook: "https://www.facebook.com/people/Hannah-Spa/61553359328074/",
+  schedule: [["Lunes a viernes", "9:00 – 19:00 h"], ["Sábado", "9:00 – 14:00 h"], ["Domingo", "Cerrado"]],
+  hoursSummary: "Lunes a viernes de 9:00 a 19:00 h · Sábado de 9:00 a 14:00 h · Domingo cerrado",
+};
+
+const CATS = [
+  { slug: "faciales", title: "Faciales", count: "Seis faciales", theme: "crimson",
+    desc: "Limpieza profunda, hidratación y rejuvenecimiento para cada tipo de piel.",
+    lead: "Seis faciales para hidratar, equilibrar y rejuvenecer según tu tipo de piel.",
+    items: [
+      { slug: "facial-hidratante", n: "Facial hidratante",
+        d: "Para pieles mixtas a secas. Mejora las líneas de expresión y la humectación, y disminuye la sensación acartonada.",
+        inc: ["Limpieza", "Exfoliación", "Ozono", "Mascarilla de elastina", "Aparatología", "Ácido hialurónico", "Crema hidratante"] },
+      { slug: "anti-acne-piel-grasa", n: "Anti acné o piel grasa",
+        d: "Controla el exceso de grasa y mejora el brillo, el escozor y la apariencia de la piel.",
+        inc: ["Limpieza", "Exfoliación", "Extracción", "Aparatología", "Alta frecuencia", "Mascarilla de arcilla o barro negro", "Hidratación"] },
+      { slug: "hidrodermoabrasion", n: "Hidrodermoabrasión",
+        d: "Remueve células muertas, exceso de grasa e impurezas mediante una succión indolora. Hidrata y limpia de forma simultánea.",
+        inc: ["Limpieza", "Exfoliación", "Alta frecuencia", "Hidrodermoabrasión con solución de vitamina C, ácido acetilsalicílico, ácido glicólico o ácido hialurónico", "Mascarilla hidroplástica", "Hidratación"] },
+      { slug: "facial-hannah", n: "Facial HannaH", star: true, rec: "2 sesiones",
+        d: "El facial más completo. Mejora la apariencia general, con extracción si es necesario y microdermoabrasión o hidrodermoabrasión.",
+        inc: ["Limpieza", "Exfoliación", "Aparatología según el tipo de piel", "Alta frecuencia", "Radiofrecuencia", "Mascarilla Gold", "Hidratación"] },
+      { slug: "facial-rejuvenecedor", n: "Facial rejuvenecedor", rec: "8 a 10 sesiones periódicas",
+        d: "Rejuvenece la piel, favorece la producción de colágeno y mejora la apariencia general.",
+        inc: ["Limpieza", "Exfoliación", "Radiofrecuencia", "Bioestimulación", "Mascarilla según necesidad", "Máscara LED"] },
+      { slug: "microdermoabrasion", n: "Microdermoabrasión",
+        d: "Piel más joven, suave y limpia. Elimina cicatrices y disminuye arrugas.",
+        inc: ["Limpieza", "Exfoliación", "Alta frecuencia", "Microdermoabrasión con puntas de diamante", "Mascarilla hidroplástica", "Hidratación"] },
+    ] },
+  { slug: "masajes", title: "Masajes", count: "Cuatro masajes", theme: "plum",
+    desc: "Relajación, alivio muscular y bienestar en cada sesión.",
+    lead: "Cuatro masajes para relajar el cuerpo, aliviar la tensión muscular y renovar la energía.",
+    items: [
+      { slug: "masaje-relajante", n: "Masaje relajante", dur: "50 min",
+        d: "Favorece la circulación, reduce el estrés y mejora el estado de ánimo." },
+      { slug: "masaje-piedras-calientes", n: "Masaje piedras calientes", dur: "60 min",
+        d: "Masaje Zen. Mejora la calidad del sueño y reduce los dolores musculares." },
+      { slug: "masaje-deportivo", n: "Masaje deportivo", dur: "60 min",
+        d: "Mejora el dolor en contracturas, disminuye el estrés y relaja los músculos." },
+      { slug: "masaje-modelador", n: "Masaje modelador", dur: "10 sesiones",
+        d: "Drenaje linfático, compresas de lodo del Mar Muerto, cavitación y radiofrecuencia." },
+    ] },
+  { slug: "especiales", title: "Especiales", count: "Cuatro tratamientos", theme: "sand",
+    desc: "Tratamientos avanzados: skin booster, hilos tensores y toxina botulínica.",
+    lead: "Cuatro tratamientos avanzados para hidratar en profundidad y tensar la piel del rostro.",
+    items: [
+      { slug: "skin-booster", n: "Skin booster",
+        d: "Hidratación profunda con ácido hialurónico.",
+        inc: ["4 sesiones", "1 sesión cada 15 días"] },
+      { slug: "hilos-tensores", n: "Hilos tensores",
+        d: "Elimina arrugas y flacidez facial. Levanta las cejas y redefine el óvalo y el contorno de la mandíbula.",
+        zonas: ["Frente", "Perfilamiento mandibular", "Surco nasogeniano", "Patas de gallo", "Líneas de marioneta", "Cuello"] },
+      { slug: "nanobotox", n: "Nanobotox",
+        d: "Combinación de pequeñas dosis de toxina botulínica y ácido hialurónico.",
+        inc: ["Una aplicación", "Un refuerzo"] },
+      { slug: "mesobotox", n: "Mesobotox",
+        d: "Pequeñas dosis de toxina botulínica en el tercio superior del rostro. Trata arrugas y líneas de expresión suaves.",
+        inc: ["Una aplicación", "Un refuerzo"] },
+    ] },
+];
+
+const LEGAL = {
+  "aviso-de-privacidad": {
+    title: "Aviso de Privacidad",
+    intro: "En HannaH valoramos tu privacidad. Este aviso describe cómo recabamos, usamos y protegemos tus datos personales cuando te pones en contacto con nosotros a través de este sitio.",
+    sections: [
+      ["Responsable de tus datos personales", ["[Razón social del responsable] (en adelante, «HannaH» o «el Responsable»), con domicilio en Eugenia 1309, Col. Narvarte, Ciudad de México, C.P. 03020, es responsable del tratamiento de tus datos personales conforme a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP), su Reglamento y demás normativa aplicable."]],
+      ["Datos personales que recabamos", ["Cuando utilizas nuestro formulario de contacto recabamos: nombre, número de teléfono, correo electrónico (opcional), el servicio de tu interés y el contenido del mensaje que decidas enviarnos.", "No recabamos datos personales sensibles a través del sitio. Te pedimos no incluir información sobre tu salud u otros datos sensibles en el campo de mensaje."]],
+      ["Finalidades del tratamiento", ["Finalidades primarias: dar respuesta a tus solicitudes de información, contactarte para coordinar una cita y darte seguimiento como cliente o prospecto.", "Finalidades secundarias: enviarte información sobre promociones, servicios y novedades de HannaH. Puedes oponerte a las finalidades secundarias en cualquier momento escribiendo a [correo de contacto de privacidad]."]],
+      ["Transferencias de datos", ["Para el envío y la gestión de los mensajes del formulario utilizamos el servicio de un tercero (EmailJS, operado desde los Estados Unidos de América).", "Fuera de lo anterior, no transferimos tus datos personales a terceros sin tu consentimiento, salvo en los casos previstos por el artículo 37 de la LFPDPPP."]],
+      ["Derechos ARCO", ["Tienes derecho a acceder, rectificar y cancelar tus datos personales, así como a oponerte a su tratamiento. Para ejercer estos derechos, envía tu solicitud a [correo de contacto de privacidad] indicando tu nombre, los datos sobre los que deseas ejercer el derecho y una descripción clara de tu petición. Responderemos en los plazos que establece la LFPDPPP."]],
+      ["Medios para limitar el uso o la divulgación", ["Puedes solicitar que limitemos el uso o la divulgación de tus datos escribiendo a [correo de contacto de privacidad]. Asimismo, puedes inscribirte en el Registro Público para Evitar Publicidad (REPEP) de la PROFECO en https://repep.profeco.gob.mx."]],
+      ["Cookies y tecnologías de rastreo", ["Actualmente este sitio no utiliza cookies ni tecnologías de rastreo con fines de analítica o publicidad. Si esto cambia, actualizaremos este aviso y, en su caso, solicitaremos tu consentimiento."]],
+      ["Cambios al aviso de privacidad", ["Nos reservamos el derecho de modificar este aviso de privacidad. Cualquier cambio se publicará en esta misma página, indicando la fecha de última actualización."]],
+      ["Contacto", ["Para cualquier duda sobre este aviso o el tratamiento de tus datos, contáctanos en [correo de contacto de privacidad] o al [teléfono]."]],
+    ] },
+  "terminos": {
+    title: "Términos y Condiciones",
+    intro: "El acceso y uso de este sitio web (el «Sitio») implica la aceptación de los presentes Términos y Condiciones. Si no estás de acuerdo, te pedimos no utilizar el Sitio.",
+    sections: [
+      ["Objeto del Sitio", ["El Sitio tiene carácter informativo y de presentación de los servicios de HannaH, clínica de belleza y estética ubicada en la Ciudad de México. No permite realizar compras, pagos ni reservaciones en línea."]],
+      ["La información no constituye asesoría médica", ["La información publicada en el Sitio es de carácter general y no sustituye la consulta, el diagnóstico ni el tratamiento con un profesional de la salud calificado. Antes de contratar cualquier tratamiento se realizará una valoración individual."]],
+      ["Resultados de los tratamientos", ["Los resultados de los tratamientos estéticos varían de una persona a otra y dependen de factores individuales. Las imágenes y descripciones del Sitio son ilustrativas y no constituyen una garantía de resultados."]],
+      ["Propiedad intelectual", ["Los textos, imágenes, logotipos, marcas y demás contenidos del Sitio son propiedad de HannaH o de sus titulares y están protegidos por la legislación aplicable. No se permite su reproducción o uso sin autorización previa por escrito."]],
+      ["Enlaces a sitios de terceros", ["El Sitio puede contener enlaces a sitios de terceros (por ejemplo, redes sociales o mapas). HannaH no es responsable del contenido ni de las prácticas de privacidad de dichos sitios."]],
+      ["Limitación de responsabilidad", ["HannaH procura mantener la información del Sitio actualizada y correcta, pero no garantiza que esté libre de errores ni que el Sitio esté disponible de forma ininterrumpida. En la medida permitida por la ley, HannaH no será responsable por daños derivados del uso o de la imposibilidad de uso del Sitio."]],
+      ["Modificaciones", ["HannaH puede modificar estos Términos y Condiciones en cualquier momento. La versión vigente será la publicada en esta página."]],
+      ["Legislación aplicable y jurisdicción", ["Estos Términos y Condiciones se rigen por la legislación de los Estados Unidos Mexicanos. Para cualquier controversia, las partes se someten a los tribunales competentes de la Ciudad de México, salvo disposición legal en contrario."]],
+      ["Contacto", ["Para cualquier duda sobre estos Términos y Condiciones, escríbenos a [correo de contacto] o al [teléfono]."]],
+    ] },
+};
+
+const THEMES = ["crimson", "noir", "sand", "plum"];
+const PAL = {
+  crimson: ["#F0C4B8", "#8E2A22", "#2A0B0B"],
+  noir:    ["#E7C9A2", "#4A2A20", "#0E0A0A"],
+  sand:    ["#FBEBD6", "#B98A57", "#5A2A22"],
+  plum:    ["#E0938A", "#6B1414", "#140909"],
+};
+const pad = n => String(n).padStart(2, "0");
+
+/* ---------- abstract "macro photography" generator (stand-in images) ---------- */
+let uid = 0;
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function macro(seed, pal) {
+  const r = rng(seed * 7919 + 13), id = "mc" + (++uid), W = 400, H = 500;
+  let veins = "", blobs = "";
+  const ribs = 6 + Math.floor(r() * 4);
+  for (let k = 0; k < ribs; k++) {
+    const y0 = (k / ribs) * H * 1.3 - 60 + r() * 40, y3 = y0 - 160 + r() * 200;
+    const c1y = y0 + (r() - .5) * 220, c2y = y3 + (r() - .5) * 220;
+    veins += `<path d="M-30 ${y0.toFixed(1)} C${(120 + r() * 60).toFixed(1)} ${c1y.toFixed(1)} ${(260 + r() * 60).toFixed(1)} ${c2y.toFixed(1)} 430 ${y3.toFixed(1)}" stroke-width="${(1.4 + r() * 2.4).toFixed(2)}"/>`;
+    for (let b = 0; b < 5; b++) {
+      const t = .1 + r() * .8, bx = -30 + 460 * t, by = y0 + (y3 - y0) * t + (r() - .5) * 50;
+      veins += `<path d="M${bx.toFixed(1)} ${by.toFixed(1)} q${((r() - .5) * 70).toFixed(1)} ${(-20 - r() * 50).toFixed(1)} ${((r() - .5) * 110).toFixed(1)} ${(-50 - r() * 70).toFixed(1)}" stroke-width="${(.5 + r() * .8).toFixed(2)}"/>`;
+    }
+  }
+  for (let i = 0; i < 4; i++) {
+    blobs += `<ellipse cx="${(r() * W).toFixed(0)}" cy="${(r() * H).toFixed(0)}" rx="${(80 + r() * 120).toFixed(0)}" ry="${(60 + r() * 120).toFixed(0)}" fill="${i % 2 ? pal[0] : pal[1]}" opacity="${(.25 + r() * .35).toFixed(2)}"/>`;
+  }
+  const ang = Math.floor(r() * 360);
+  return `<svg class="macro" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="${id}g" gradientTransform="rotate(${ang} .5 .5)"><stop offset="0" stop-color="${pal[1]}"/><stop offset="1" stop-color="${pal[2]}"/></linearGradient>
+      <filter id="${id}b" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="34"/></filter>
+      <filter id="${id}s"><feGaussianBlur stdDeviation="${(r() * 1.4).toFixed(2)}"/></filter>
+    </defs>
+    <rect width="${W}" height="${H}" fill="url(#${id}g)"/>
+    <g filter="url(#${id}b)">${blobs}</g>
+    <g fill="none" stroke="${pal[0]}" stroke-linecap="round" opacity=".5" filter="url(#${id}s)">${veins}</g>
+  </svg>`;
+}
+const media = (seed, pal, cls = "", extra = "") =>
+  `<figure class="media grain ${cls}">${macro(seed, pal)}${extra}</figure>`;
+
+/* =====================================================================
+   SHARED BLOCKS
+   ===================================================================== */
+const footer = () => `
+<footer class="site-footer">
+  <div class="shell">
+    <div class="foot-grid">
+      <div>
+        <h2 class="display foot-cta">¿Hablamos?</h2>
+        <p style="margin:.75rem 0 1rem;max-width:30ch">Cuéntanos qué necesitas y te respondemos pronto.</p>
+        <a class="btn btn-noir" href="#/contacto">Contáctanos <span aria-hidden="true">↗</span></a>
+      </div>
+      <div>
+        <h3>Contacto</h3>
+        <ul>
+          <li><a href="${SITE.phoneHref}">${SITE.phone}</a></li>
+          <li><a href="mailto:${SITE.email}">${SITE.email}</a></li>
+          <li><a href="${SITE.whatsapp}" target="_blank" rel="noopener">WhatsApp ↗</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Visítanos</h3>
+        <p>${SITE.address[0]}<br>${SITE.address[1]}<br>${SITE.address[2]}</p>
+        <p style="margin-top:.75rem;font-size:.9rem;opacity:.8">${SITE.hoursSummary}</p>
+      </div>
+      <div>
+        <h3>HannaH</h3>
+        <ul>
+          <li><a href="#/servicios">Servicios</a></li>
+          <li><a href="#/nosotros">Nosotros</a></li>
+          <li><a href="#/contacto">Contacto</a></li>
+          <li><a href="${SITE.instagram}" target="_blank" rel="noopener">Instagram ↗</a></li>
+          <li><a href="${SITE.facebook}" target="_blank" rel="noopener">Facebook ↗</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <p class="wordmark fit" aria-hidden="true">HannaH</p>
+  <div class="shell foot-bottom" style="position:relative;background:var(--sand)">
+    <span style="display:inline-flex;align-items:center;min-height:44px">© 2026 HannaH — Belleza y Estética. Todos los derechos reservados.</span>
+    <span><a href="#/aviso-de-privacidad">Aviso de Privacidad</a> · <a href="#/terminos">Términos y Condiciones</a></span>
+  </div>
+</footer>`;
+
+const talk = () => `
+<section class="panel talk grain" data-panel>
+  <div class="panel-shade"></div>
+  <div class="panel-inner shell">
+    <p class="eyebrow">Contacto</p>
+    <h2 class="display talk-title">¿Hablamos?</h2>
+    <p class="lead">Cuéntanos qué necesitas y te respondemos pronto.</p>
+    <div class="actions" style="margin-top:2rem">
+      <a class="btn btn-cream" href="#/contacto">Contáctanos <span aria-hidden="true">↗</span></a>
+      <a class="btn btn-ghost" href="${SITE.whatsapp}" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+  </div>
+</section>`;
+
+/* =====================================================================
+   VIEWS
+   ===================================================================== */
+function viewHome() {
+  return `<div class="stack">
+  <section class="panel hero grain" data-panel>
+    <div class="panel-shade"></div>
+    <div class="macro-wrap">${macro(3, ["#E0938A", "#6B1414", "#0E0A0A"])}</div>
+    <div class="panel-inner shell">
+      <p class="eyebrow hero-eyebrow">${SITE.tagline}</p>
+      <h1 class="display hero-title fit">El cuidado <span class="acc">de tu piel,</span> como un ritual</h1>
+      <div class="hero-foot">
+        <div>
+          <p class="lead">Faciales, masajes y tratamientos estéticos en un espacio pensado para detenerte, respirar y volver a ti.</p>
+          <div class="actions" style="margin-top:1.75rem">
+            <a class="btn btn-cream" href="#/servicios">Ver servicios <span aria-hidden="true">↗</span></a>
+            <a class="btn btn-ghost" href="#/contacto">Contacto</a>
+          </div>
+        </div>
+        <p class="hero-meta">${SITE.address[0]} · Narvarte, CDMX<br>Lun–Vie 9:00–19:00 · Sáb 9:00–14:00</p>
+      </div>
+    </div>
+  </section>
+  ${footer()}
+  </div>`;
+}
+
+const COL_PAL = {
+  faciales:   ["#F7D3C7", "#C85A4B", "#3A0E0C"],
+  masajes:    ["#F4DEC0", "#B98A57", "#3D1A1A"],
+  especiales: ["#FBEBD6", "#D9A38F", "#6B1414"],
+};
+
+function viewServicios() {
+  return `<div class="stack">
+  <section class="panel svc-cols" data-panel aria-labelledby="svc-h">
+    <div class="panel-shade"></div>
+    <h1 class="sr-only" id="svc-h">Servicios</h1>
+    <p class="sr-only">Tres formas de cuidar tu piel y tu bienestar. Elige una categoría para conocer los tratamientos.</p>
+    <div class="cols panel-inner">
+      ${CATS.map((c, i) => `
+      <a class="col grain" href="#/servicios/${c.slug}">
+        ${macro(200 + i * 7, COL_PAL[c.slug])}
+        <span class="col-tint" aria-hidden="true"></span>
+        <span class="col-fade" aria-hidden="true"></span>
+        <span class="col-body">
+          <span class="col-count">${pad(i + 1)} · ${c.count}</span>
+          <span class="col-title">${c.title}</span>
+          <span class="col-more"><span>
+            <span class="col-desc">${c.desc}</span>
+            <span class="arrow-link">Ver tratamientos <span aria-hidden="true">↗</span></span>
+          </span></span>
+        </span>
+      </a>`).join("")}
+    </div>
+  </section>
+  ${talk()}
+  ${footer()}
+  </div>`;
+}
+
+function treatmentPanel(t, i, c) {
+  const theme = THEMES[i % THEMES.length];
+  const list = t.inc ? ["Incluye", t.inc] : t.zonas ? ["Zonas", t.zonas] : null;
+  const metas = [
+    t.rec ? `<span class="meta"><span>Recomendación:</span> ${t.rec}</span>` : "",
+    t.dur ? `<span class="meta">${t.dur}</span>` : "",
+  ].join("");
+  const extra = `<span class="media-tag"><span class="off">Imagen · pasa el cursor</span><span class="on">▶ Clip en bucle</span></span>` +
+    (t.star ? `<div class="player"><p>Facial HannaH <span class="acc">— tratamiento insignia</span></p><div class="scrub"><span class="play">▶</span><div class="track"><i></i></div></div></div>` : "");
+  return `
+  <section class="panel window theme-${theme} grain" data-panel data-crumb="${t.n}" id="${t.slug}">
+    <div class="panel-shade"></div>
+    <div class="panel-inner shell">
+      <div class="panel-grid ${i % 2 ? "flip" : ""}">
+        <div class="panel-copy">
+          <p class="panel-count"><b>${pad(i + 1)}</b> / ${pad(c.items.length)} · ${c.title}</p>
+          ${t.star ? `<p class="badge"><span aria-hidden="true">★</span> Tratamiento insignia</p>` : ""}
+          <h2 class="display tr-title fit">${t.n}</h2>
+          <p class="panel-desc">${t.d}</p>
+          ${metas ? `<div class="meta-row">${metas}</div>` : ""}
+          ${list ? `<div class="incl"><p class="incl-h">${list[0]}</p><ul>${list[1].map(x => `<li>${x}</li>`).join("")}</ul></div>` : ""}
+          <div class="actions"><a class="btn btn-solid" href="#/contacto?servicio=${c.slug}">Agendar cita <span aria-hidden="true">↗</span></a></div>
+        </div>
+        ${media(100 + i * 17 + c.slug.length, PAL[THEMES[(i + 2) % THEMES.length]], "", extra)}
+      </div>
+    </div>
+  </section>`;
+}
+
+function viewCategory(slug) {
+  const c = CATS.find(x => x.slug === slug);
+  if (!c) return viewNotFound();
+  const others = CATS.filter(x => x !== c);
+  return `<div class="stack">
+  <section class="panel intro" data-panel>
+    <div class="panel-shade"></div>
+    <div class="panel-inner shell">
+      <nav class="chips" aria-label="Categorías" style="margin-bottom:2rem">
+        ${CATS.map(x => `<a class="chip ${x === c ? "is-active" : ""}" href="#/servicios/${x.slug}" ${x === c ? 'aria-current="page"' : ""}>${x.title}</a>`).join("")}
+      </nav>
+      <p class="eyebrow">Servicios · ${pad(c.items.length)} tratamientos</p>
+      <h1 class="display intro-title fit">${c.title}</h1>
+      <div class="intro-row">
+        <p class="lead" style="margin:0">${c.lead}</p>
+        <p class="scroll-cue"><i></i>Desliza</p>
+      </div>
+    </div>
+  </section>
+  ${c.items.map((t, i) => treatmentPanel(t, i, c)).join("")}
+  <section class="panel others" data-panel>
+    <div class="panel-shade"></div>
+    <div class="panel-inner shell">
+      <p class="eyebrow">Otras categorías</p>
+      ${others.map(o => `<a class="other-link" href="#/servicios/${o.slug}"><span class="display">${o.title}</span><p>${o.desc}</p></a>`).join("")}
+      <a class="arrow-link" style="color:var(--rose);margin-top:1rem" href="#/servicios">Ver todos los servicios <span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
+  ${talk()}
+  ${footer()}
+  </div>`;
+}
+
+function viewNosotros() {
+  return `<div class="stack">
+  <section class="panel intro about-intro" data-panel>
+    <div class="panel-shade"></div>
+    <div class="panel-inner shell">
+      <p class="eyebrow">Nosotros</p>
+      <h1 class="display fit" style="font-size:clamp(2.8rem,8.5cqi,8rem);max-width:62rem">Un espacio <span class="acc" style="color:var(--rose)">para el cuidado,</span> sin prisa</h1>
+      <p class="lead" style="margin-top:2rem">HannaH es una clínica de belleza y estética en México. Combinamos aparatología, cosmética profesional y un trato cercano para cuidar la piel y el bienestar de cada persona que nos visita.</p>
+    </div>
+  </section>
+
+  <section class="panel manifesto grain" data-panel>
+    <div class="panel-shade"></div>
+    <div class="panel-inner shell">
+      <p class="eyebrow">Filosofía</p>
+      <div class="m-cap">
+        <h3>Nada de fórmulas genéricas</h3>
+        <p>Creemos en los resultados que se construyen con constancia y en tratamientos diseñados para cada tipo de piel. Primero escuchamos, después proponemos.</p>
+      </div>
+      <div class="collage">
+        <span class="swatch sw1">${macro(71, PAL.sand)}</span>
+        <span class="swatch sw2">${macro(72, PAL.noir)}</span>
+        <span class="swatch sw3">${macro(73, PAL.plum)}</span>
+        <span class="swatch sw4">${macro(74, PAL.sand)}</span>
+        <h2 class="display big-word fit reveal">Constancia</h2>
+        <div class="center grain">${macro(75, ["#FBEBD6", "#C9A27A", "#8E2A22"])}</div>
+        <h2 class="display big-word fit reveal">Pausa</h2>
+      </div>
+      <div class="m-cap">
+        <h3>Un momento para ti</h3>
+        <p>Cada sesión es también una pausa. Un momento para bajar el ritmo y reconectar con una misma.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel team" data-panel>
+    <div class="panel-shade"></div>
+    <div class="panel-inner shell">
+      <p class="eyebrow">Equipo</p>
+      <h2 class="display team-statement reveal">Especialistas en estética facial <span class="acc" style="color:var(--sand)">y</span> corporal</h2>
+      <div class="cards">
+        <article class="tcard theme-crimson reveal">
+          <p class="q" aria-hidden="true">“</p>
+          <div><h3 class="display">Estética facial</h3></div>
+          <p>Perfil del equipo pendiente de contenido del cliente.</p>
+        </article>
+        <article class="tcard theme-sand reveal">
+          <p class="q" aria-hidden="true">“</p>
+          <div><h3 class="display">Estética corporal</h3></div>
+          <p>Perfil del equipo pendiente de contenido del cliente.</p>
+        </article>
+        <article class="tcard theme-plum reveal">
+          <p class="q" aria-hidden="true">“</p>
+          <div><h3 class="display">Formación continua</h3></div>
+          <p>Un equipo en formación continua para ofrecer técnicas actuales y seguras.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+  ${talk()}
+  ${footer()}
+  </div>`;
+}
+
+function viewContacto(params) {
+  const pre = params.get("servicio") || "";
+  const opt = (v, l) => `<option value="${v}" ${pre === v ? "selected" : ""}>${l}</option>`;
+  const mapLines = Array.from({ length: 14 }, (_, i) => `<path d="M${-50 + i * 40} 0 L${60 + i * 40} 400" />`).join("") +
+    Array.from({ length: 10 }, (_, i) => `<path d="M0 ${20 + i * 42} L600 ${-40 + i * 42}" />`).join("");
+  return `<div class="stack">
+  <section class="panel contact" data-panel data-static>
+    <div class="panel-shade"></div>
+    <div class="panel-inner shell">
+      <div class="contact-grid">
+        <div class="contact-side">
+          <p class="eyebrow">Contacto</p>
+          <h1 class="display contact-title fit">¿Hablamos?</h1>
+          <p class="lead">Déjanos un mensaje con tus datos y te respondemos lo antes posible.</p>
+          <div class="quick">
+            <a href="${SITE.whatsapp}" target="_blank" rel="noopener"><span><small>WhatsApp</small>Escríbenos</span><span aria-hidden="true">↗</span></a>
+            <a href="${SITE.phoneHref}"><span><small>Teléfono</small>${SITE.phone}</span><span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+        <div class="form-card grain">
+          <form id="cform" novalidate style="position:relative;z-index:2">
+            <h2 class="display">Déjanos un mensaje</h2>
+            <div class="f"><label for="f-nombre">Nombre</label><input id="f-nombre" name="nombre" autocomplete="name" placeholder="Tu nombre completo"><p class="err" data-for="nombre"></p></div>
+            <div class="f"><label for="f-tel">Teléfono</label><input id="f-tel" name="telefono" type="tel" inputmode="tel" autocomplete="tel" placeholder="55 1234 5678"><p class="err" data-for="telefono"></p></div>
+            <div class="f"><label for="f-serv">Servicio</label>
+              <select id="f-serv" name="servicio">
+                <option value="" ${pre ? "" : "selected"}>¿Qué servicio te interesa?</option>
+                ${opt("faciales", "Faciales")}${opt("masajes", "Masajes")}${opt("especiales", "Especiales")}${opt("otro", "Otro / No sé aún")}
+              </select><p class="err" data-for="servicio"></p></div>
+            <div class="f"><label for="f-mail">Correo electrónico <span class="opt">Opcional</span></label><input id="f-mail" name="email" type="email" autocomplete="email" placeholder="tu@correo.com"><p class="err" data-for="email"></p></div>
+            <div class="f"><label for="f-msg">Mensaje</label><textarea id="f-msg" name="mensaje" maxlength="500" placeholder="¿En qué podemos ayudarte?"></textarea><p class="counter"><span id="left">500</span> restantes</p><p class="err" data-for="mensaje"></p></div>
+            <p class="privacy">Al enviar, aceptas nuestro <a href="#/aviso-de-privacidad">Aviso de Privacidad</a>.</p>
+            <button class="btn btn-sand" type="submit" id="sendBtn">Enviar mensaje</button>
+          </form>
+          <div class="success" id="csuccess" hidden style="position:relative;z-index:2">
+            <p class="display">Gracias.</p>
+            <p>Recibimos tu mensaje y te responderemos lo antes posible.</p>
+            <button class="btn btn-ghost" type="button" id="again">Enviar otro mensaje</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel info" data-panel>
+    <div class="panel-shade"></div>
+    <div class="panel-inner shell">
+      <div class="info-grid">
+        <div>
+          <h3>Visítanos</h3>
+          <p>${SITE.address.join("<br>")}</p>
+          <h3 style="margin-top:2rem">Teléfono</h3>
+          <p><a href="${SITE.phoneHref}">${SITE.phone}</a></p>
+          <h3 style="margin-top:2rem">WhatsApp</h3>
+          <p><a class="arrow-link" href="${SITE.whatsapp}" target="_blank" rel="noopener">Escríbenos ↗</a></p>
+        </div>
+        <div>
+          <h3>Horario</h3>
+          <ul>${SITE.schedule.map(([d, h]) => `<li><span>${d}</span><span>${h}</span></li>`).join("")}</ul>
+          <h3 style="margin-top:2rem">Redes</h3>
+          <p><a class="arrow-link" href="${SITE.instagram}" target="_blank" rel="noopener">Instagram ↗</a> &nbsp; <a class="arrow-link" href="${SITE.facebook}" target="_blank" rel="noopener">Facebook ↗</a></p>
+        </div>
+        <div class="map" role="img" aria-label="Ubicación de HannaH en el mapa">
+          <svg viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice"><rect width="600" height="400" fill="#1a1212"/><g stroke="#3D1A1A" stroke-width="10">${mapLines}</g><g stroke="#6B1414" stroke-width="18" opacity=".8"><path d="M0 250 L600 150"/><path d="M340 0 L270 400"/></g></svg>
+          <div class="pin"><b></b><span>HannaH · Eugenia 1309</span></div>
+          <a class="arrow-link" href="${SITE.mapLink}" target="_blank" rel="noopener">Abrir en Google Maps ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  ${footer()}
+  </div>`;
+}
+
+function viewLegal(key) {
+  const L = LEGAL[key];
+  return `<div class="stack">
+  <section class="panel legal" data-panel>
+    <div class="panel-shade"></div>
+    <div class="panel-inner shell">
+      <p class="eyebrow">Legal</p>
+      <h1 class="display legal-title fit">${L.title}</h1>
+      <p class="draft">Borrador — texto de ejemplo pendiente de revisión y aprobación legal del cliente. No publicar en producción sin validar los datos entre corchetes.</p>
+      <p class="updated">Última actualización: [fecha]</p>
+      <div class="legal-body">
+        <p>${L.intro}</p>
+        ${L.sections.map(([h, ps]) => `<section><h2>${h}</h2>${ps.map(p => `<p>${p}</p>`).join("")}</section>`).join("")}
+      </div>
+    </div>
+  </section>
+  ${footer()}
+  </div>`;
+}
+
+function viewNotFound() {
+  return `<div class="stack">
+  <section class="panel intro" data-panel>
+    <div class="panel-shade"></div>
+    <div class="panel-inner shell">
+      <p class="eyebrow">Error 404</p>
+      <h1 class="display intro-title fit">Esta página no existe</h1>
+      <p class="lead" style="margin-top:1.5rem">Puede que el enlace esté roto o que la página se haya movido.</p>
+      <div class="actions" style="margin-top:2rem"><a class="btn btn-cream" href="#/">Volver al inicio</a><a class="btn btn-ghost" href="#/servicios">Ver servicios</a></div>
+    </div>
+  </section>
+  ${footer()}
+  </div>`;
+}
+
+/* =====================================================================
+   ROUTER + BEHAVIOUR
+   ===================================================================== */
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const app = $("#app"), view = $("#view"), device = $("#device"), menu = $("#menu"), burger = $(".burger");
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+let panels = [], io = null;
+
+const TITLES = { "": "HannaH — Clínica de belleza y estética", servicios: "Servicios", faciales: "Faciales", masajes: "Masajes", especiales: "Especiales", nosotros: "Nosotros", contacto: "Contacto", "aviso-de-privacidad": "Aviso de Privacidad", terminos: "Términos y Condiciones" };
+
+// mega menu content
+$("#mega").innerHTML = `
+  <div class="mega-top"><p class="eyebrow">Nuestros servicios</p><a class="arrow-link" href="#/servicios">Ver todos <span aria-hidden="true">↗</span></a></div>
+  <div class="mega-grid">${CATS.map((c, i) => `
+    <a class="mega-card theme-${c.theme} grain" href="#/servicios/${c.slug}">
+      <span class="display">${c.title}</span>
+      <p>${c.desc}</p>
+      <span class="arrow-link" style="min-height:32px">Ver tratamientos <span aria-hidden="true">↗</span></span>
+    </a>`).join("")}</div>`;
+
+const crumbsOl = $("#crumbs"), crumbsNav = $("#crumbsNav");
+let crumbBase = [], crumbLive = null;
+function renderCrumbs() {
+  const list = crumbLive ? [...crumbBase, [crumbLive, null]] : crumbBase;
+  crumbsNav.hidden = list.length === 0;
+  crumbsOl.innerHTML = list.map(([label, href], i) => {
+    const last = i === list.length - 1;
+    const cls = crumbLive && last ? ' class="crumb-live"' : "";
+    return last || !href
+      ? `<li${cls}><span aria-current="page">${label}</span></li>`
+      : `<li><a href="${href}">${label}</a></li>`;
+  }).join("");
+}
+
+function route() {
+  const raw = location.hash.replace(/^#/, "") || "/";
+  const [path, query = ""] = raw.split("?");
+  const seg = path.split("/").filter(Boolean);
+  const params = new URLSearchParams(query);
+  let html, key = seg[0] || "", target = null;
+  if (!seg.length) html = viewHome();
+  else if (seg[0] === "servicios" && !seg[1]) html = viewServicios();
+  else if (seg[0] === "servicios") { html = viewCategory(seg[1]); key = seg[1]; target = seg[2] || null; }
+  else if (seg[0] === "nosotros") html = viewNosotros();
+  else if (seg[0] === "contacto") html = viewContacto(params);
+  else if (LEGAL[seg[0]]) html = viewLegal(seg[0]);
+  else { html = viewNotFound(); key = null; }
+
+  const home = ["Inicio", "#/"];
+  if (!seg.length) crumbBase = [];
+  else if (seg[0] === "servicios") {
+    crumbBase = [home, ["Servicios", "#/servicios"]];
+    const c = CATS.find(x => x.slug === seg[1]);
+    if (c) crumbBase.push([c.title, `#/servicios/${c.slug}`]);
+  }
+  else if (LEGAL[seg[0]]) crumbBase = [home, [LEGAL[seg[0]].title, null]];
+  else if (TITLES[seg[0]]) crumbBase = [home, [TITLES[seg[0]], null]];
+  else crumbBase = [home, ["Página no encontrada", null]];
+  crumbLive = null;
+  renderCrumbs();
+
+  closeMenu();
+  $$(".has-mega").forEach(li => li.classList.remove("open"));
+  view.innerHTML = html;
+  document.title = key === "" ? TITLES[""] : `${TITLES[key] || "Página no encontrada"} — HannaH`;
+  $$(".nav-link").forEach(a => a.classList.toggle("is-active", a.dataset.nav === seg[0]));
+  $$(".nav-link").forEach(a => a.dataset.nav === seg[0] ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
+  const jump = $("#jump"); const jv = "#/" + seg.slice(0, 2).join("/"); if ([...jump.options].some(o => o.value === jv)) jump.value = jv;
+
+  app.scrollTop = 0;
+  setup();
+  if (target) {
+    const el = document.getElementById(target);
+    if (el) requestAnimationFrame(() => app.scrollTo({ top: el.offsetTop + el.offsetParent.offsetTop, behavior: "auto" }));
+  } else app.scrollTop = 0;
+  onScroll();
+}
+
+function fit(el) {
+  el.style.fontSize = "";
+  let fs = parseFloat(getComputedStyle(el).fontSize);
+  let guard = 80;
+  while (el.scrollWidth > el.clientWidth + 1 && fs > 16 && guard--) { fs -= 2; el.style.fontSize = fs + "px"; }
+}
+
+function measure() {
+  const vh = app.clientHeight;
+  device.style.setProperty("--vh", vh + "px");
+  $$(".fit", view).forEach(fit);
+  panels = $$("[data-panel]", view);
+  // Sheets taller than the window get extra bottom room, so their last lines
+  // stay readable for a while before the next sheet rises over them.
+  panels.forEach(p => p.classList.remove("tall"));
+  panels.forEach(p => { if (!p.hasAttribute("data-static") && p.offsetHeight > vh) p.classList.add("tall"); });
+  panels.forEach(p => { if (!p.hasAttribute("data-static")) p.style.top = Math.min(0, vh - p.offsetHeight) + "px"; });
+}
+
+function setup() {
+  measure();
+  if (io) io.disconnect();
+  io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { root: app, threshold: .15 });
+  $$(".reveal", view).forEach(el => io.observe(el));
+  const form = $("#cform", view);
+  if (form) wireForm(form);
+}
+
+let ticking = false;
+function onScroll() {
+  if (ticking) return; ticking = true;
+  requestAnimationFrame(() => {
+    ticking = false;
+    const vh = app.clientHeight, max = app.scrollHeight - vh;
+    $("#progress").style.transform = `scaleX(${max > 0 ? app.scrollTop / max : 0})`;
+    const base = app.getBoundingClientRect().top;
+    let live = null;
+    panels.forEach(p => { if (p.dataset.crumb && p.getBoundingClientRect().top - base <= vh * .45) live = p.dataset.crumb; });
+    if (live !== crumbLive) { crumbLive = live; renderCrumbs(); }
+    if (reduced) return;
+    const footerEl = $(".site-footer", view);
+    panels.forEach((p, i) => {
+      const next = panels[i + 1] || footerEl;
+      const inner = p.querySelector(".panel-inner"), shade = p.querySelector(".panel-shade");
+      if (!inner) return;
+      // how much the next sheet covers this one (0 → 1)
+      const pr = p.getBoundingClientRect();
+      const pBottom = Math.min(pr.bottom - base, vh);
+      const nTop = next ? next.getBoundingClientRect().top - base : vh;
+      const cover = pBottom > 0 ? Math.min(1, Math.max(0, (pBottom - nTop) / pBottom)) : 1;
+      // how far this sheet has risen into view (0 → 1)
+      const own = pr.top - base;
+      const enter = i === 0 ? 1 : Math.min(1, Math.max(0, 1 - own / vh));
+      const lift = (1 - enter) * 70;
+      inner.style.transform = `translate3d(0,${(lift - cover * 40).toFixed(1)}px,0) scale(${(1 - cover * .06).toFixed(4)})`;
+      inner.style.opacity = (0.55 + enter * 0.45).toFixed(3);
+      if (shade) shade.style.opacity = (cover * .6).toFixed(3);
+    });
+  });
+}
+app.addEventListener("scroll", onScroll, { passive: true });
+
+let rT;
+const onResize = () => { clearTimeout(rT); rT = setTimeout(() => { measure(); onScroll(); }, 80); };
+addEventListener("resize", onResize);
+if (document.fonts) document.fonts.ready.then(() => { measure(); onScroll(); });
+new ResizeObserver(onResize).observe(app);
+
+/* ---------- menu ---------- */
+function openMenu() { menu.classList.add("open"); menu.setAttribute("aria-hidden", "false"); burger.setAttribute("aria-expanded", "true"); burger.setAttribute("aria-label", "Cerrar menú"); }
+function closeMenu() { menu.classList.remove("open"); menu.setAttribute("aria-hidden", "true"); burger.setAttribute("aria-expanded", "false"); burger.setAttribute("aria-label", "Abrir menú"); }
+burger.addEventListener("click", () => menu.classList.contains("open") ? closeMenu() : openMenu());
+addEventListener("keydown", e => { if (e.key === "Escape") { closeMenu(); $$(".has-mega").forEach(li => li.classList.remove("open")); } });
+menu.addEventListener("click", e => { if (e.target.closest("a[href^='#']")) closeMenu(); });
+const megaLi = $(".has-mega");
+megaLi.addEventListener("click", e => { if (e.target.closest(".mega a")) { megaLi.classList.add("closed"); megaLi.classList.remove("open"); document.activeElement.blur(); } });
+megaLi.addEventListener("mouseleave", () => megaLi.classList.remove("closed"));
+// touch: first tap on "Servicios" opens the mega menu
+$(".has-mega > .nav-link").addEventListener("click", e => {
+  const li = e.currentTarget.parentElement;
+  if (matchMedia("(hover: none)").matches && !li.classList.contains("open")) { e.preventDefault(); li.classList.add("open"); }
+});
+
+/* ---------- language + toast ---------- */
+const toast = $("#toast"); let tT;
+function say(msg) { toast.textContent = msg; toast.classList.add("show"); clearTimeout(tT); tT = setTimeout(() => toast.classList.remove("show"), 3200); }
+$("[data-en]").addEventListener("click", () => say("Mockup en español. El sitio real ya es bilingüe (/en) — la versión EN usaría los textos de en.ts."));
+
+/* ---------- contact form (mock submit, same validation copy as es.ts) ---------- */
+function wireForm(form) {
+  const msg = form.querySelector("#f-msg"), left = form.querySelector("#left");
+  msg.addEventListener("input", () => { left.textContent = 500 - msg.value.length; });
+  const setErr = (name, text) => {
+    const p = form.querySelector(`.err[data-for="${name}"]`);
+    p.textContent = text || "";
+    p.closest(".f").classList.toggle("bad", !!text);
+    const input = p.closest(".f").querySelector("input,select,textarea");
+    if (text) { input.setAttribute("aria-invalid", "true"); input.setAttribute("aria-describedby", "err-" + name); p.id = "err-" + name; }
+    else input.removeAttribute("aria-invalid");
+  };
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    const v = Object.fromEntries(new FormData(form));
+    const errs = {};
+    const nombre = (v.nombre || "").trim();
+    if (!nombre) errs.nombre = "Escribe tu nombre.";
+    else if (/\d/.test(nombre)) errs.nombre = "El nombre no debe llevar números.";
+    else if (nombre.length < 2) errs.nombre = "El nombre es demasiado corto.";
+    else if (nombre.length > 80) errs.nombre = "El nombre es demasiado largo.";
+    const digits = (v.telefono || "").replace(/\D/g, "");
+    if (!digits) errs.telefono = "Escribe tu teléfono.";
+    else if (digits.length < 10) errs.telefono = "Debe tener al menos 10 dígitos.";
+    else if (digits.length > 15) errs.telefono = "Tiene demasiados dígitos.";
+    if (!v.servicio) errs.servicio = "Selecciona el servicio que te interesa.";
+    if (v.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email)) errs.email = "Revisa tu correo electrónico.";
+    if (!(v.mensaje || "").trim()) errs.mensaje = "Escribe tu mensaje.";
+    ["nombre", "telefono", "servicio", "email", "mensaje"].forEach(k => setErr(k, errs[k]));
+    const first = Object.keys(errs)[0];
+    if (first) { form.querySelector(`[name="${first}"]`).focus(); return; }
+    const btn = form.querySelector("#sendBtn");
+    btn.textContent = "Enviando…"; btn.disabled = true;
+    setTimeout(() => {
+      form.hidden = true; $("#csuccess").hidden = false;
+      measure();
+    }, 800);
+  });
+  $("#again").addEventListener("click", () => {
+    form.reset(); left.textContent = 500;
+    const btn = form.querySelector("#sendBtn"); btn.textContent = "Enviar mensaje"; btn.disabled = false;
+    form.hidden = false; $("#csuccess").hidden = true; measure();
+  });
+}
+
+/* ---------- prototype toolbar ---------- */
+$$("[data-mode]").forEach(b => b.addEventListener("click", () => {
+  const mobile = b.dataset.mode === "mobile";
+  document.body.classList.toggle("is-mobile", mobile);
+  $$("[data-mode]").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+  requestAnimationFrame(() => { measure(); onScroll(); });
+}));
+$("#jump").addEventListener("change", e => { location.hash = e.target.value; });
+$("#protoMin").addEventListener("click", () => {
+  const p = $("#proto"); p.classList.toggle("collapsed");
+  $("#protoMin").textContent = p.classList.contains("collapsed") ? "Prototipo +" : "—";
+});
+// ?mobile in the URL opens straight into the phone frame
+if (/mobile/.test(location.search)) $("[data-mode='mobile']").click();
+
+addEventListener("hashchange", route);
+route();
+})();
+</script>
+</body>
+</html>
