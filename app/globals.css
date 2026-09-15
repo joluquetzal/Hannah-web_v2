@@ -3,6 +3,14 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    /* Height of the sticky site header (strip + bar + breadcrumbs), the offset
+       `min-h-window` and every sticky sheet subtract. The header republishes
+       the real measured value onto <html> at runtime; this default matches the
+       1440px layout (44 + 70 + 46) so the first paint doesn't jump. */
+    --header-h: 160px;
+  }
+
   html {
     scroll-behavior: smooth;
   }

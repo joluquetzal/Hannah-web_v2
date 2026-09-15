@@ -68,6 +68,16 @@ what reserved 450–700px of section height for 150–190px of text on `/nosotro
 - `min-h-[100svh]` is allowed on the landing hero only, because a full-screen hero is the deliberate intent there.
 - No fixed `px` heights on content containers. Media containers get an aspect ratio instead (§9).
 
+**The one other exception: `min-h-window`** (Concept 03, pipeline D1). The token is
+`calc(100svh - var(--header-h))` — the space left below the sticky header — and it exists so
+the redesign can show one treatment, or the three `/servicios` columns, per screen. Its
+limits are the whole reason it is allowed:
+
+- **Only `ServiceColumns` and `TreatmentWindow` may use it.** Any third caller is a rule change, not a judgement call.
+- **Always `min-h-`, never `h-`.** A sheet whose content outgrows the window must still grow; that is the difference between this and the `min-h-[45vh]` pattern §5 exists to forbid.
+- `svh`, not `vh`, so mobile browser chrome doesn't clip the sheet.
+- Everything else still sizes to content. `/nosotros` in particular: `py-20`, not a viewport fraction.
+
 ## 6. Spacing scale
 
 Use the Tailwind scale (`4/8/12/16/24…`) plus the project's fluid tokens, and nothing else:
@@ -88,12 +98,27 @@ Don't invent one-off values. If a value is needed twice, it's a token.
 
 | Class | px | Role |
 |---|---|---|
-| `text-display-lg / -md / -sm` | fluid | Page headings (`<h1>`, major section `<h2>`) — Cormorant Garamond, light italic |
+| `text-caps-xl / -lg / -md / -sm` | fluid | **Concept 03 page type** — DM Sans **800**, uppercase, tight leading. `xl` = Inicio + page `<h1>`; `lg` = category and hub titles; `md` = treatment names; `sm` = cards and hub columns |
+| `text-display-lg / -md / -sm` | fluid | Cormorant Garamond light italic. Since Concept 03, its role is the **accent phrase inside a heavy-caps heading** ("como un *ritual*"), plus long-form legal headings |
 | `text-2xl` (`text-3xl` sparingly) | 24 / 30 | Component headings — footer brand, clinic-info subhead, menu-card titles — Cormorant italic |
 | `text-lg` | 18 | Lead **and** body paragraphs — page intros, hero subtext, treatment descriptions. A 16px body paragraph is a bug, not a variant. |
 | base (no size class) | 16 | Form controls (`<input>` / `<select>` / `<textarea>`). Below 16px iOS Safari zooms the viewport on focus — **never** put `text-sm` on a form control. |
 | `text-sm` | 14 | Dense secondary content only — "incluye" lists, the clinic `<dl>`, footer, card copy. Never a running paragraph. |
 | `text-xs` | 12 | Uppercase eyebrows, labels, button text, small-caps CTAs. **The floor — nothing smaller.** No `text-[10px]` / `[11px]` / `[13px]`. |
+
+**Four families, each with one job** (Concept 03, pipeline D2). Don't mix them freely:
+
+| Family | Class | Job |
+|---|---|---|
+| DM Sans | `font-body` | Everything by default: body copy, UI, and — at `font-extrabold` — the `text-caps-*` headings |
+| Cormorant Garamond 300 italic | `font-display` | The accent phrase inside a heavy-caps heading, and `text-2xl` component headings |
+| Source Serif 4 600 | `font-hserif` | **Header chrome only** — nav links, breadcrumbs, the announcement strip |
+| Space Grotesk 400 | `font-grotesk` | **Header controls only** — the strip button, the two bar buttons, ES/EN |
+
+`font-hserif` and `font-grotesk` exist for the header. Using either in page content is a
+bug — it dilutes the header's distinct voice and pulls in a font file the page didn't need.
+The logo is `public/brand/hannah-wordmark.svg`, not a font: Anton is deliberately **not**
+loaded, so never reach for a fourth family.
 
 - Visual hierarchy comes from size, weight and contrast — never from a heading tag chosen for its default size.
 - **Uppercase text is always tracked:** `tracking-label` (0.2em) for inline labels / buttons / small CTAs, `tracking-eyebrow` (0.3em) for the eyebrow line above a heading. Uppercase with no tracking is a bug. **Never uppercase running text** — only labels, eyebrows and ≤ ~4-word CTAs.
@@ -107,17 +132,56 @@ column so nothing runs to ~100ch on a wide monitor.
 
 ## 8. Color and contrast
 
-Minimum 4.5:1 for body text, 3:1 for large text. Measured against `noir` (#0E0A0A):
+Minimum 4.5:1 for body text, 3:1 for large text.
+
+**`noir` is no longer the only ground.** Concept 03 gives every sheet its own colour, so a
+token has to be measured against the sheet it lands on, not against the page default. Every
+figure below was computed from the hex values, not estimated.
+
+On `noir` (#0E0A0A):
 
 | Pair | Ratio | |
 |---|---|---|
 | `cream` #F0E8DC | 16.20:1 | ✅ |
 | `sand` #C9A27A | 8.38:1 | ✅ |
-| `cream` on `crimson` button | 9.96:1 | ✅ |
-| `sand` on `crimson-light` | 6.56:1 | ✅ |
-| `muted` #847A6F | 4.68:1 | ✅ (just passes — don't darken it) |
 | `crimson-bright` #E0938A as text | 8.17:1 | ✅ (error / alert text + borders) |
+| `muted` #847A6F | 4.68:1 | ✅ (just passes — don't darken it) |
 | **`crimson` #6B1414 as text or border** | **1.63:1** | ❌ **fails at any size** |
+
+On the sheet themes — `surface` #151010, `crimson` #6B1414, `crimson-light` #3D1A1A, `sand` #C9A27A:
+
+| Pair | Ratio | |
+|---|---|---|
+| `cream` on `surface` | 15.52:1 | ✅ |
+| `sand` on `surface` | 8.02:1 | ✅ |
+| **`muted` on `surface`** | **4.49:1** | ❌ **fails** |
+| `cream` on `crimson` | 9.96:1 | ✅ |
+| `sand` on `crimson` | 5.15:1 | ✅ |
+| `crimson-bright` on `crimson` | 5.02:1 | ✅ |
+| `sand` on `crimson-light` | 6.56:1 | ✅ |
+| `crimson-bright` on `crimson-light` | 6.40:1 | ✅ |
+| **`muted` on `crimson-light`** | **3.67:1** | ❌ **fails** |
+| `noir` on `sand` | 8.38:1 | ✅ (the footer sheet) |
+| **`muted` on `sand`** | **1.79:1** | ❌ **fails badly** |
+
+On the header — `ink` #221A08 and `paper` #FFEBD6:
+
+| Pair | Ratio | |
+|---|---|---|
+| `paper` on `ink` | 14.85:1 | ✅ |
+| `cream` on `ink` | 14.17:1 | ✅ |
+| `crimson-bright` on `ink` | 7.14:1 | ✅ |
+| `stone` on `ink` | 5.54:1 | ✅ (inactive breadcrumbs) |
+| `ink` on `paper` | 14.85:1 | ✅ (the strip button) |
+
+**`muted` is a `noir`-only token.** It fails on `surface`, on `crimson-light` and
+catastrophically on `sand`. On any sheet that isn't `noir`, de-emphasized text is `sand` (or
+`noir` on the `sand` footer) — never `muted`. A `text-muted` inside a non-noir sheet is a bug.
+
+**A colour-only state change needs a delta measured between its two states**, not just
+against the background. `sand` against `muted` is 1.79:1 — two warm tans that read as no
+change at all. If colour is the only signal, prove the two states differ; otherwise add
+weight, an icon or a text change.
 
 **`crimson` is a background colour, never a text or border colour on `noir`.** A
 `crimson-bright` token (#E0938A, ~8:1) was added for this: `ContactForm.tsx` validation
@@ -125,9 +189,7 @@ errors, the invalid-field border and the send-failure message now use it, as doe
 signature-treatment ★ and the draft banner on the legal pages. If you see `text-crimson`
 or `border-crimson` on a dark surface, it's a bug — use `crimson-bright` or `cream`.
 
-Keep the colour table in `CLAUDE.md` in sync with `tailwind.config.ts` — the doc currently
-lists `muted` as `#7A6E65`, which measures 3.98:1 and fails; the config correctly uses
-`#847A6F`.
+Keep the colour table in `CLAUDE.md` in sync with `tailwind.config.ts`.
 
 ## 9. Images and media
 
