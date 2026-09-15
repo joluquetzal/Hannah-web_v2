@@ -54,16 +54,25 @@ export const en = {
   categories: {
     faciales: {
       title: "Facials",
+      count: "Six facials",
       lead: "Six facials to hydrate, balance and rejuvenate according to your skin type.",
     },
     masajes: {
       title: "Massages",
+      count: "Four massages",
       lead: "Four massages to relax the body, ease muscle tension and restore your energy.",
     },
     especiales: {
       title: "Special treatments",
+      count: "Four treatments",
       lead: "Four advanced treatments to deeply hydrate and firm the skin of the face.",
     },
+  },
+
+  talk: {
+    title: "Shall we talk?",
+    body: "Tell us what you need and we'll get back to you soon.",
+    cta: "Get in touch",
   },
 
   treatment: {
@@ -88,9 +97,6 @@ export const en = {
     team1:
       "A team of specialists in facial and body aesthetics, in continuous training to offer current, safe techniques.",
     teamNote: "(Team profiles pending client content.)",
-    talkTitle: "Shall we talk?",
-    talkBody: "Tell us what you need and we'll get back to you soon.",
-    talkCta: "Get in touch",
   },
 
   contacto: {

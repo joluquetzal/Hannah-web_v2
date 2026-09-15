@@ -53,16 +53,26 @@ export const es = {
   categories: {
     faciales: {
       title: "Faciales",
+      count: "Seis faciales",
       lead: "Seis faciales para hidratar, equilibrar y rejuvenecer según tu tipo de piel.",
     },
     masajes: {
       title: "Masajes",
+      count: "Cuatro masajes",
       lead: "Cuatro masajes para relajar el cuerpo, aliviar la tensión muscular y renovar la energía.",
     },
     especiales: {
       title: "Especiales",
+      count: "Cuatro tratamientos",
       lead: "Cuatro tratamientos avanzados para hidratar en profundidad y tensar la piel del rostro.",
     },
+  },
+
+  // Shared closing sheet — used by /servicios, the category pages and /nosotros.
+  talk: {
+    title: "¿Hablamos?",
+    body: "Cuéntanos qué necesitas y te respondemos pronto.",
+    cta: "Contáctanos",
   },
 
   treatment: {
@@ -87,9 +97,6 @@ export const es = {
     team1:
       "Un equipo de especialistas en estética facial y corporal, en formación continua para ofrecer técnicas actuales y seguras.",
     teamNote: "(Perfiles del equipo pendientes de contenido del cliente.)",
-    talkTitle: "¿Hablamos?",
-    talkBody: "Cuéntanos qué necesitas y te respondemos pronto.",
-    talkCta: "Contáctanos",
   },
 
   contacto: {

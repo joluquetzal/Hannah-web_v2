@@ -28,8 +28,8 @@ to enable the slash command, or just ask Claude Code to "continue the Concept 03
 | 1 | Foundations — tokens, fonts, rule-file updates | ✅ | `9b95c0b` |
 | 2 | Header — strip, bar, mega menu, mobile menu, breadcrumbs | ✅ | `ab2ca97` |
 | 3 | Sheet system — sticky stacking + cover effect | ✅ | `2541275` |
-| 4 | Inicio | ⏸ waiting for gate approval | — |
-| 5 | Servicios hub — three image columns | ⬜ | — |
+| 4 | Inicio | ✅ | `581edb8` |
+| 5 | Servicios hub — three image columns | ⏸ waiting for gate approval | — |
 | 6 | Category pages — one treatment per window | ⬜ | — |
 | 7 | Nosotros | ⬜ | — |
 | 8 | Contacto | ⬜ | — |
@@ -550,3 +550,31 @@ exactly what the token computes. Flagged, not silent.
 
 **Open:** `/nosotros` h1 sits at 432px against everyone else's 132 — it still centres its own
 prose column, which §4 forbids. That is Phase 7's job and is expected to close there.
+
+### Phase 5 — 2026-09-15
+
+`/servicios` is now three full-height images in one bleed window sheet, followed by the shared
+talk sheet. New `ServiceColumns.tsx` and `TalkSheet.tsx`; `ServiceCard.tsx` deleted (unused).
+
+**Accept:**
+
+| Criterion | Measured |
+|---|---|
+| ≥ 640px: three equal columns filling the window | **640** 213×747 · **768** 256×741 · **1024** 341×741 · **1440** 480×741 · **2560** 853×741 — equal, and the sheet exactly fills the space below the header |
+| < 640px: three rows | **390**: `grid-template-columns` resolves to 1, three 390×249 rows |
+| Hover and focus produce the same state | reveal `0px → 109.5px` (390) / `132.25px` (640) and tint `1 → 0`, **identical** for `:hover` and `:focus-visible` |
+| Focus ring visible | `outline: auto 2px`, with `outline-offset: -4px` so it reads inside the image |
+| Title and description fit at 390 and 640 | no overflow on either, in the narrowest 213px column |
+| Horizontal overflow / CLS | 0 at all six widths; CLS ≤ 0.003 |
+
+Two structural additions to `Sheet`: `bleed` (skip the centred shell and the vertical padding,
+so an image grid can run edge to edge and fill the sheet) and the `talk` dictionary group,
+moved out of `nosotros` so `/servicios`, the category pages and `/nosotros` share one source.
+
+`@media (hover: none)` is expressed as an arbitrary variant, `[@media(hover:none)]:`, since
+Tailwind ships no `hover-none` and the project keeps `plugins: []`. On touch the tint lightens
+and the description is always open — declared, but not exercised by these measurements, which
+run in a hover-capable context.
+
+**Deferred:** `ScrollBackdrop` + `lib/backdrop.ts` now have exactly one importer left,
+`NosotrosView`. They go in Phase 7.

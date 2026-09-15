@@ -29,6 +29,7 @@ export function Sheet({
   theme = "noir",
   variant = "content",
   align = "center",
+  bleed = false,
   static: isStatic = false,
   crumb,
   id,
@@ -43,6 +44,9 @@ export function Sheet({
    *  a reflowing paragraph from moving with it — centring turns any text
    *  rewrap into a shift of the whole block. */
   align?: "center" | "start";
+  /** Skip the centred shell and the vertical padding: the children run edge to
+   *  edge and fill the sheet. For image grids, not for text. */
+  bleed?: boolean;
   /** Never sticky, never covered — used by the contact form. */
   static?: boolean;
   /** Label this sheet contributes to the live breadcrumb while it is in view. */
@@ -61,7 +65,8 @@ export function Sheet({
       data-crumb={crumb}
       data-static={isStatic ? "" : undefined}
       className={clsx(
-        "relative isolate overflow-hidden py-16",
+        "relative isolate overflow-hidden",
+        !bleed && "py-16",
         // The first sheet has nothing above it to lift away from.
         "rounded-t-sheet shadow-sheet first:rounded-none first:shadow-none",
         themeClass[theme],
@@ -79,8 +84,18 @@ export function Sheet({
         aria-hidden
         className="pointer-events-none absolute inset-0 z-20 bg-black opacity-0"
       />
-      <div data-sheet-inner className="relative z-10 w-full origin-top">
-        <div className="mx-auto w-full max-w-shell px-gutter">{children}</div>
+      <div
+        data-sheet-inner
+        className={clsx(
+          "relative z-10 w-full origin-top",
+          bleed && "self-stretch",
+        )}
+      >
+        {bleed ? (
+          children
+        ) : (
+          <div className="mx-auto w-full max-w-shell px-gutter">{children}</div>
+        )}
       </div>
     </section>
   );

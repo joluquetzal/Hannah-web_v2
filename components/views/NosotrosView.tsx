@@ -6,6 +6,7 @@ import { getDictionary, localizedPath, type Lang } from "@/lib/i18n";
 /* TODO: reemplazar todo el texto de esta página con el copy real del cliente. */
 export function NosotrosView({ lang }: { lang: Lang }) {
   const t = getDictionary(lang).nosotros;
+  const talk = getDictionary(lang).talk;
 
   return (
     <>
@@ -53,12 +54,12 @@ export function NosotrosView({ lang }: { lang: Lang }) {
 
         <section className="mx-auto flex min-h-[50vh] max-w-prose flex-col justify-center border-t border-crimson-light pt-16">
           <h2 className="font-display text-display-sm italic text-cream">
-            {t.talkTitle}
+            {talk.title}
           </h2>
-          <p className="mt-4 text-lg leading-relaxed text-sand">{t.talkBody}</p>
+          <p className="mt-4 text-lg leading-relaxed text-sand">{talk.body}</p>
           <div className="mt-8">
             <ButtonLink href={localizedPath("/contacto", lang)}>
-              {t.talkCta}
+              {talk.cta}
             </ButtonLink>
           </div>
         </section>
