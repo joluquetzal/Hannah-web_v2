@@ -16,6 +16,7 @@ export const en = {
   nav: {
     primaryLabel: "Primary",
     mobileLabel: "Mobile menu",
+    breadcrumbLabel: "Breadcrumb",
     skipToContent: "Skip to content",
     home: "Home",
     services: "Services",
@@ -98,6 +99,7 @@ export const en = {
 
   clinic: {
     visitUs: "Visit us",
+    visitUsAt: "Visit us at",
     phone: "Phone",
     hours: "Hours",
     whatsapp: "WhatsApp",

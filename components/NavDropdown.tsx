@@ -21,11 +21,18 @@ import { useI18n } from "@/lib/i18n/useLang";
  * (restoring focus), outside pointerdown, focus leaving the group, and
  * route change.
  */
+/** Category card grounds. Matches the sheet themes the category pages use. */
+const cardTheme: Record<string, string> = {
+  faciales: "bg-crimson text-cream",
+  masajes: "bg-crimson-light text-cream",
+  especiales: "bg-sand text-noir",
+};
+
 export function NavDropdown({
-  onOpenChange,
+  navLinkClass,
 }: {
-  /** Lets the header go solid while the panel is showing. */
-  onOpenChange?: (open: boolean) => void;
+  /** Shared bar-link styling, so the trigger matches its sibling links. */
+  navLinkClass: (active: boolean) => string;
 }) {
   const pathname = usePathname();
   const { lang, t } = useI18n();
@@ -50,10 +57,6 @@ export function NavDropdown({
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
-
-  useEffect(() => {
-    onOpenChange?.(open);
-  }, [open, onOpenChange]);
 
   // Close when a pointer goes down outside the group.
   useEffect(() => {
@@ -114,17 +117,14 @@ export function NavDropdown({
         aria-controls={panelId}
         onClick={() => setOpen((v) => !v)}
         onFocus={cancelClose}
-        className={clsx(
-          "inline-flex items-center gap-1.5 transition-colors hover:text-cream",
-          active || open ? "text-cream" : "text-sand",
-        )}
+        className={clsx(navLinkClass(active), "gap-1.5")}
       >
         {t.nav.services}
         <svg
           aria-hidden
           viewBox="0 0 10 6"
           className={clsx(
-            "h-1.5 w-2.5 transition-transform duration-200",
+            "h-1.5 w-2.5 transition-transform duration-200 motion-reduce:transition-none",
             open && "rotate-180",
           )}
         >
@@ -144,23 +144,23 @@ export function NavDropdown({
         hidden={!open}
         onMouseEnter={cancelClose}
         onMouseLeave={closeSoon}
-        className="absolute inset-x-0 top-full border-y border-crimson-light bg-noir/95 backdrop-blur-md"
+        className="absolute inset-x-0 top-full z-mega border-t border-paper/15 bg-ink shadow-[0_30px_50px_-20px_rgb(0_0_0/0.7)]"
       >
-        <div className="px-gutter py-8">
-          <div className="flex items-baseline justify-between">
-            <p className="text-xs uppercase tracking-eyebrow text-muted">
+        <div className="mx-auto max-w-shell px-gutter py-6">
+          <div className="flex items-baseline justify-between gap-4">
+            <p className="font-hserif text-base font-semibold text-stone">
               {t.nav.servicesMenuHeading}
             </p>
             <Link
               data-menu-item
               href={path("/servicios")}
-              className="text-xs uppercase tracking-label text-sand transition-colors hover:text-cream"
+              className="inline-flex min-h-11 items-center font-grotesk text-xs uppercase tracking-label text-paper transition-opacity hover:opacity-80"
             >
-              {t.nav.servicesViewAll}
+              {t.nav.servicesViewAll} <span aria-hidden>↗</span>
             </Link>
           </div>
 
-          <ul className="mt-6 grid gap-4 sm:grid-cols-3">
+          <ul className="mt-3 grid gap-2 sm:grid-cols-3">
             {servicios.map((category) => {
               const current = rest === category.href;
               return (
@@ -170,21 +170,17 @@ export function NavDropdown({
                     href={path(category.href)}
                     aria-current={current ? "page" : undefined}
                     className={clsx(
-                      "group block h-full border p-5 transition-colors",
-                      current
-                        ? "border-sand/50 bg-crimson-light/40"
-                        : "border-crimson-light hover:border-sand/50 hover:bg-crimson-light/40",
+                      "flex h-full min-h-36 flex-col justify-between gap-3 p-4 transition-transform duration-300 hover:-translate-y-0.5 motion-reduce:transition-none",
+                      cardTheme[category.slug],
+                      current && "ring-1 ring-inset ring-paper/60",
                     )}
                   >
-                    <p className="font-display text-2xl italic text-cream">
+                    <p className="font-body text-2xl font-extrabold uppercase leading-none tracking-caps">
                       {category.titulo[lang]}
                     </p>
-                    <p className="mt-2 text-sm leading-relaxed text-sand">
+                    <p className="max-w-[30ch] text-sm leading-snug">
                       {category.descripcion[lang]}
                     </p>
-                    <span className="mt-4 inline-block text-xs uppercase tracking-label text-muted transition-colors group-hover:text-sand">
-                      {t.nav.servicesCardCta}
-                    </span>
                   </Link>
                 </li>
               );

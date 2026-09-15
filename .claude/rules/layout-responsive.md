@@ -85,7 +85,6 @@ Use the Tailwind scale (`4/8/12/16/24…`) plus the project's fluid tokens, and 
 | Token | Use |
 |---|---|
 | `px-gutter` | horizontal page margin (clamps 1.5→4rem) |
-| `pt-top-clear` | clearance under the fixed nav |
 | `pb-section-b` / `pb-section-b-lg` | bottom of a page's content |
 | `max-w-shell` | the 1280px content cap (§4) |
 | `max-w-prose` | long-form text measure (§7) |
@@ -121,7 +120,7 @@ The logo is `public/brand/hannah-wordmark.svg`, not a font: Anton is deliberatel
 loaded, so never reach for a fourth family.
 
 - Visual hierarchy comes from size, weight and contrast — never from a heading tag chosen for its default size.
-- **Uppercase text is always tracked:** `tracking-label` (0.2em) for inline labels / buttons / small CTAs, `tracking-eyebrow` (0.3em) for the eyebrow line above a heading. Uppercase with no tracking is a bug. **Never uppercase running text** — only labels, eyebrows and ≤ ~4-word CTAs.
+- **Uppercase text is always tracked — but which way depends on size.** *Small* uppercase (`text-xs` / `text-sm` labels, eyebrows, button text, CTAs) is letter-*spaced*: `tracking-label` (0.2em) for inline labels / buttons / small CTAs, `tracking-eyebrow` (0.3em) for the eyebrow above a heading. *Display* uppercase — the `text-caps-*` scale, and anything uppercase at roughly `text-2xl` or larger — takes `tracking-caps` (−0.025em) instead: letters that big read as loose at zero, so they tighten. Uppercase with no tracking at all is a bug either way. **Never uppercase running text** — only labels, eyebrows, CTAs and headings.
 - **Leading by role:** `leading-relaxed` on body and lead paragraphs; tight on display headings (`leading-[1.05]` on the hero `<h1>` is the one sanctioned arbitrary value). Never `leading-none` on anything that can wrap.
 
 **Measure — line length 50–75 characters — applies to every multi-line text block, not

@@ -5,10 +5,17 @@
 @layer base {
   :root {
     /* Height of the sticky site header (strip + bar + breadcrumbs), the offset
-       `min-h-window` and every sticky sheet subtract. The header republishes
-       the real measured value onto <html> at runtime; this default matches the
-       1440px layout (44 + 70 + 46) so the first paint doesn't jump. */
-    --header-h: 160px;
+       `min-h-window` and every sticky sheet subtract. Nav republishes the real
+       measured height onto <html> at runtime; these defaults are the measured
+       values, so the first paint doesn't jump before JS runs.
+       Mobile 44 + 64 + 45, desktop 44 + 70 + 45 — both verified in Chromium. */
+    --header-h: 153px;
+  }
+
+  @media (min-width: 768px) {
+    :root {
+      --header-h: 159px;
+    }
   }
 
   html {

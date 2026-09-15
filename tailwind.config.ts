@@ -41,7 +41,6 @@ const config: Config = {
       // rhythm) intentionally stays on the fixed Tailwind scale.
       spacing: {
         gutter: "clamp(1.5rem, 1rem + 2.5vw, 4rem)",
-        "top-clear": "clamp(6rem, 4rem + 9vw, 11rem)",
         "section-b": "clamp(4rem, 3rem + 6vw, 7rem)",
         "section-b-lg": "clamp(5rem, 4rem + 7vw, 9rem)",
       },
@@ -71,6 +70,10 @@ const config: Config = {
       letterSpacing: {
         label: "0.2em", // inline labels, button text, small caps CTAs
         eyebrow: "0.3em", // section eyebrows above a heading
+        // Display caps (`text-caps-*`, DM Sans 800). Large uppercase needs the
+        // opposite of what small uppercase needs: letters this size read as
+        // loose at 0, so they tighten. Never use this below ~24px.
+        caps: "-0.025em",
       },
       // Fluid prose width: page intros and long-form copy grow with the
       // viewport instead of hitting a fixed breakpoint cap. The upper bound
