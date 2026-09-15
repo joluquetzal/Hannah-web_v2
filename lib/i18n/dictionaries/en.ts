@@ -92,9 +92,13 @@ export const en = {
   nosotros: {
     eyebrow: "About",
     title: "A space for unhurried care",
+    titleParts: ["A space", "for care,", "unhurried"],
     intro:
       "HannaH is a beauty and aesthetics clinic in Mexico City. We combine technology, professional skincare and a personal touch to care for the skin and wellbeing of everyone who visits us.",
     philosophyTitle: "Philosophy",
+    philosophyHead1: "No generic formulas",
+    philosophyHead2: "A moment for you",
+    philosophyWords: ["Consistency", "Pause"],
     philosophy1:
       "We believe in results built through consistency and in treatments designed for each skin type. No generic formulas: first we listen, then we advise.",
     philosophy2:
@@ -103,6 +107,16 @@ export const en = {
     team1:
       "A team of specialists in facial and body aesthetics, in continuous training to offer current, safe techniques.",
     teamNote: "(Team profiles pending client content.)",
+    teamStatementParts: ["Specialists in facial", "and", "body aesthetics"],
+    // TODO: client copy — the first two bodies are placeholders on purpose (D12).
+    teamCards: [
+      { title: "Facial aesthetics", body: "(Description pending client content.)" },
+      { title: "Body aesthetics", body: "(Description pending client content.)" },
+      {
+        title: "Continuous training",
+        body: "In continuous training to offer current, safe techniques.",
+      },
+    ],
   },
 
   contacto: {

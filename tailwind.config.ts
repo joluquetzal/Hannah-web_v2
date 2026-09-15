@@ -64,7 +64,10 @@ const config: Config = {
         // rewraps when the webfont swaps in (0.13 CLS at 390px before this).
         // Binding line is es "COMO UN RITUAL": 38px max at 390, 132px at 2560.
         "caps-xl": "clamp(2.34rem, 0.15rem + 9vw, 8.1rem)", // Inicio + page h1
-        "caps-lg": "clamp(3.2rem, 0.4rem + 11.5vw, 10rem)", // category / hub titles
+        // Fitted like caps-xl: the binding word is en "CONSISTENCY" on
+        // /nosotros, 11 characters that must fit a 339px column at 390px —
+        // 46px in the Arial fallback. It was rendering at 51px and overflowing.
+        "caps-lg": "clamp(2.85rem, 0.22rem + 10.85vw, 10rem)", // category / hub titles
         "caps-md": "clamp(2.4rem, 1.2rem + 4.85vw, 5.6rem)", // treatment names
         "caps-sm": "clamp(1.9rem, 1.5rem + 1.7vw, 3.2rem)", // cards, hub columns
       },

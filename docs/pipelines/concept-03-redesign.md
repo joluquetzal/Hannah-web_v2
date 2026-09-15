@@ -31,7 +31,7 @@ to enable the slash command, or just ask Claude Code to "continue the Concept 03
 | 4 | Inicio | ✅ | `581edb8` |
 | 5 | Servicios hub — three image columns | ⏸ waiting for gate approval | — |
 | 6 | Category pages — one treatment per window | ⏸ waiting for gate approval | — |
-| 7 | Nosotros | ⬜ | — |
+| 7 | Nosotros | ⏸ waiting for gate approval | — |
 | 8 | Contacto | ⬜ | — |
 | 9 | Footer, legal pages, 404 | ⬜ | — |
 | 10 | English, cleanup, docs | ⬜ | — |
@@ -613,3 +613,43 @@ lets the track shrink and the break take effect. Both languages are clean now.
 
 **Deferred to Phase 9:** the footer is still the old dark one and is not part of any
 `SheetStack`, so it does not yet rise over the last treatment sheet.
+
+### Phase 7 — 2026-09-15
+
+`/nosotros` rebuilt as four sheets: intro (noir), manifesto (crimson gradient, centred, with
+the two big words and the collage), team (surface, three flat cards), talk. New keys
+`titleParts`, `philosophyHead1/2`, `philosophyWords`, `teamStatementParts`, `teamCards` in
+both languages.
+
+**Accept:**
+
+| Criterion | Measured |
+|---|---|
+| No section sized by viewport height | **none** — every sheet is `py-24`; the old `min-h-[45vh]/[70vh]/[50vh]` are gone |
+| Big words never overflow, 390 → 2560 | **0 overflows**, one line each, both languages (46 → 160px) |
+| Horizontal overflow | **0** at all five widths, both languages |
+| CLS | ≤ 0.0015 |
+| Page height at 1440 | **3892px** (es) · **4035px** (en) — baseline was 2948px |
+
+**On the page height:** it went *up*, not down, and that is the right outcome. The 2948px
+baseline was four short text blocks padded out by viewport fractions — D9's complaint was
+450–700px of section height carrying 150–190px of text. The page now carries a manifesto
+sheet with a collage, a three-card team sheet and the talk sheet, all sized by their content.
+More page, because there is more on it.
+
+**`caps-lg` was re-fitted, for the same reason `caps-xl` was in Phase 4.** en `CONSISTENCY`
+— 11 characters — overflowed a 339px column at 390px, rendering at 51px where 46px is the
+fallback-font limit. New clamp `clamp(2.85rem, 0.22rem + 10.85vw, 10rem)`. Since `caps-lg`
+also sets the category and hub titles, those were re-checked after the change: no heading
+passes the viewport and no page overflows, at 390 or 2560, in either language.
+
+**D9 closed.** `/nosotros` no longer centres its own prose column: its `<h1>` sits at **132px
+at 1440**, the same left edge as Inicio, the category pages and Contacto (it was 432px).
+
+**D5 closed.** With `NosotrosView` converted, nothing imported the old colour-crossfade
+backdrop any more, so `ScrollBackdrop.tsx` and `lib/backdrop.ts` are deleted.
+
+**Placeholders, deliberately (D12):** two of the three team-card bodies and all four collage
+images are placeholders, marked `TODO: client copy` in both dictionaries and in the view.
+The collage reuses the existing ~600-byte SVG stubs, so that region will look empty until
+real photography arrives — a content gap, not a CSS bug (§9).

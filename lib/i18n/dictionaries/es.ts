@@ -93,9 +93,15 @@ export const es = {
   nosotros: {
     eyebrow: "Nosotros",
     title: "Un espacio para el cuidado, sin prisa",
+    // Three lines; the middle one is set in Cormorant italic. `title` above
+    // stays the plain string for metadata.
+    titleParts: ["Un espacio", "para el cuidado,", "sin prisa"],
     intro:
       "HannaH es una clínica de belleza y estética en México. Combinamos aparatología, cosmética profesional y un trato cercano para cuidar la piel y el bienestar de cada persona que nos visita.",
     philosophyTitle: "Filosofía",
+    philosophyHead1: "Nada de fórmulas genéricas",
+    philosophyHead2: "Un momento para ti",
+    philosophyWords: ["Constancia", "Pausa"],
     philosophy1:
       "Creemos en los resultados que se construyen con constancia y en tratamientos diseñados para cada tipo de piel. Nada de fórmulas genéricas: primero escuchamos, después proponemos.",
     philosophy2:
@@ -104,6 +110,23 @@ export const es = {
     team1:
       "Un equipo de especialistas en estética facial y corporal, en formación continua para ofrecer técnicas actuales y seguras.",
     teamNote: "(Perfiles del equipo pendientes de contenido del cliente.)",
+    // Accent is the middle part, set in Cormorant italic.
+    teamStatementParts: ["Especialistas en estética facial", "y", "corporal"],
+    // TODO: client copy — the first two bodies are placeholders on purpose (D12).
+    teamCards: [
+      {
+        title: "Estética facial",
+        body: "(Descripción pendiente de contenido del cliente.)",
+      },
+      {
+        title: "Estética corporal",
+        body: "(Descripción pendiente de contenido del cliente.)",
+      },
+      {
+        title: "Formación continua",
+        body: "En formación continua para ofrecer técnicas actuales y seguras.",
+      },
+    ],
   },
 
   contacto: {
