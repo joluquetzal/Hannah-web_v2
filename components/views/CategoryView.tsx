@@ -35,7 +35,10 @@ export function CategoryView({
 
   return (
     <SheetStack>
-      <Sheet theme="noir">
+      {/* A window-height intro keeps the next sheet below the fold at rest.
+          A short first sheet would already be mid-cover — shrunk and dimmed —
+          before the visitor has scrolled at all. */}
+      <Sheet theme="noir" variant="window">
         <header className="max-w-prose">
           <h1 className="font-display text-display-md italic text-cream">
             {cat.title}

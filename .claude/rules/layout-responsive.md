@@ -65,7 +65,7 @@ already rem-based, so this is mostly automatic.
 what reserved 450–700px of section height for 150–190px of text on `/nosotros`.
 
 - **Never size a content section by viewport height.** Height comes from content plus padding.
-- `min-h-[100svh]` is allowed on the landing hero only, because a full-screen hero is the deliberate intent there.
+- The landing hero is allowed to fill the screen, because a full-screen hero is the deliberate intent there. Since Phase 4 it does that with `min-h-window` (below), not a raw `100svh` — the sticky header is part of the page now, so the hero should fill what is left under it.
 - No fixed `px` heights on content containers. Media containers get an aspect ratio instead (§9).
 
 **The one other exception: `min-h-window`** (Concept 03, pipeline D1). The token is
@@ -73,7 +73,7 @@ what reserved 450–700px of section height for 150–190px of text on `/nosotro
 the redesign can show one treatment, or the three `/servicios` columns, per screen. Its
 limits are the whole reason it is allowed:
 
-- **Only `ServiceColumns` and `TreatmentWindow` may use it.** Any third caller is a rule change, not a judgement call.
+- **Only `ServiceColumns`, `TreatmentWindow` and the landing hero may use it.** Any fourth caller is a rule change, not a judgement call. (The hero was added in Phase 4: §5 already allowed it a full-viewport height, and now that the header is sticky and in normal flow, "full screen" means the space *below* the header — which is exactly what this token computes. Using it beats hand-rolling `calc(100svh - var(--header-h))` at the call site.)
 - **Always `min-h-`, never `h-`.** A sheet whose content outgrows the window must still grow; that is the difference between this and the `min-h-[45vh]` pattern §5 exists to forbid.
 - `svh`, not `vh`, so mobile browser chrome doesn't clip the sheet.
 - Everything else still sizes to content. `/nosotros` in particular: `py-20`, not a viewport fraction.

@@ -37,6 +37,9 @@ export const es = {
 
   home: {
     title: "El cuidado de tu piel, como un ritual",
+    // The <h1> as three parts; the middle one is set in Cormorant italic.
+    // `title` above stays the plain string for metadata and aria.
+    titleParts: ["El cuidado", "de tu piel,", "como un ritual"],
     lead: "Faciales, masajes y tratamientos estéticos en un espacio pensado para detenerte, respirar y volver a ti.",
     ctaServices: "Ver servicios",
     ctaContact: "Contacto",
@@ -109,6 +112,8 @@ export const es = {
     mapTitle: "Ubicación de HannaH en el mapa",
     hoursSummary:
       "Lunes a viernes de 9:00 a 19:00 h · Sábado de 9:00 a 14:00 h · Domingo cerrado",
+    // Compact form for the hero's meta block, where the full summary is too long.
+    hoursShort: "Lun–Vie 9:00–19:00 · Sáb 9:00–14:00",
     schedule: [
       { days: "Lunes a viernes", time: "9:00 – 19:00 h" },
       { days: "Sábado", time: "9:00 – 14:00 h" },

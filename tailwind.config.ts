@@ -59,7 +59,11 @@ const config: Config = {
         // rem + vw so they still respond to the user's font-size setting.
         // caps-md is provisional until Phase 6 renders the longest treatment
         // names (HIDRODERMOABRASIÓN, MASAJE PIEDRAS CALIENTES) at every width.
-        "caps-xl": "clamp(2.6rem, 0.5rem + 8.6vw, 8.5rem)", // Inicio + page h1
+        // Fitted by measurement, not taste: each authored hero line must sit on
+        // one line in BOTH DM Sans 800 and its Arial fallback, or the h1
+        // rewraps when the webfont swaps in (0.13 CLS at 390px before this).
+        // Binding line is es "COMO UN RITUAL": 38px max at 390, 132px at 2560.
+        "caps-xl": "clamp(2.34rem, 0.15rem + 9vw, 8.1rem)", // Inicio + page h1
         "caps-lg": "clamp(3.2rem, 0.4rem + 11.5vw, 10rem)", // category / hub titles
         "caps-md": "clamp(2.4rem, 1.2rem + 4.85vw, 5.6rem)", // treatment names
         "caps-sm": "clamp(1.9rem, 1.5rem + 1.7vw, 3.2rem)", // cards, hub columns

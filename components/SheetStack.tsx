@@ -45,9 +45,14 @@ export function SheetStack({ children }: { children: React.ReactNode }) {
         sheet.classList.remove("is-tall");
         sheet.style.top = "";
       });
-      all.forEach((sheet) => {
+      all.forEach((sheet, i) => {
         if (sheet.hasAttribute("data-static")) return;
-        if (sheet.offsetHeight > available) sheet.classList.add("is-tall");
+        // The last sheet has nothing rising over it, so it needs no reading
+        // room. The 1.05 margin stops a sheet sitting within a few pixels of
+        // the window from flipping in and out while fonts and images settle —
+        // that thrash alone measured 0.44 CLS.
+        if (i === all.length - 1) return;
+        if (sheet.offsetHeight > available * 1.05) sheet.classList.add("is-tall");
       });
       all.forEach((sheet) => {
         if (sheet.hasAttribute("data-static")) return;

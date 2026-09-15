@@ -27,8 +27,8 @@ to enable the slash command, or just ask Claude Code to "continue the Concept 03
 | 0 | Decisions & rule exceptions (no code) | ✅ | — |
 | 1 | Foundations — tokens, fonts, rule-file updates | ✅ | `9b95c0b` |
 | 2 | Header — strip, bar, mega menu, mobile menu, breadcrumbs | ✅ | `ab2ca97` |
-| 3 | Sheet system — sticky stacking + cover effect | ⏸ waiting for gate approval | — |
-| 4 | Inicio | ⬜ | — |
+| 3 | Sheet system — sticky stacking + cover effect | ✅ | `2541275` |
+| 4 | Inicio | ⏸ waiting for gate approval | — |
 | 5 | Servicios hub — three image columns | ⬜ | — |
 | 6 | Category pages — one treatment per window | ⬜ | — |
 | 7 | Nosotros | ⬜ | — |
@@ -476,3 +476,77 @@ would put `text-cream` on `#C9A27A` at 1.9:1, so it waits for the theme-aware
 
 **Open:** the optional 2px scroll progress bar (deferred from Phase 2) is still not built —
 it now has a natural home in `SheetStack`. Say the word and it's a small addition.
+
+### Phase 4 — 2026-09-15
+
+Inicio rebuilt as a single full-bleed hero sheet (D8): `hero.jpg` behind a scrim, eyebrow,
+three-line heavy-caps `<h1>` with a Cormorant italic accent, lead, two CTAs, and a meta block.
+New keys `home.titleParts` and `clinic.hoursShort` in both languages.
+
+**Accept:**
+
+| Criterion | Target | Measured |
+|---|---|---|
+| `<h1>` overflow, 390 → 2560 | none | **0** at all six widths |
+| `<h1>` lines at 1440 | ≤ 3 | **3** (exactly, at every width) |
+| `<h1>` left edge aligns with the shell | — | **132 / 384 / 704** at 1440 / 1920 / 2560, matching `/servicios/faciales` and `/contacto` |
+| Buttons | ≥ 48px | **48px** at every width, both languages |
+
+**The real work of this phase was CLS.** The landing page measured **0.448**, bimodal across
+runs (0.44 / 0.038 alternating) — a race, not noise. Four distinct causes, each measured and
+fixed:
+
+1. **`--header-h` was wrong on `/` at first paint.** Breadcrumbs don't render on the landing
+   page, so its header is 114px, not the 159px default — every window sheet resized once JS
+   measured the real value. `globals.css` now composes `--header-h` from named rows
+   (`--hdr-strip` + `--hdr-bar` + `--hdr-crumbs`) and `Nav` zeroes the crumb row on routes
+   where `Breadcrumbs` renders nothing, **in the served HTML**, so the first paint is correct.
+2. **`is-tall` thrashed.** `SheetStack` flagged the hero — the only sheet in its stack — as
+   tall and added 30svh of padding, then removed it as fonts settled. A sheet with nothing
+   rising over it needs no reading room: the last sheet is now skipped, and the threshold
+   carries a 1.05 margin so a sheet sitting within a few pixels of the window can't flip.
+3. **The `<h1>` rewrapped on font swap** — four lines in the Arial fallback, three in
+   DM Sans 800. The three `titleParts` are now one block per line, and `caps-xl` was
+   **re-fitted by measurement**: the binding line is es `COMO UN RITUAL`, which needs ≤38px at
+   390 in the *fallback* (41.5px was being rendered). New clamp
+   `clamp(2.34rem, 0.15rem + 9vw, 8.1rem)` keeps every authored line unwrapped in both fonts.
+4. **The window sheet centred its content**, so the lead paragraph rewrapping moved the entire
+   block, h1 included. `Sheet` gained `align="start"`; the hero is top-aligned with extra top
+   padding, which is also what the prototype does (`.hero{min-height:0}` + padding).
+
+| CLS | before | after |
+|---|---|---|
+| es `/` @390 | 0.448 (unstable) | **0.0245** |
+| es `/` @768 | 0.12 | **0.0216** |
+| es `/` @1440 | 0.038 | **0.0009** |
+| en `/` @768 | 0.135 | **0.0275** |
+| `/servicios/faciales` @1440 | 0.0006 | **0.0006** |
+
+Worst case across every page and width is now 0.0275, inside the < 0.05 target and well
+inside Google's 0.1 "good" threshold. Results are deterministic run to run — the race is gone.
+
+**Lighthouse was not run.** `npm install lighthouse` crashed twice (`Exit handler never
+called!`) on a machine with ~0.8 GB free; the package half-installed and its CLI could not
+resolve. Rather than report a score I didn't measure: LCP is **428ms** (the hero image),
+`load` 302ms, total transfer **1294 KB**, and there are no structural a11y faults (one `<h1>`,
+no heading-level jumps, every `<img>` has `alt`, `<main>`/`<title>`/meta description present).
+Phase 11 owns the real Lighthouse run.
+
+**Flag for the performance budget:** `hero.jpg` is **606 KB of the 1294 KB** total and is the
+LCP element. Static export forces `images.unoptimized: true`, so Next will not re-encode it —
+it ships exactly as committed. A pre-compressed / WebP hero is the single highest-value
+perf change available before Phase 11's ≥95 target.
+
+**Other changes:** `ButtonLink` gained a `cream` variant (the filled CTA on a photographic
+ground) and `min-h-12`; its `ghost` variant moved from sand to cream, because sand over the
+worst-case scrim measures ~3.7:1 while cream clears 6.9:1. `CategoryView`'s intro sheet became
+a window sheet — a 275px first sheet was already 63% through its cover animation at rest,
+rendering the intro shrunk and dimmed before the visitor scrolled.
+
+**Rule amendment, §5.** The landing hero is now a third permitted caller of `min-h-window`,
+alongside `ServiceColumns` and `TreatmentWindow`. §5 already allowed the hero a full-viewport
+height; with the header sticky and in flow, "full screen" means the space below it, which is
+exactly what the token computes. Flagged, not silent.
+
+**Open:** `/nosotros` h1 sits at 432px against everyone else's 132 — it still centres its own
+prose column, which §4 forbids. That is Phase 7's job and is expected to close there.

@@ -28,21 +28,30 @@ const themeClass: Record<SheetTheme, string> = {
 export function Sheet({
   theme = "noir",
   variant = "content",
+  align = "center",
   static: isStatic = false,
   crumb,
   id,
   className,
+  backdrop,
   children,
 }: {
   theme?: SheetTheme;
   /** `window` fills the space below the header; `content` sizes to its content. */
   variant?: "content" | "window";
+  /** Where the content sits in a `window` sheet. `start` keeps everything above
+   *  a reflowing paragraph from moving with it — centring turns any text
+   *  rewrap into a shift of the whole block. */
+  align?: "center" | "start";
   /** Never sticky, never covered — used by the contact form. */
   static?: boolean;
   /** Label this sheet contributes to the live breadcrumb while it is in view. */
   crumb?: string;
   id?: string;
   className?: string;
+  /** Full-bleed layer behind the content — a hero image and its scrim. Sits
+   *  outside the shell, so it ignores `max-w-shell` and the gutters. */
+  backdrop?: React.ReactNode;
   children: React.ReactNode;
 }) {
   return (
@@ -56,10 +65,14 @@ export function Sheet({
         // The first sheet has nothing above it to lift away from.
         "rounded-t-sheet shadow-sheet first:rounded-none first:shadow-none",
         themeClass[theme],
-        variant === "window" && "flex min-h-window items-center",
+        variant === "window" && "flex min-h-window",
+        variant === "window" &&
+          (align === "start" ? "items-start" : "items-center"),
         className,
       )}
     >
+      {backdrop && <div className="absolute inset-0 z-0">{backdrop}</div>}
+
       {/* Darkens as the next sheet rises over this one. */}
       <div
         data-sheet-shade

@@ -4,17 +4,24 @@
 
 @layer base {
   :root {
-    /* Height of the sticky site header (strip + bar + breadcrumbs), the offset
-       `min-h-window` and every sticky sheet subtract. Nav republishes the real
-       measured height onto <html> at runtime; these defaults are the measured
-       values, so the first paint doesn't jump before JS runs.
-       Mobile 44 + 64 + 45, desktop 44 + 70 + 45 — both verified in Chromium. */
-    --header-h: 153px;
+    /* Header height, composed from its three rows, because `min-h-window` and
+       every sticky sheet subtract it. Nav republishes the real measured value
+       onto <html> after mount; these defaults have to be right at FIRST paint
+       or window-height sheets resize under the visitor (measured: a wrong
+       default cost 0.44 CLS on the landing page).
+
+       The rows are named separately because the breadcrumb row is conditional:
+       Nav zeroes `--hdr-crumbs` on the routes where Breadcrumbs renders
+       nothing. All three values verified in Chromium. */
+    --hdr-strip: 44px;
+    --hdr-bar: 64px;
+    --hdr-crumbs: 45px;
+    --header-h: calc(var(--hdr-strip) + var(--hdr-bar) + var(--hdr-crumbs));
   }
 
   @media (min-width: 768px) {
     :root {
-      --header-h: 159px;
+      --hdr-bar: 70px;
     }
   }
 

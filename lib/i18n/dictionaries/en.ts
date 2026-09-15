@@ -40,6 +40,7 @@ export const en = {
 
   home: {
     title: "Caring for your skin, like a ritual",
+    titleParts: ["Caring for", "your skin,", "like a ritual"],
     lead: "Facials, massages and aesthetic treatments in a space designed to help you slow down, breathe and return to yourself.",
     ctaServices: "View services",
     ctaContact: "Contact",
@@ -110,6 +111,7 @@ export const en = {
     mapTitle: "HannaH's location on the map",
     hoursSummary:
       "Monday to Friday, 9:00 am – 7:00 pm · Saturday, 9:00 am – 2:00 pm · Sunday closed",
+    hoursShort: "Mon–Fri 9 am – 7 pm · Sat 9 am – 2 pm",
     schedule: [
       { days: "Monday to Friday", time: "9:00 am – 7:00 pm" },
       { days: "Saturday", time: "9:00 am – 2:00 pm" },
