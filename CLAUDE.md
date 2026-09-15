@@ -48,10 +48,12 @@ app/
   en/                     # English mirror: /en, /en/servicios/…, /en/contacto …
                           # same thin wrappers, lang="en"
 components/
-  Nav.tsx                 # fixed nav; contains LanguageSwitch (ES | EN)
-  Footer.tsx
+  Nav.tsx                 # sticky 3-row header: strip, bar, breadcrumbs
+  Breadcrumbs.tsx         # route trail + live sheet crumb + BreadcrumbList JSON-LD
+  Sheet.tsx / SheetStack.tsx           # the scroll-stacking sheet system
+  Footer.tsx              # last sheet — sand ground, decorative wordmark
   LanguageSwitch.tsx      # swaps to the same page in the other language
-  ServiceCard.tsx / TreatmentRow.tsx   # take a `lang` prop
+  ServiceColumns.tsx / TreatmentWindow.tsx / TalkSheet.tsx
   views/                  # HomeView, ServiciosView, CategoryView, NosotrosView,
                           # ContactoView — the real page bodies, param'd by lang
 data/
@@ -105,10 +107,10 @@ Four families, one job each (Concept 03). All loaded via `next/font/google` in `
 
 ### Motion principles
 
-- GSAP ScrollTrigger for section background color shifts (same approach as the old site)
+- **Sticky sheet stack**: every top-level section is a full-bleed colour sheet that pins below the header while the next one rises over it. GSAP ScrollTrigger only *scrubs* the cover effect (the covered sheet's scale/shade). This replaced the old `ScrollBackdrop` colour crossfade, which is deleted.
+- Sticky is switched on after mount (`data-stack="on"`), so with JS off nothing is pinned or hidden.
 - Hover on treatment images: static image → muted looping `<video>` swap (CSS only, `group-hover`)
-- Page transitions: subtle fade via Tailwind + Next.js view transitions
-- Respect `prefers-reduced-motion` — wrap all GSAP in a check
+- Respect `prefers-reduced-motion` — stacking stays (it is only scrolling), but GSAP is never even fetched
 
 ## Pages
 
@@ -120,31 +122,31 @@ rendered from the same `components/views/*` component with `lang="en"`.
 
 ### `/` — Landing
 
-Hero only. Brand statement, atmospheric image or video, CTA buttons ("Ver Servicios" → `/servicios`, "Contacto" → `/contacto`). No service listings here.
+One full-bleed hero sheet: `hero.jpg` behind a dark scrim, an eyebrow, a three-line heavy-caps `<h1>` with a Cormorant italic accent, the lead, two CTAs and a meta block (address + short hours). No service listings here.
 
 ### `/servicios` — Hub
 
-Three large editorial cards: Faciales, Masajes, Especiales. Each links to its own page. No treatment details here.
+Three full-height images side by side (stacked rows below 640px), each linking to its category. The warm tint clears and the description slides up on hover **and on keyboard focus**. The page has no visible title — the `<h1>` and lead are `sr-only` so the heading order stays valid.
 
 ### `/servicios/faciales`
 
-Six treatments rendered with `TreatmentRow`. Alternating layout (odd: image left, even: image right). Hover crossfades to a muted looping clip.
+An intro sheet (count eyebrow, heavy-caps title, lead, category chips, scroll cue), then **one `TreatmentWindow` sheet per treatment** — six here — with the theme cycling crimson → surface → sand → crimson-light and the image side flipping by index parity. Closes with "Otras categorías" and the shared talk sheet. Deep links work: the sheet's `id` is the treatment slug.
 
 ### `/servicios/masajes`
 
-Four treatments, same layout.
+Four treatments, same structure.
 
 ### `/servicios/especiales`
 
-Four treatments, same layout.
+Four treatments, same structure.
 
 ### `/nosotros`
 
-About the clinic: who they are, their philosophy, the team. Content TBD — placeholder copy until client provides it.
+Four content-height sheets: intro, a centred manifesto on a crimson gradient (two big words and a photo collage), a team sheet with three flat cards, and the shared talk sheet. Two card bodies and all four collage images are **placeholder** — marked `TODO: client copy` — until the clinic provides real text and photography.
 
 ### `/contacto`
 
-Contact form: nombre, teléfono, correo electrónico (optional), mensaje. Submits via EmailJS. No date picker, no service selector — it is not a booking form. Also shows: address, phone, hours, WhatsApp link, map embed.
+Two columns in a **static** sheet (nothing ever slides over a form being filled in): a sticky left column with the heading and quick contact links, and the form card on the right. Fields: nombre, teléfono, servicio, correo electrónico (optional), mensaje. Submits via EmailJS — no date picker, it is not a booking form. `/contacto?servicio=<slug>` preselects the service, which is how treatment CTAs arrive. A second sheet carries address, phone, hours, WhatsApp, socials and the map embed.
 
 ## Service data
 
@@ -229,7 +231,7 @@ Contact form: nombre, teléfono, correo electrónico (optional), mensaje. Submit
 
 - No backend, no API routes, no database
 - No authentication
-- No reservations/booking — a plain EmailJS contact form only (no calendar, no service selector)
+- No reservations/booking — a plain EmailJS contact form only (no calendar). It **does** have a `servicio` selector, preselected via `?servicio=<slug>` (pipeline D6 — the older "no service selector" note was stale)
 - Static export (`output: 'export'` in next.config.ts)
 - Each service category has its own route (`/servicios/faciales`, not anchor links)
 - Landing page (`/`) contains NO service listings
@@ -248,13 +250,20 @@ full-bleed colour sheets that rise over each other on scroll, one treatment per 
   two places that must stay in sync: `docs/pipelines/concept-03-command.md` (the source) and
   `.claude/commands/concept-03.md` (the copy that registers the slash command).
 
-**Phase 0 is approved** (2026-09-15) — the thirteen decisions and their answers are in the pipeline file.
-Until **Phase 1** writes the agreed exceptions into `.claude/rules/`, everything in this file and in the
-rules still applies unchanged, including the "never size a content section by viewport height" rule —
-D1's `min-h-window` exception is not live until Phase 1 lands it. Where the pipeline and a rule disagree
-on anything not settled in Phase 0, stop and ask.
+**Phases 0–11 are implemented** — the decisions, the per-phase acceptance numbers and every
+deviation are recorded in the pipeline file's Status table and Log. The rule files in
+`.claude/rules/` were updated alongside the code and are the current, binding version:
+`min-h-window` (§5), the heavy-caps scale and the four font families (§7), and the per-sheet
+contrast tables (§8) are all live. Where the pipeline and a rule disagree on anything not
+settled in Phase 0, stop and ask.
 
-## Layout rework — wide-viewport pass (planned 2026-09-07)
+Work still outstanding is collected as **Phase 12** at the end of the pipeline file.
+
+## Layout rework — wide-viewport pass (planned 2026-09-07) — **SUPERSEDED**
+
+> **Superseded by the Concept 03 redesign above (pipeline D9).** Its Phase 0 baselines are kept
+> as acceptance numbers there; do not work this section. Its open items are closed: `/nosotros`
+> no longer centres its column, and the contact inputs measure ~531px, not 1013px.
 
 Resolves the red-marked issues from the visual review of `/`, `/nosotros`,
 `/servicios/masajes` and `/contacto` at 1920×1000.

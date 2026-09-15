@@ -1,6 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
+
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 import emailjs from "@emailjs/browser";
 import clsx from "clsx";
@@ -82,10 +84,10 @@ function validateField(
 }
 
 const inputClass =
-  "w-full border bg-transparent px-4 py-3 text-cream placeholder:text-muted focus:outline-none";
+  "w-full border bg-noir px-4 py-3 text-cream placeholder:text-muted focus:outline-none";
 
 const borderClass = (invalid: boolean) =>
-  invalid ? "border-crimson-bright" : "border-crimson-light focus:border-sand";
+  invalid ? "border-crimson-bright" : "border-sand/35 focus:border-sand";
 
 function Field({
   id,
@@ -105,7 +107,7 @@ function Field({
       <div className="flex items-baseline justify-between gap-3">
         <label
           htmlFor={id}
-          className="block text-xs uppercase tracking-label text-muted"
+          className="block text-xs uppercase tracking-label text-sand"
         >
           {label}
         </label>
@@ -125,6 +127,27 @@ function Field({
   );
 }
 
+/** Category slug (from a treatment CTA) → the `servicio` option value. */
+const SERVICIO_BY_SLUG: Record<string, string> = {
+  faciales: "Faciales",
+  masajes: "Masajes",
+  especiales: "Especiales",
+};
+
+/**
+ * Reads `?servicio=` and preselects the matching option. Split out and wrapped
+ * in <Suspense> because useSearchParams opts a route into client-side
+ * rendering otherwise, which a static export refuses to build.
+ */
+function ServicioFromQuery({ onPick }: { onPick: (value: string) => void }) {
+  const slug = useSearchParams().get("servicio");
+  useEffect(() => {
+    const value = slug ? SERVICIO_BY_SLUG[slug] : undefined;
+    if (value) onPick(value);
+  }, [slug, onPick]);
+  return null;
+}
+
 export function ContactForm({ lang }: { lang: Lang }) {
   const t = getDictionary(lang).form;
   const [values, setValues] = useState<Values>(EMPTY);
@@ -133,6 +156,13 @@ export function ContactForm({ lang }: { lang: Lang }) {
 
   const sending = useRef(false);
   const honeypotRef = useRef<HTMLInputElement>(null);
+
+  // Only fills an untouched field, so it can never overwrite the visitor.
+  const preselectServicio = useCallback((value: string) => {
+    setValues((current) =>
+      current.servicio ? current : { ...current, servicio: value },
+    );
+  }, []);
 
   function setField(name: FieldName, value: string) {
     const next = { ...values, [name]: value };
@@ -221,7 +251,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
         <button
           type="button"
           onClick={() => setStatus("idle")}
-          className="mt-6 text-xs uppercase tracking-label text-muted transition-colors hover:text-sand"
+          className="mt-6 inline-flex min-h-11 items-center text-xs uppercase tracking-label text-sand transition-colors hover:text-cream"
         >
           {t.successAgain}
         </button>
@@ -242,6 +272,10 @@ export function ContactForm({ lang }: { lang: Lang }) {
       noValidate
       className="flex h-full flex-col justify-start space-y-6"
     >
+      <Suspense fallback={null}>
+        <ServicioFromQuery onPick={preselectServicio} />
+      </Suspense>
+
       <Field id="nombre" label={t.nombre} error={errors.nombre}>
         <input
           {...fieldProps("nombre")}
@@ -278,7 +312,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
             inputClass,
             borderClass(Boolean(errors.servicio)),
             "cursor-pointer bg-noir",
-            !values.servicio && "text-muted",
+            !values.servicio && "text-sand/80",
           )}
         >
           <option value="" disabled>
@@ -296,7 +330,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
         label={t.email}
         error={errors.email}
         hint={
-          <span className="text-xs uppercase tracking-label text-muted">
+          <span className="text-xs uppercase tracking-label text-sand">
             {t.optional}
           </span>
         }
@@ -320,7 +354,9 @@ export function ContactForm({ lang }: { lang: Lang }) {
           <span
             className={clsx(
               "text-xs uppercase tracking-label",
-              mensajeLeft < 50 ? "text-sand" : "text-muted",
+              // Two states need a measurable delta between EACH OTHER, not just
+                // against the ground: sand vs muted is 1.79:1 and reads as no change.
+                mensajeLeft < 50 ? "text-crimson-bright" : "text-sand",
             )}
           >
             {mensajeLeft} {t.charsLeftSuffix}
@@ -372,7 +408,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
         )}
       </div>
 
-      <p className="text-xs leading-relaxed text-muted">
+      <p className="text-xs leading-relaxed text-sand">
         {t.privacyBefore}
         <Link
           href={localizedPath("/aviso-de-privacidad", lang)}
@@ -386,7 +422,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
       <button
         type="submit"
         disabled={status === "sending" || !isComplete}
-        className="inline-flex items-center justify-center bg-crimson px-7 py-3 text-xs uppercase tracking-label text-cream transition-colors hover:bg-crimson-light disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex min-h-12 items-center justify-center bg-sand px-7 py-3 text-xs uppercase tracking-label text-noir transition-colors hover:bg-cream disabled:cursor-not-allowed disabled:opacity-60"
       >
         {status === "sending" ? t.submitting : t.submit}
       </button>

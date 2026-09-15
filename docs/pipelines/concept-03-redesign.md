@@ -29,13 +29,14 @@ to enable the slash command, or just ask Claude Code to "continue the Concept 03
 | 2 | Header — strip, bar, mega menu, mobile menu, breadcrumbs | ✅ | `ab2ca97` |
 | 3 | Sheet system — sticky stacking + cover effect | ✅ | `2541275` |
 | 4 | Inicio | ✅ | `581edb8` |
-| 5 | Servicios hub — three image columns | ⏸ waiting for gate approval | — |
-| 6 | Category pages — one treatment per window | ⏸ waiting for gate approval | — |
-| 7 | Nosotros | ⏸ waiting for gate approval | — |
-| 8 | Contacto | ⬜ | — |
-| 9 | Footer, legal pages, 404 | ⬜ | — |
-| 10 | English, cleanup, docs | ⬜ | — |
-| 11 | Full verification & sign-off | ⬜ | — |
+| 5 | Servicios hub — three image columns | ✅ | see log |
+| 6 | Category pages — one treatment per window | ✅ | see log |
+| 7 | Nosotros | ✅ | see log |
+| 8 | Contacto | ✅ | see log |
+| 9 | Footer, legal pages, 404 | ✅ | see log |
+| 10 | English, cleanup, docs | ✅ | see log |
+| 11 | Full verification & sign-off | ⏸ awaiting owner sign-off | see log |
+| 12 | Deferred work — carried out of phases 1–11 | ⬜ | — |
 
 Legend: ⬜ not started · 🟡 in progress · ⏸ waiting for gate approval · ✅ approved
 
@@ -653,3 +654,129 @@ backdrop any more, so `ScrollBackdrop.tsx` and `lib/backdrop.ts` are deleted.
 images are placeholders, marked `TODO: client copy` in both dictionaries and in the view.
 The collage reuses the existing ~600-byte SVG stubs, so that region will look empty until
 real photography arrives — a content gap, not a CSS bug (§9).
+
+### Phases 8–11 — 2026-09-16
+
+**Phase 8 — Contacto.** A `static` sheet (nothing may slide over a form being filled in) with
+a sticky left column and the form card on the right, then a `surface` info sheet.
+`ContactForm`'s logic, validation, EmailJS call and spam guard are untouched — restyle only,
+plus the `?servicio=` preselect.
+
+| Criterion | Target | Measured |
+|---|---|---|
+| Input width at 1440 | 520–660px | **531px** (baseline 1013px) |
+| Input width at 1920 | — | **518px** |
+| Submit height | ≥ 48px | **48px** |
+| `?servicio=masajes` | preselects Masajes | **"Masajes"**; plain `/contacto` is empty |
+| Tab order | quick links → fields → submit | phone → nombre → telefono → servicio → email → mensaje → … |
+
+The form column was initially **198px wide**. The `caps-lg` heading's min-content width blew
+the left grid track out to 1032px — the same failure mode as the treatment titles in Phase 6.
+`min-w-0` on both columns fixed it. Worth noting as a pattern: every heavy-caps heading placed
+in a grid track needs `min-w-0` on that track.
+
+**Phase 9 — Footer, legal, 404.** The footer is now the last sheet: `sand` ground, rounded top
+and upward shadow, so it rises over the sticky sheet above it. All 8 footer links measure
+**≥44px** at every width, and the giant decorative wordmark (`22vw`, `aria-hidden`) never
+widens the page — `overflow` is 0 at 390 through 2560. Legal pages and the 404 are single
+noir sheets with heavy-caps titles.
+
+**Phase 10 — Cleanup and docs.** `ScrollBackdrop`, `lib/backdrop.ts`, `ServiceCard`,
+`TreatmentRow` and the `top-clear` token are all gone; `nav.servicesViewAllLong` removed from
+both dictionaries (0 references). No component in `components/` is unreferenced. `CLAUDE.md`
+updated: structure, motion principles, all five page descriptions, the D6 service-selector
+correction, and the wide-viewport pass marked **SUPERSEDED**.
+
+**Phase 11 — Full verification.** 9 routes × 2 languages × 5 widths = **90 page loads**:
+
+| Check | Failures |
+|---|---|
+| Horizontal overflow (`scrollWidth − innerWidth`) | **0 / 90** |
+| Interactive targets under 44px (excluding links inline in a sentence) | **0 / 90** |
+| Heading structure (exactly one `<h1>`, no skipped levels) | **0 / 90** |
+| CLS > 0.05 | **0 / 90** |
+| `muted` on a non-noir sheet | **0 / 90** |
+
+The contrast sweep caught a real regression on the first run: **9 `text-muted` elements on the
+contact form's `crimson-light` card**, where muted measures 3.67:1. All moved to `sand`
+(6.56:1). Placeholders stayed on `muted` — the inputs are `bg-noir`, where it passes at 4.68:1.
+The character-counter warning also moved to `crimson-bright`: `sand` against `muted` is 1.79:1,
+which reads as no change at all.
+
+**Progressive enhancement**, both directions:
+- **JS disabled** — all five main routes render with a real `<h1>`, 800–2775 characters of text, nothing sticky, zero overflow.
+- **Reduced motion** — GSAP is *never fetched* (`"gsap" in window === false`), every `[data-sheet-inner]` transform is `none`, the hover clip is `display: none`.
+
+**Phase 0 baselines, at 1920×1000:**
+
+| | baseline | now |
+|---|---|---|
+| Content band | 1792px | **1280px** |
+| Contacto input width | 1013px | **518px** |
+| `/nosotros` page height | 2948px | **4189px** |
+| Masajes bands above / below the text | 197 / 191px | **206 / 206px** |
+
+Two of these need reading rather than scoring. `/nosotros` is taller because it now carries a
+manifesto, a collage, three team cards and a talk sheet instead of four short text blocks
+padded out with viewport fractions. The Masajes bands are now *symmetric* — they are the
+window-centring of a full-height treatment sheet (841px window, ~429px of content), not the
+one-sided dead space beside a short image that the baseline measured.
+
+---
+
+## Phase 12 — Deferred work
+
+Everything phases 1–11 could not finish, with the reason. Nothing here is a blocker for
+review; several items are blocked on the client rather than on code.
+
+### Blocked on the environment
+
+- **Lighthouse has never been run.** `npm install lighthouse` crashed twice
+  (`Exit handler never called!`) with ~0.8 GB free RAM; the package half-installed and its CLI
+  could not resolve its own `package.json`. Phase 4's "≥95 on the landing page" and Phase 11's
+  "≥95 in all four categories" are therefore **unverified**. Measured proxies on `/`: LCP
+  428ms, load 302ms, 1294 KB transferred, CLS ≤ 0.0245, no structural a11y faults.
+  → Run it on a machine with more headroom, or in CI.
+
+### Blocked on client assets and copy
+
+- **`hero.jpg` is 606 KB of the landing page's 1294 KB** and is the LCP element. Static export
+  forces `images.unoptimized: true`, so Next ships it exactly as committed. Pre-compressing it
+  (or shipping WebP/AVIF) is the single highest-value performance change available.
+- **All treatment, category and collage images are ~600-byte SVG stubs.** The hub columns, the
+  treatment windows and the `/nosotros` collage will look empty until real photography lands.
+  A content gap, not a CSS bug (§9) — but judge the design only against representative photos.
+- **Placeholder copy, marked `TODO: client copy` in both dictionaries:** two of the three
+  `/nosotros` team-card bodies, and the whole of both legal pages (pending legal review).
+- **English clinical terms in `data/*.ts`** are a best-effort translation and want a native or
+  clinical review, per `content-i18n.md`.
+
+### Deliberately not built
+
+- **The 2px scroll progress bar** in the header. Listed as optional in Phase 2, deferred again
+  in Phase 3; `SheetStack` is its natural home now.
+- **The footer is not inside `SheetStack`.** It is styled as the last sheet and, being after
+  the stack in flow, does visually rise over the final sticky sheet — but it does not
+  participate in the GSAP cover scrub, so the sheet it covers neither dims nor shrinks.
+  Putting it in the stack means every view rendering its own footer; that is a structural
+  change worth deciding on deliberately.
+
+### Unverified rather than unbuilt
+
+- **Touch behaviour of the hub columns.** `@media (hover: none)` lightens the tint and pins the
+  description open. The CSS is declared and shipped, but every measurement in this pipeline ran
+  in a hover-capable context, so it has never been exercised on a real touch device.
+- **The breadcrumb row's horizontal scroll.** The container and its hidden scrollbar are in
+  place, but no trail is long enough at 390px to engage it, even with a live treatment crumb.
+- **`ContactForm`'s privacy link is 16px tall.** It sits inline inside a sentence, which WCAG
+  2.5.8 exempts, so the Phase 11 sweep excludes it by design. Worth a decision rather than a
+  silent pass.
+
+### Open decisions
+
+- **`layout-responsive.md` §14 is still open** — whether to adopt an automated layout check.
+  This pipeline effectively built one: a Playwright harness living in the session scratchpad
+  that measures overflow, target sizes, heading order, CLS and contrast across 90 page loads.
+  Promoting it to `scripts/layout-check.mjs` would answer §14's "scope" and "target" questions;
+  it would add Playwright as the project's first dev dependency, which `project-workflow.md`
+  says must be justified deliberately.

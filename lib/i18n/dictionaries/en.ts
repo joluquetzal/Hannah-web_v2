@@ -26,7 +26,6 @@ export const en = {
     closeMenu: "Close menu",
     servicesMenuHeading: "Our services",
     servicesViewAll: "View all",
-    servicesViewAllLong: "View all services",
     servicesCardCta: "View treatments",
   },
 
@@ -121,6 +120,8 @@ export const en = {
 
   contacto: {
     title: "Contact",
+    heading: "Shall we talk?",
+    formTitle: "Leave us a message",
     lead: "Leave us a message with your details and we'll get back to you as soon as possible.",
   },
 
