@@ -84,8 +84,8 @@ All tokens are defined in `tailwind.config.ts` under `theme.extend`.
 | `crimson-bright` | `#E0938A` | Error / alert text and borders on dark (~8.2:1 on noir) |
 | `sand` | `#C9A27A` | Warm gold — body text on dark |
 | `cream` | `#F0E8DC` | Light headings on dark |
-| `muted` | `#847A6F` | De-emphasized running text — footer fine print, helper paragraphs, input placeholders (4.68:1 on noir, min. that passes AA — don't darken) |
-| `muted-strong` | `#A99C8D` | 12px uppercase micro-labels — eyebrows, field labels, treatment times, card CTAs (~7.34:1 on noir, AAA) |
+| `muted` | `#847A6F` | De-emphasized running text **on noir only** — footer fine print, helper paragraphs, input placeholders (4.68:1 on noir, the min. that passes AA — don't darken; 3.67:1 on `crimson-light`, where it fails) |
+| `muted-strong` | `#A99C8D` | 12px uppercase micro-labels — eyebrows, field labels, treatment times, card CTAs — and de-emphasized text on any non-noir backdrop (7.34:1 on noir, 5.75:1 on `crimson-light`) |
 
 ### Typography
 

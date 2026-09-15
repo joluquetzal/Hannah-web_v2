@@ -14,13 +14,14 @@ const config: Config = {
         sand: "#C9A27A",
         cream: "#F0E8DC",
         // Nudged lighter than the design-doc #7A6E65 (which is ~3.98:1 on
-        // noir and fails WCAG AA for body text). #847A6F is ~4.74:1.
+        // noir and fails WCAG AA for body text). #847A6F is 4.68:1 — and only
+        // on noir: on crimson-light it drops to 3.67:1 and fails.
         muted: "#847A6F",
         // Brighter partner to `muted` for the 12px uppercase micro-labels
-        // (eyebrows, field labels, treatment times). Letter-spaced caps that
-        // small read as thin at muted's 4.68:1; #A99C8D is ~7.34:1 on noir
-        // (AAA). `muted` stays for de-emphasized running text — footer fine
-        // print, helper paragraphs, input placeholders.
+        // (eyebrows, field labels, treatment times), and for any de-emphasized
+        // text on a backdrop other than noir. Letter-spaced caps that small
+        // read as thin at muted's 4.68:1; #A99C8D is 7.34:1 on noir (AAA) and
+        // 5.75:1 on crimson-light.
         "muted-strong": "#A99C8D",
       },
       fontFamily: {

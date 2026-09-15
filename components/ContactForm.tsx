@@ -320,7 +320,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
           <span
             className={clsx(
               "text-xs uppercase tracking-label",
-              mensajeLeft < 50 ? "text-sand" : "text-muted-strong",
+              mensajeLeft < 50 ? "text-crimson-bright" : "text-muted-strong",
             )}
           >
             {mensajeLeft} {t.charsLeftSuffix}

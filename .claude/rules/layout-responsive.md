@@ -120,6 +120,16 @@ Minimum 4.5:1 for body text, 3:1 for large text. Measured against `noir` (#0E0A0
 | `crimson-bright` #E0938A as text | 8.17:1 | ✅ (error / alert text + borders) |
 | **`crimson` #6B1414 as text or border** | **1.63:1** | ❌ **fails at any size** |
 
+`noir` is not the only backdrop. `ScrollBackdrop` puts whole sections on `crimson-light`
+(#3D1A1A), so any token used inside one must be measured there too:
+
+| Pair on `crimson-light` #3D1A1A | Ratio | |
+|---|---|---|
+| `sand` #C9A27A | 6.56:1 | ✅ |
+| `muted-strong` #A99C8D | 5.75:1 | ✅ |
+| `crimson-bright` #E0938A | 6.40:1 | ✅ |
+| **`muted` #847A6F** | **3.67:1** | ❌ **fails — use `muted-strong`** |
+
 **`crimson` is a background colour, never a text or border colour on `noir`.** A
 `crimson-bright` token (#E0938A, ~8:1) was added for this: `ContactForm.tsx` validation
 errors, the invalid-field border and the send-failure message now use it, as does the
@@ -131,14 +141,19 @@ on 12px uppercase set with `tracking-label` / `tracking-eyebrow` — letter-spac
 small need more headroom. Those micro-labels (eyebrows, field labels, treatment times,
 `Incluye` / `Zonas`, clinic-info `<dt>`, card CTAs, the legal "last updated" line, the
 ES/EN switch) use `muted-strong` (#A99C8D, 7.34:1). `muted` stays for de-emphasized
-*running* text only: footer fine print, the contact-form helper paragraph, `next/image`
-placeholder boxes, input placeholders. A `text-muted` on a `text-xs uppercase` element is
-now a bug — use `muted-strong`. Where such a label had `hover:text-sand`, the hover target
-moved to `text-cream` so the state change stays legible.
+*running* text **on `noir` only**: footer fine print, the contact-form helper paragraph,
+`next/image` placeholder boxes, input placeholders. Two ways to get this wrong, both bugs:
+`text-muted` on a `text-xs uppercase` element, and `text-muted` anywhere inside a
+`crimson-light` section (3.67:1). Both take `muted-strong`. Where such a label had
+`hover:text-sand`, the hover target moved to `text-cream` so the state change stays legible.
 
-Keep the colour table in `CLAUDE.md` in sync with `tailwind.config.ts` — the doc currently
-lists `muted` as `#7A6E65`, which measures 3.98:1 and fails; the config correctly uses
-`#847A6F`.
+**A colour-only state change needs a real delta.** `sand` against `muted-strong` is 1.14:1 —
+two warm tans that read as the same colour, which is how the contact form's
+character-counter warning became invisible. It now uses `crimson-bright`. When a state is
+signalled by colour alone, measure the two states against *each other*, not just against the
+background.
+
+Keep the colour table in `CLAUDE.md` in sync with `tailwind.config.ts`.
 
 ## 9. Images and media
 

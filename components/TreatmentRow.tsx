@@ -107,7 +107,7 @@ export function TreatmentRow({
         )}
 
         {treatment.recomendacion && (
-          <p className="mt-6 text-sm text-muted">
+          <p className="mt-6 text-sm text-muted-strong">
             {t.recommendation} {treatment.recomendacion[lang]}
           </p>
         )}
