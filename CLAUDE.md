@@ -224,6 +224,25 @@ Contact form: nombre, teléfono, correo electrónico (optional), mensaje. Submit
 - Landing page (`/`) contains NO service listings
 - Images are provided by the client as SVG + video pairs per treatment (GIFs converted to H.264 MP4 at build-prep time; source GIFs not committed)
 - Bilingual `es` (default, `/`) + `en` (`/en`) — no `[lang]` dynamic segment; the English tree is an explicit `app/en/` mirror of thin wrappers over shared `components/views/*`. Strings in `lib/i18n/dictionaries/{es,en}.ts` (`en` typed `satisfies Dictionary`) and `Localized<T>` fields in `data/`.
+
+## Redesign — Concept 03 (planned 2026-09-15)
+
+The site is being redesigned to the approved **Concept 03 "Editorial Manifesto"** prototype:
+full-bleed colour sheets that rise over each other on scroll, one treatment per window, a three-image
+`/servicios` hub, and a Ronnsquare-style header with breadcrumbs.
+
+- Prototype and design notes: `docs/design/concept-03/` (open `prototipo.html` in a browser).
+- Plan, status and log: `docs/pipelines/concept-03-redesign.md`. Branch: **`feat/redesign`**.
+- Run it with **`/concept-03`** (next phase), `/concept-03 status`, or `/concept-03 <n>`. The command lives in
+  two places that must stay in sync: `docs/pipelines/concept-03-command.md` (the source) and
+  `.claude/commands/concept-03.md` (the copy that registers the slash command).
+
+**Phase 0 is approved** (2026-09-15) — the thirteen decisions and their answers are in the pipeline file.
+Until **Phase 1** writes the agreed exceptions into `.claude/rules/`, everything in this file and in the
+rules still applies unchanged, including the "never size a content section by viewport height" rule —
+D1's `min-h-window` exception is not live until Phase 1 lands it. Where the pipeline and a rule disagree
+on anything not settled in Phase 0, stop and ask.
+
 ## Layout rework — wide-viewport pass (planned 2026-09-07)
 
 Resolves the red-marked issues from the visual review of `/`, `/nosotros`,
