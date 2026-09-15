@@ -43,6 +43,20 @@
     @apply bg-crimson text-cream;
   }
 
+  /* Sticky stacking is opt-in at runtime: SheetStack sets data-stack="on"
+     after mount, so with JS unavailable the sheets stay in normal flow and
+     nothing is ever pinned under another sheet. */
+  [data-stack="on"] > [data-sheet]:not([data-static]) {
+    position: sticky;
+  }
+
+  /* A sheet taller than the space below the header gets extra room at the
+     bottom, so its last lines stay readable for a while before the next sheet
+     rises. Padding, not height — §5's ban is on sizing sections by viewport. */
+  [data-sheet].is-tall {
+    padding-bottom: 30svh;
+  }
+
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-sand;
   }

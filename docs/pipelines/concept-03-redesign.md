@@ -26,8 +26,8 @@ to enable the slash command, or just ask Claude Code to "continue the Concept 03
 |---|---|---|---|
 | 0 | Decisions & rule exceptions (no code) | ✅ | — |
 | 1 | Foundations — tokens, fonts, rule-file updates | ✅ | `9b95c0b` |
-| 2 | Header — strip, bar, mega menu, mobile menu, breadcrumbs | ⏸ waiting for gate approval | — |
-| 3 | Sheet system — sticky stacking + cover effect | ⬜ | — |
+| 2 | Header — strip, bar, mega menu, mobile menu, breadcrumbs | ✅ | `ab2ca97` |
+| 3 | Sheet system — sticky stacking + cover effect | ⏸ waiting for gate approval | — |
 | 4 | Inicio | ⬜ | — |
 | 5 | Servicios hub — three image columns | ⬜ | — |
 | 6 | Category pages — one treatment per window | ⬜ | — |
@@ -424,3 +424,55 @@ JSON-LD emits absolute URLs per locale. The live treatment crumb is Phase 3's jo
 **Open:** the breadcrumb row's horizontal scroll never engaged — no trail is long enough at
 390 (`Inicio / Aviso de Privacidad` fits). The container is in place; Phase 6's live
 treatment crumb is what will actually exercise it.
+
+### Phase 3 — 2026-09-15
+
+`Sheet.tsx` (server) + `SheetStack.tsx` (client) + the live-breadcrumb channel.
+`/servicios/faciales` is wired to the stack as the test page; `TreatmentRow` keeps its
+current content and lost its `data-bg`.
+
+**Measured on `/servicios/faciales` against the static build:**
+
+| Criterion | Target | Measured |
+|---|---|---|
+| Window sheet ≥ space below header (1440×900) | ≥ 741 | **741** ✅ all six |
+| Window sheet ≥ space below header (390×844) | ≥ 691 | **1168–1296** ✅ all six |
+| Shade when next sheet's top meets header | 0.60 | **0.600** ✅ (scale 0.940, y −40.0) |
+| Tall sheet's CTA stays visible | ≥ 207px of scroll | **1800px** ✅ |
+| CLS from the stack switching on | < 0.05 | **0.0006** (1440) · **0** (390) ✅ |
+| Horizontal overflow, 5 widths | 0 | **0** ✅ |
+
+**Reduced motion** — stacking kept (`position: sticky` intact), every `[data-sheet-inner]`
+transform is `none`, and **GSAP is never even fetched** (`"gsap" in window === false`).
+**JavaScript off** — 7 sheets render, nothing is sticky, no `data-stack` attribute, all six
+treatment headings readable, overflow 0. Progressive enhancement holds in both directions.
+
+**Live breadcrumb** — `Inicio / Servicios / Faciales` at the top, gains a fourth
+non-link crumb (`… / ANTI ACNÉ O PIEL GRASA`) on scroll, and clears on the way back.
+Delivered by a `CustomEvent` on `window` rather than context or a store, keeping the
+header and the page decoupled (`react-nextjs.md`: no global store, no context for content).
+The live crumb takes `aria-current` from the route crumb while it is showing, so only one
+element claims it, and it is deliberately **absent from the JSON-LD** — it names a position
+on the page, not a route.
+
+**One correction to the pipeline's formula.** Phase 3 specifies
+`top = header-h + min(0, windowHeight − sheetHeight)`. That leaves a tall sheet's last
+`header-h` pixels below the fold: with wh 900, header 159, sheet 800 it pins at 159 and the
+sheet ends at 959. The implementation uses the space *below* the header,
+`header + min(0, (windowHeight − header) − sheetHeight)`, which pins the sheet exactly at the
+viewport bottom — verified by the negative tops at 390 (−324 to −452px).
+
+**Deferred, condition not met.** D5 says to delete `ScrollBackdrop.tsx` and `lib/backdrop.ts`
+"once no view imports them". `NosotrosView` and `ServiciosView` still do, so both files stay
+until Phases 5 and 7 convert those views. `TreatmentRow` no longer imports `backdrop`.
+
+**Scope note.** Converting `CategoryView` to sheets is strictly Phase 6's page, but Phase 3's
+own acceptance criteria name `/servicios/faciales` as the test page, so the mechanism had to
+be wired somewhere real. Only the *structure* changed: the treatment content is still
+`TreatmentRow`, and the theme cycle is limited to `surface` / `crimson-light` — both dark, so
+`TreatmentRow`'s cream/sand palette stays above 4.5:1. The `sand` theme in the Phase 6 cycle
+would put `text-cream` on `#C9A27A` at 1.9:1, so it waits for the theme-aware
+`TreatmentWindow`.
+
+**Open:** the optional 2px scroll progress bar (deferred from Phase 2) is still not built —
+it now has a natural home in `SheetStack`. Say the word and it's a small addition.

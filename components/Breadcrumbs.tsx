@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { CRUMB_EVENT } from "@/components/SheetStack";
 import { servicios } from "@/data/servicios";
 import { site } from "@/lib/site";
 import { getDictionary, localizedPath, stripLocale } from "@/lib/i18n";
@@ -51,6 +53,17 @@ export function Breadcrumbs() {
   const t = getDictionary(lang);
   const trail = buildTrail(rest, t, lang);
 
+  // The sheet currently on screen, reported by SheetStack. Not a link and not
+  // in the JSON-LD: it names a position in the page, not a route.
+  const [live, setLive] = useState<string | null>(null);
+  useEffect(() => {
+    const onCrumb = (e: Event) =>
+      setLive((e as CustomEvent<string | null>).detail);
+    window.addEventListener(CRUMB_EVENT, onCrumb);
+    return () => window.removeEventListener(CRUMB_EVENT, onCrumb);
+  }, []);
+  useEffect(() => setLive(null), [rest]);
+
   // Hidden on the landing page: a single "Inicio" crumb says nothing.
   if (trail.length === 0) return null;
 
@@ -82,7 +95,10 @@ export function Breadcrumbs() {
                 </span>
               )}
               {isLast ? (
-                <span aria-current="page" className="text-paper">
+                <span
+                  aria-current={live ? undefined : "page"}
+                  className={live ? "text-stone" : "text-paper"}
+                >
                   {crumb.label}
                 </span>
               ) : (
@@ -96,6 +112,17 @@ export function Breadcrumbs() {
             </li>
           );
         })}
+
+        {live && (
+          <li className="flex items-center">
+            <span aria-hidden className="mx-3.5 text-paper">
+              /
+            </span>
+            <span aria-current="true" className="text-paper">
+              {live}
+            </span>
+          </li>
+        )}
       </ol>
 
       <script

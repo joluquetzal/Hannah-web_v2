@@ -1,7 +1,6 @@
 import Image from "next/image";
 import clsx from "clsx";
 import type { Treatment } from "@/data/types";
-import { backdrop } from "@/lib/backdrop";
 import { ButtonLink } from "@/components/ButtonLink";
 import { getDictionary, localizedPath, type Lang } from "@/lib/i18n";
 
@@ -25,7 +24,6 @@ export function TreatmentRow({
 
   return (
     <article
-      data-bg={imageRight ? backdrop.crimsonLight : backdrop.noir}
       className={clsx(
         "grid items-center gap-8 md:gap-14",
         // Text always gets the wider column so the image frame stays the same
