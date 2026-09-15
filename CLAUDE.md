@@ -82,15 +82,26 @@ All tokens are defined in `tailwind.config.ts` under `theme.extend`.
 | `crimson` | `#6B1414` | Deep red accent (brand) — **background only**, fails as text/border on noir (1.63:1) |
 | `crimson-light` | `#3D1A1A` | Mid-dark surface, borders |
 | `crimson-bright` | `#E0938A` | Error / alert text and borders on dark (~8.2:1 on noir) |
-| `sand` | `#C9A27A` | Warm gold — body text on dark |
+| `sand` | `#C9A27A` | Warm gold — body text on dark; also the footer sheet's ground |
 | `cream` | `#F0E8DC` | Light headings on dark |
-| `muted` | `#847A6F` | Secondary text (min. that passes AA on noir — don't darken) |
+| `muted` | `#847A6F` | Secondary text — **`noir` only** (4.68:1 there; fails on `surface` 4.49, `crimson-light` 3.67, `sand` 1.79) |
+| `surface` | `#151010` | Lifted noir — the sheet theme one step above the page ground |
+| `ink` | `#221A08` | Header bar ground |
+| `paper` | `#FFEBD6` | Header strip ground and filled header button |
+| `stone` | `#9C917D` | Inactive breadcrumbs on `ink` (5.54:1) |
+
+Full measured contrast tables — every token against every sheet ground — are in
+`.claude/rules/layout-responsive.md` §8. Measure against the sheet, not the page.
 
 ### Typography
 
-- **Display / headings**: `Cormorant Garamond` — light 300, italic. Treatment names, hero text, section titles.
-- **Body / UI**: `DM Sans` — 400 regular, 500 medium. Descriptions, nav, buttons, labels.
-- Both loaded via Google Fonts in `app/layout.tsx`.
+Four families, one job each (Concept 03). All loaded via `next/font/google` in `app/layout.tsx`.
+
+- **Page headings**: `DM Sans` **800**, uppercase — the `text-caps-xl / -lg / -md / -sm` scale.
+- **Accent**: `Cormorant Garamond` 300 italic — the accent phrase inside a heavy-caps heading ("como un *ritual*"), and `text-2xl` component headings.
+- **Body / UI**: `DM Sans` 400 regular, 500 medium. Descriptions, nav, buttons, labels.
+- **Header chrome**: `Source Serif 4` 600 (`font-hserif`) for nav links, breadcrumbs and the strip; `Space Grotesk` 400 (`font-grotesk`) for the header buttons and ES/EN. **Header only** — using either in page content is a bug.
+- **Logo**: `public/brand/hannah-wordmark.svg`, an Anton-derived wordmark. Anton is not loaded as a font.
 
 ### Motion principles
 

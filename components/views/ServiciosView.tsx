@@ -11,7 +11,7 @@ export function ServiciosView({ lang }: { lang: Lang }) {
     <>
       <ScrollBackdrop />
 
-      <div className="mx-auto max-w-shell px-gutter pb-section-b pt-top-clear">
+      <div className="mx-auto max-w-shell px-gutter pb-section-b pt-16">
         <header data-bg={backdrop.noir} className="max-w-prose">
           <h1 className="font-display text-display-md italic text-cream">
             {t.servicios.title}

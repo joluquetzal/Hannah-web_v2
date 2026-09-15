@@ -15,7 +15,7 @@ export function LegalPageView({
   const page = doc === "privacy" ? legal.privacy : legal.terms;
 
   return (
-    <div className="mx-auto max-w-shell px-gutter pb-section-b pt-top-clear">
+    <div className="mx-auto max-w-shell px-gutter pb-section-b pt-16">
       <div className="max-w-prose">
         <h1 className="font-display text-display-md italic text-cream">
           {page.title}

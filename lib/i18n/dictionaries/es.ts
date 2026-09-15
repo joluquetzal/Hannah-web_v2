@@ -13,6 +13,7 @@ export const es = {
   nav: {
     primaryLabel: "Principal",
     mobileLabel: "Menú móvil",
+    breadcrumbLabel: "Ruta de navegación",
     skipToContent: "Saltar al contenido",
     home: "Inicio",
     services: "Servicios",
@@ -95,6 +96,9 @@ export const es = {
 
   clinic: {
     visitUs: "Visítanos",
+    // Header strip: reads "<visitUsAt> Eugenia 1309, Col. Narvarte, …".
+    // A separate key because the connector is not translatable word-for-word.
+    visitUsAt: "Visítanos en",
     phone: "Teléfono",
     hours: "Horario",
     whatsapp: "WhatsApp",

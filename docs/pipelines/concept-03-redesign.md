@@ -25,8 +25,8 @@ to enable the slash command, or just ask Claude Code to "continue the Concept 03
 | # | Phase | Status | Commit |
 |---|---|---|---|
 | 0 | Decisions & rule exceptions (no code) | ✅ | — |
-| 1 | Foundations — tokens, fonts, rule-file updates | ⬜ | — |
-| 2 | Header — strip, bar, mega menu, mobile menu, breadcrumbs | ⬜ | — |
+| 1 | Foundations — tokens, fonts, rule-file updates | ✅ | `9b95c0b` |
+| 2 | Header — strip, bar, mega menu, mobile menu, breadcrumbs | ⏸ waiting for gate approval | — |
 | 3 | Sheet system — sticky stacking + cover effect | ⬜ | — |
 | 4 | Inicio | ⬜ | — |
 | 5 | Servicios hub — three image columns | ⬜ | — |
@@ -48,7 +48,7 @@ phase ✅. Recommendations are marked ★.
 
 | ID | Question | Options | Answer |
 |---|---|---|---|
-| D0 | Unmerged worktree `.claude/worktrees/contrast-labels` touches `Nav`, `NavDropdown`, `ServiceCard`, `TreatmentRow`, `ContactForm`, `ClinicInfo`, `tailwind.config.ts` and two rule files — all files this pipeline rewrites. | ★ merge it into `main` first, then branch · drop it | ★ **PR `worktree-contrast-labels` → `main` first**, then rebase `feat/redesign` on the updated `main`. |
+| D0 | Unmerged worktree `.claude/worktrees/contrast-labels` touches `Nav`, `NavDropdown`, `ServiceCard`, `TreatmentRow`, `ContactForm`, `ClinicInfo`, `tailwind.config.ts` and two rule files — all files this pipeline rewrites. | ★ merge it into `main` first, then branch · drop it | **Dropped** (revised by the owner after review). It predates the redesign and rewrites components this pipeline replaces. Not merged; branch `fix/muted-strong-contrast` is left on the remote, unmerged, for reference only. |
 | D1 | **Viewport-height exception** (`layout-responsive.md` §5). The prototype sizes the `/servicios` columns and each treatment window to the window height below the header. | ★ allow a single token `min-h-window` (= `100svh − header height`), used only by `ServiceColumns` and `TreatmentWindow`; always `min-h`, never `h`, so content can grow · keep content-height sections (loses the one-per-window effect) | ★ **Add `min-h-window`**, restricted to `ServiceColumns` + `TreatmentWindow`, always `min-h`. Written into §5 as a named exception in Phase 1. |
 | D2 | **Typography.** Prototype: heavy uppercase display in **DM Sans 800** with **Cormorant Garamond italic** accent words; header in **Source Serif 4 600** (nav, crumbs, strip), **Space Grotesk 400** (header buttons, ES/EN), **Anton** (logo). Today: Cormorant 300 italic headings, DM Sans 400/500. | ★ adopt all of it, but ship the logo as an SVG wordmark drawn from Anton (no font download) · adopt all, Anton as a web font · keep Cormorant headings and only restyle the header | ★ **Adopt all; logo ships as `public/brand/hannah-wordmark.svg`** — Anton is not loaded as a web font. |
 | D3 | **New colour tokens.** `surface #151010` (lifted noir), header `ink #221A08`, `paper #FFEBD6`, `stone #9C917D`. Measured: paper/ink 14.85 ✅ · stone/ink 5.54 ✅ · crimson-bright/ink 7.14 ✅ · cream/surface 15.52 ✅ · sand/surface 8.02 ✅ · **muted/surface 4.49 ❌** · cream/crimson 9.96 ✅ · crimson-bright/crimson 5.02 ✅ · sand/crimson 5.15 ✅ · crimson-bright/crimson-light 6.40 ✅ · noir/sand 8.38 ✅ · **muted/sand 1.79 ❌** | ★ add the four tokens; never use `muted` on `surface` or `sand` (use `sand`/`cream` on surface, `noir` on sand) · rename the tokens | ★ **Add the four tokens.** `muted` is banned on `surface` and on `sand`; both failures documented in §8. |
@@ -66,7 +66,9 @@ phase ✅. Recommendations are marked ★.
 
 ### Decisions that change later phases
 
-- **D0** adds a prerequisite before Phase 1: `worktree-contrast-labels` merges to `main`, then `feat/redesign` rebases onto it. Phase 1 must therefore keep `muted-strong` and the `muted` vs `muted-strong` split in §8 when it rewrites the contrast table.
+- **D0** is dropped, so there is **no prerequisite before Phase 1** — `feat/redesign` builds straight on `origin/main`, which has no `muted-strong` token. Two findings from that branch's review are still true of the code this pipeline inherits, and Phase 1's §8 rewrite should absorb them rather than re-discover them:
+  - `muted` (#847A6F) is 4.68:1 on `noir` but **3.67:1 on `crimson-light`**, which is one of the D4 sheet themes. Measure every token against every sheet theme, not just `noir`.
+  - A colour-only state change needs a delta measured **between its two states**: the contact form's counter warning used `sand` against `muted` (1.79:1), which reads as no change at all.
 - **D2** removes Anton from the Phase 1 font list and adds `public/brand/hannah-wordmark.svg` as a Phase 2 asset.
 - **D8** means Phase 4 deletes the hero `<figure>` added by the wide-viewport pass rather than restyling it.
 
@@ -301,4 +303,124 @@ Append one entry per phase: date, what changed, measured numbers, open questions
 - `.gitignore`: added `/.claude/worktrees/` and `/Claude outputs/`, both previously untracked noise.
 - No code touched. No measurements — Phase 0 is a conversation.
 
-**Open / blocking Phase 1:** the D0 PR must be merged and `feat/redesign` rebased onto it first.
+**Revision, same day — D0 reversed.** The owner dropped the contrast-labels work instead of
+merging it: it predates the redesign and edits components this pipeline replaces. It was
+reviewed and fixed first (branch `fix/muted-strong-contrast`, commits `00fd921` + `ec48281`,
+pushed but **not merged**) — kept on the remote for reference, nothing landed on `main`.
+The two findings worth carrying forward are recorded under "Decisions that change later phases".
+
+**Phase 1 is unblocked** and starts from `origin/main` as-is — no `muted-strong` token.
+
+### Phase 1 — 2026-09-15
+
+**Tokens** (`tailwind.config.ts`) — colours `surface` #151010, `ink` #221A08, `paper` #FFEBD6,
+`stone` #9C917D · families `hserif` (Source Serif 4), `grotesk` (Space Grotesk) · sizes
+`caps-xl/-lg/-md/-sm` · `minHeight.window` = `calc(100svh - var(--header-h))` ·
+`borderRadius.sheet` 18px · `boxShadow.sheet` · zIndex `menu 30 / header 40 / mega 45`.
+No `logo` family — D2 chose the SVG wordmark.
+
+**Verified by compiling, not by reading the diff.** A probe file run through the real config
+emitted every new token; the four new colours resolve to the right hex
+(`ink` → `rgb(34 26 8)`, `paper` → `rgb(255 235 214)`, `surface` → `rgb(21 16 16)`,
+`stone` → `rgb(156 145 125)`) and `min-h-window` → `calc(100svh - var(--header-h))`.
+This is the §13 silent-failure check; an unused token emits nothing and would have looked fine.
+
+**Fonts** — the built `@font-face` set is exactly eight faces and no extras:
+Cormorant Garamond 300 normal + italic · DM Sans 400 / 500 / 700 / 800 · Source Serif 4 600 ·
+Space Grotesk 400.
+
+**Contrast** — all twelve D3 pairs recomputed from the hex values; every figure matches the
+pipeline exactly (paper/ink 14.85 · stone/ink 5.54 · crimson-bright/ink 7.14 · cream/surface
+15.52 · sand/surface 8.02 · **muted/surface 4.49 ❌** · cream/crimson 9.96 ·
+crimson-bright/crimson 5.02 · sand/crimson 5.15 · crimson-bright/crimson-light 6.40 ·
+noir/sand 8.38 · **muted/sand 1.79 ❌**). §8 now carries all of them plus the carried-forward
+**muted/crimson-light 3.67 ❌**, split into three tables by ground.
+
+**Wordmark** — `public/brand/hannah-wordmark.svg`, 581 bytes, generated from the real Anton
+v27 outlines (downloaded, converted to a single path in a throwaway venv; no tooling added to
+the project). 8 subpaths as expected for H·A+counter·N·N·A+counter·H, `fill="currentColor"`
+so it inherits the header colour.
+
+**Rule files updated in the same commit:** `layout-responsive.md` §5 (the `min-h-window`
+exception and its limits), §7 (heavy-caps scale, Cormorant's new accent-only role, the
+four-family table), §8 (three contrast tables + the colour-only-state-change rule);
+`styling-tailwind.md` (families, z-scale, muted is noir-only); `project-workflow.md`
+(the eight-face budget); `CLAUDE.md` colour and typography tables.
+
+`npm run lint` and `npm run build` clean. `:root{--header-h:160px}` ships.
+
+**Not verified by rendering, and why:** Phase 1 applies no new class to any page — the diff
+under `app/` is fonts plus one CSS variable, and no component markup changed at all. There is
+nothing whose position or size moved, so there are no numbers to measure yet. The
+render-and-measure pass (§12, five widths, overflow = 0) starts in Phase 2 with the header.
+
+**Open:**
+- `caps-md` is provisional. Phase 6 must re-fit it by rendering the longest names — es `HIDRODERMOABRASIÓN`, `MASAJE PIEDRAS CALIENTES`, `MICRODERMOABRASIÓN`; en `HYDRADERMABRASION`, `BODY-CONTOURING MASSAGE`.
+- `--header-h`'s 160px default is the predicted 1440 layout (44+70+46). Phase 2 must confirm the measured height and correct the default if it differs, or the first paint will jump.
+  → **Closed in Phase 2.** Measured 159 (≥768) and 153 (mobile); `globals.css` now carries both.
+
+### Phase 2 — 2026-09-15
+
+`Nav.tsx` rebuilt as a **sticky** three-row `<header>` (no longer `fixed` over content):
+paper strip → ink bar → breadcrumbs. New `Breadcrumbs.tsx` (client) with `BreadcrumbList`
+JSON-LD (D11). `NavDropdown` restyled to `bg-ink` with category-coloured cards, behaviour
+untouched. `LanguageSwitch` restyled to grotesk/paper. `pt-top-clear` removed from all six
+views and the now-unused `top-clear` token deleted from the config and §6.
+
+**Verification tooling.** Playwright + Chromium installed into the session scratchpad (not a
+project dependency — `project-workflow.md` still governs `package.json`), driving the static
+`out/` build over a local server. Every number below is measured in Chromium, not read off
+the diff.
+
+**Row heights** — targets 1440: 44 / 70 / 46 (±2); 390: 44 / 64 / 46 (±2):
+
+| | strip | bar | crumbs | total | `--header-h` |
+|---|---|---|---|---|---|
+| 1440 | **44** ✅ | **70** ✅ | **45** ✅ | 159 | 159px |
+| 390 | **44** ✅ | **64** ✅ | **45** ✅ | 153 | 153px |
+
+First attempt missed two: strip measured 56 and crumbs 49, because `py-*` stacks on top of
+`min-h-*` under `box-sizing: border-box`. Dropping the strip's vertical padding and taking
+the crumb `<ol>` to `min-h-11` landed both on target.
+
+**Touch targets** — 0 header controls below 44px tall or 24px wide, at 390 and at 1440.
+Covers logo, both bar buttons, the strip's map button, every nav link, ES, EN, the burger
+(44×44) and every crumb link.
+
+**Overflow** — `scrollWidth − innerWidth = 0` on all 40 combinations (8 routes × 390/768/
+1024/1440/2560), plus 0 at 390 with the mobile menu open.
+
+**Keyboard** — tab order: skip link → strip map button → logo → Servicios → Nosotros →
+Contacto → WhatsApp → Contáctanos → ES → EN. Dropdown behaviour preserved exactly:
+ArrowDown opens and focuses the first item, Escape closes and restores focus to the trigger,
+Enter reopens, and the panel carries `hidden` when closed. Mobile menu: `aria-expanded`
+toggles, body scroll locks and releases, `aria-hidden` tracks state.
+
+**Breadcrumbs** — absent on `/` and `/en`; `Inicio / Servicios / Faciales` and
+`Home / Services / Facials` render from the dictionaries and `data/servicios.ts`;
+JSON-LD emits absolute URLs per locale. The live treatment crumb is Phase 3's job.
+
+**Decisions taken in this phase — please confirm:**
+
+1. **New key `clinic.visitUsAt`** ("Visítanos en" / "Visit us at"). D7 specified
+   `{clinic.visitUs} en {address}` using existing keys only, but that hardcodes the Spanish
+   connector and renders "Visit us en Eugenia 1309" in English. One key, both languages.
+2. **Rule amendment, `layout-responsive.md` §7.** The old rule — "uppercase text is always
+   tracked", 0.2em / 0.3em — was written for 12px micro-labels and would put +0.2em on heavy
+   display caps, which is visually wrong. §7 now splits by size: small uppercase spaces out,
+   display uppercase (`text-caps-*` and anything uppercase ≳ `text-2xl`) takes a new
+   `tracking-caps` token (−0.025em), matching the prototype's −.025em. Flagged rather than
+   applied silently.
+3. **Mega-card titles use `text-2xl`**, not `caps-sm`. `caps-sm` renders ~51px at 1440 —
+   far too large for a dropdown card. `text-2xl` is the scale's own slot for "menu-card
+   titles"; it just wears the Concept 03 treatment (DM Sans 800, uppercase, `tracking-caps`).
+4. **Mobile menu rises 12px and fades** rather than sliding a full screen height. The
+   prototype's full-height slide depends on its fixed device frame; reproducing it needs a
+   `calc(100svh - var(--header-h))` clip, which is the viewport-height pattern D1 deliberately
+   fenced off to two components. Same direction of motion, no rule breach.
+5. **The optional 2px scroll progress bar was not built.** Listed as optional; it belongs
+   with the scroll machinery in Phase 3 if wanted.
+
+**Open:** the breadcrumb row's horizontal scroll never engaged — no trail is long enough at
+390 (`Inicio / Aviso de Privacidad` fits). The container is in place; Phase 6's live
+treatment crumb is what will actually exercise it.

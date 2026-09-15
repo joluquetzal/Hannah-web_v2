@@ -11,7 +11,7 @@ export function NosotrosView({ lang }: { lang: Lang }) {
     <>
       <ScrollBackdrop />
 
-      <article className="mx-auto max-w-shell px-gutter pb-section-b-lg pt-top-clear">
+      <article className="mx-auto max-w-shell px-gutter pb-section-b-lg pt-16">
         <section
           data-bg={backdrop.noir}
           className="mx-auto flex min-h-[45vh] max-w-prose flex-col justify-center"

@@ -17,8 +17,10 @@ export function LanguageSwitch({ className }: { className?: string }) {
       aria-current={lang === target ? "true" : undefined}
       title={title}
       className={clsx(
-        "px-2 py-1.5 transition-colors",
-        lang === target ? "text-cream" : "text-muted hover:text-sand",
+        "inline-flex min-h-11 min-w-9 items-center justify-center text-paper transition-opacity",
+        // The inactive locale stops short of full opacity on hover, so the
+        // active one stays the brightest thing in the group.
+        lang === target ? "opacity-100" : "opacity-45 hover:opacity-75",
       )}
     >
       {label}
@@ -28,13 +30,10 @@ export function LanguageSwitch({ className }: { className?: string }) {
   return (
     <div
       aria-label={t.label}
-      className={clsx(
-        "flex items-center text-xs uppercase tracking-label",
-        className,
-      )}
+      className={clsx("flex items-center font-grotesk text-sm", className)}
     >
       {item("es", t.es, t.toEs)}
-      <span aria-hidden className="text-muted">
+      <span aria-hidden className="text-paper opacity-35">
         /
       </span>
       {item("en", t.en, t.toEn)}

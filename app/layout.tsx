@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, DM_Sans } from "next/font/google";
+import {
+  Cormorant_Garamond,
+  DM_Sans,
+  Source_Serif_4,
+  Space_Grotesk,
+} from "next/font/google";
 import "./globals.css";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
@@ -17,10 +22,27 @@ const cormorant = Cormorant_Garamond({
   display: "swap",
 });
 
+// 700/800 carry the Concept 03 heavy-caps scale (`text-caps-*`).
 const dmSans = DM_Sans({
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["400", "500", "700", "800"],
   variable: "--font-dm-sans",
+  display: "swap",
+});
+
+// Header chrome only: nav links, breadcrumbs, the announcement strip.
+const sourceSerif = Source_Serif_4({
+  subsets: ["latin"],
+  weight: ["600"],
+  variable: "--font-source-serif",
+  display: "swap",
+});
+
+// Header buttons and the ES/EN switch only.
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-space-grotesk",
   display: "swap",
 });
 
@@ -49,7 +71,10 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es" className={`${cormorant.variable} ${dmSans.variable}`}>
+    <html
+      lang="es"
+      className={`${cormorant.variable} ${dmSans.variable} ${sourceSerif.variable} ${spaceGrotesk.variable}`}
+    >
       <body className="flex min-h-screen flex-col bg-noir font-body text-sand antialiased">
         <SkipLink />
         <SyncHtmlLang />
