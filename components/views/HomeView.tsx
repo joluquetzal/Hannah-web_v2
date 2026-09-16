@@ -37,7 +37,7 @@ export function HomeView({ lang }: { lang: Lang }) {
         <HeroReveal>
           <p
             data-reveal
-            className="text-xs uppercase tracking-eyebrow text-cream"
+            className="text-eyebrow font-bold uppercase tracking-eyebrow text-cream"
           >
             {t.site.tagline}
           </p>
@@ -48,12 +48,12 @@ export function HomeView({ lang }: { lang: Lang }) {
               0.13 CLS at 390px, where it reflowed from four lines to three. */}
           <h1
             data-reveal
-            className="mt-6 font-body text-caps-xl font-extrabold uppercase leading-[0.9] tracking-caps text-cream"
+            className="mt-6 font-body text-caps-hero font-extrabold uppercase leading-[0.9] tracking-caps text-cream"
           >
             <span className="block">{titleStart}</span>
             {/* Cormorant's caps are optically smaller than DM Sans at the same
                 size, so the accent is nudged up to match. */}
-            <span className="block font-display text-[1.04em] italic normal-case tracking-normal text-crimson-bright">
+            <span className="block font-display text-[1.04em] font-normal italic normal-case leading-[0.8] tracking-normal text-crimson-bright">
               {titleAccent}
             </span>
             <span className="block">{titleEnd}</span>
@@ -85,7 +85,7 @@ export function HomeView({ lang }: { lang: Lang }) {
 
             <p
               data-reveal
-              className="text-xs uppercase leading-loose tracking-label text-sand md:text-right"
+              className="text-arrow font-bold uppercase leading-[1.9] tracking-hero text-sand md:text-right"
             >
               {site.address.street} · {site.address.neighborhood},{" "}
               {site.address.state}

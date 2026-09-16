@@ -8,7 +8,7 @@ export function TalkSheet({ lang }: { lang: Lang }) {
 
   return (
     <Sheet theme="crimson" className="py-24">
-      <h2 className="max-w-[16ch] font-body text-caps-lg font-extrabold uppercase leading-[0.9] tracking-caps text-cream">
+      <h2 className="max-w-[16ch] font-body text-caps-talk font-extrabold uppercase leading-[0.9] tracking-caps text-cream">
         {t.title}
       </h2>
       <p className="mt-6 max-w-prose text-lg leading-relaxed text-cream">

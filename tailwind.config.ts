@@ -40,7 +40,7 @@ const config: Config = {
       // monitors. Component-internal padding (buttons, inputs, nav/footer
       // rhythm) intentionally stays on the fixed Tailwind scale.
       spacing: {
-        gutter: "clamp(1.5rem, 1rem + 2.5vw, 4rem)",
+        gutter: "clamp(1.25rem, 0.5rem + 3vw, 4rem)", // mockup: 20px @390, 51px @1440
         "section-b": "clamp(4rem, 3rem + 6vw, 7rem)",
         "section-b-lg": "clamp(5rem, 4rem + 7vw, 9rem)",
       },
@@ -52,24 +52,37 @@ const config: Config = {
         "display-lg": "clamp(3rem, 2.5rem + 2.5vw, 4.5rem)",
         "display-md": "clamp(2.25rem, 1.95rem + 1.5vw, 3rem)",
         "display-sm": "clamp(1.875rem, 1.65rem + 0.9vw, 2.25rem)",
-        // Concept 03 heavy-caps scale: DM Sans 800, uppercase, tight leading.
-        // These are the redesign's page-level type — the `display-*` sizes
-        // above stay for the Cormorant italic accent phrases inside them.
-        // Curves traced from the prototype's cqi values, re-expressed as
-        // rem + vw so they still respond to the user's font-size setting.
-        // caps-md is provisional until Phase 6 renders the longest treatment
-        // names (HIDRODERMOABRASIÓN, MASAJE PIEDRAS CALIENTES) at every width.
-        // Fitted by measurement, not taste: each authored hero line must sit on
-        // one line in BOTH DM Sans 800 and its Arial fallback, or the h1
-        // rewraps when the webfont swaps in (0.13 CLS at 390px before this).
-        // Binding line is es "COMO UN RITUAL": 38px max at 390, 132px at 2560.
-        "caps-xl": "clamp(2.34rem, 0.15rem + 9vw, 8.1rem)", // Inicio + page h1
-        // Fitted like caps-xl: the binding word is en "CONSISTENCY" on
-        // /nosotros, 11 characters that must fit a 339px column at 390px —
-        // 46px in the Arial fallback. It was rendering at 51px and overflowing.
-        "caps-lg": "clamp(2.85rem, 0.22rem + 10.85vw, 10rem)", // category / hub titles
-        "caps-md": "clamp(2.4rem, 1.2rem + 4.85vw, 5.6rem)", // treatment names
-        "caps-sm": "clamp(1.9rem, 1.5rem + 1.7vw, 3.2rem)", // cards, hub columns
+        // Concept 03 display scale — every value is the size the MOCKUP
+        // renders (Phase 13 fidelity table), converted `N cqi` → `N vw`
+        // because on the real site the frame is the viewport. Named by role,
+        // not by t-shirt size, so a call site can't pick the wrong one.
+        // The older "fitted to the Arial fallback" reasoning is superseded:
+        // next/font ships size-adjusted fallbacks and CLS is verified by
+        // measurement instead.
+        "caps-hero": "clamp(2.6rem, 9.2vw, 8.5rem)", // Inicio h1
+        "caps-page": "clamp(3.4rem, 15vw, 13rem)", // category h1
+        "caps-talk": "clamp(3.4rem, 14vw, 12rem)", // "¿Hablamos?" talk sheet
+        "caps-link": "clamp(2.4rem, 9vw, 7rem)", // "Otras categorías" rows
+        "caps-name": "clamp(2.4rem, 6.2vw, 5.6rem)", // treatment name (before fit)
+        "caps-col": "clamp(1.9rem, 3.2vw, 3.2rem)", // hub column title
+        "caps-word": "clamp(3rem, 11.5vw, 11rem)", // /nosotros big words
+        "caps-about": "2rem", // /nosotros h1 — F1, the mockup's rendered size
+        "caps-statement": "clamp(1.9rem, 4.6vw, 4rem)", // /nosotros team statement
+        "caps-card": "clamp(1.6rem, 3vw, 2.4rem)", // /nosotros team card title
+        "caps-contact": "clamp(3.2rem, 11vw, 9.5rem)", // /contacto h1 (fit to column)
+        "caps-form": "clamp(1.8rem, 3.2vw, 2.6rem)", // /contacto form title
+        "caps-footer": "clamp(2.2rem, 6vw, 4.5rem)", // footer "¿Hablamos?"
+
+        // Small-text roles. These sit BELOW the old 12px floor because the
+        // mockup sets them at 11.2–11.5px; §7 records the exception.
+        eyebrow: "0.72rem", // 11.5px — eyebrows
+        label: "0.7rem", // 11.2px — counters, list/column headings, form labels
+        btn: "0.75rem", // 12px — button text
+        arrow: "0.78rem", // 12.5px — arrow links
+        // Header controls are Space Grotesk at weight 400, not DM Sans 700 —
+        // they are chrome, not content labels.
+        hbtn: "0.9rem", // 14.4px — header bar buttons
+        hstrip: "0.8rem", // 12.8px — announcement strip button
       },
       // Tracking for the two uppercase-caps roles. Uppercase text is always
       // tracked (see styling-tailwind rule); these replace the repeated
@@ -81,6 +94,12 @@ const config: Config = {
         // opposite of what small uppercase needs: letters this size read as
         // loose at 0, so they tighten. Never use this below ~24px.
         caps: "-0.025em",
+        counter: "0.24em", // treatment counter, list headings
+        arrow: "0.16em", // arrow links
+        meta: "0.08em", // meta chips (not uppercase)
+        hero: "0.14em", // Inicio hero meta block
+        hbtn: "0.02em", // header bar buttons
+        hstrip: "0.03em", // announcement strip button
       },
       // Fluid prose width: page intros and long-form copy grow with the
       // viewport instead of hitting a fixed breakpoint cap. The upper bound

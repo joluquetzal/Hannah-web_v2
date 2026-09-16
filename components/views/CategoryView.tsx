@@ -34,14 +34,14 @@ export function CategoryView({
   return (
     <SheetStack>
       <Sheet theme="noir" variant="window" align="start" className="pt-16">
-        <p className="text-xs uppercase tracking-eyebrow text-sand">
+        <p className="text-eyebrow font-bold uppercase tracking-eyebrow text-sand">
           {t.category.countLabel.replace(
             "{count}",
             String(treatments.length).padStart(2, "0"),
           )}
         </p>
 
-        <h1 className="mt-6 font-body text-caps-lg font-extrabold uppercase leading-[0.9] tracking-caps text-cream">
+        <h1 className="mt-6 font-body text-caps-page font-extrabold uppercase leading-[0.9] tracking-caps text-cream">
           {cat.title}
         </h1>
 
@@ -58,7 +58,7 @@ export function CategoryView({
                 href={localizedPath(c.href, lang)}
                 aria-current={current ? "page" : undefined}
                 className={clsx(
-                  "inline-flex min-h-11 items-center rounded-full border px-4 text-xs uppercase tracking-label transition-colors",
+                  "inline-flex min-h-11 items-center rounded-full border px-4 text-label font-bold uppercase tracking-label transition-colors",
                   current
                     ? "border-sand bg-sand text-noir"
                     : "border-sand/35 text-sand hover:border-sand hover:text-cream",
@@ -70,7 +70,7 @@ export function CategoryView({
           })}
         </nav>
 
-        <p className="mt-10 text-xs uppercase tracking-label text-sand">
+        <p className="mt-10 text-label font-bold uppercase tracking-label text-sand">
           {t.category.scrollCue}
         </p>
       </Sheet>
@@ -88,14 +88,14 @@ export function CategoryView({
       ))}
 
       <Sheet theme="crimson-light" className="py-20">
-        <h2 className="text-xs uppercase tracking-eyebrow text-crimson-bright">
+        <h2 className="text-eyebrow font-bold uppercase tracking-eyebrow text-crimson-bright">
           {t.category.others}
         </h2>
         <ul className="mt-8 grid gap-8 sm:grid-cols-2">
           {others.map((c) => (
             <li key={c.slug}>
               <Link href={localizedPath(c.href, lang)} className="group block">
-                <span className="block font-body text-caps-sm font-extrabold uppercase leading-none tracking-caps text-cream transition-transform duration-500 group-hover:translate-x-1 motion-reduce:transition-none">
+                <span className="block font-body text-caps-link font-extrabold uppercase leading-none tracking-caps text-cream transition-transform duration-500 group-hover:translate-x-1 motion-reduce:transition-none">
                   {c.titulo[lang]}
                 </span>
                 <span className="mt-3 block max-w-prose text-sm leading-relaxed text-cream/90">

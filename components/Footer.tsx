@@ -7,7 +7,7 @@ import { useI18n } from "@/lib/i18n/useLang";
 
 /** Every footer link is a real 44px target (accessibility-seo §Touch targets). */
 const linkClass =
-  "inline-flex min-h-11 items-center text-noir transition-opacity hover:opacity-70";
+  "inline-flex min-h-11 items-center font-body text-base font-medium text-noir transition-opacity hover:opacity-70";
 
 export function Footer() {
   const { lang, t } = useI18n();
@@ -26,19 +26,19 @@ export function Footer() {
       <div className="mx-auto w-full max-w-shell px-gutter pt-20">
         <div className="grid gap-10 sm:grid-cols-[1.2fr_1fr_1fr]">
           <div>
-            <p className="font-body text-caps-sm font-extrabold uppercase leading-none tracking-caps">
+            <p className="font-body text-caps-footer font-extrabold uppercase leading-none tracking-caps">
               {t.talk.title}
             </p>
             <Link
               href={localizedPath("/contacto", lang)}
-              className="mt-5 inline-flex min-h-12 items-center bg-noir px-6 text-xs uppercase tracking-label text-cream transition-opacity hover:opacity-85"
+              className="mt-5 inline-flex min-h-12 items-center bg-noir px-6 text-label font-bold uppercase tracking-label text-cream transition-opacity hover:opacity-85"
             >
               {t.footer.contactCta}
             </Link>
           </div>
 
           <div className="text-sm">
-            <p className="text-xs uppercase tracking-eyebrow">
+            <p className="text-eyebrow font-bold uppercase tracking-eyebrow">
               {t.footer.contact}
             </p>
             <ul className="mt-2">
@@ -78,7 +78,7 @@ export function Footer() {
           </div>
 
           <div className="text-sm">
-            <p className="text-xs uppercase tracking-eyebrow">
+            <p className="text-eyebrow font-bold uppercase tracking-eyebrow">
               {t.footer.visitUs}
             </p>
             <address className="mt-3 space-y-1 not-italic leading-relaxed">

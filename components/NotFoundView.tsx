@@ -12,8 +12,8 @@ export function NotFoundView() {
   return (
     <Sheet theme="noir" className="py-28">
       <div className="max-w-prose">
-      <p className="text-xs uppercase tracking-eyebrow text-sand">{nf.eyebrow}</p>
-      <h1 className="mt-6 break-words font-body text-caps-md font-extrabold uppercase leading-[0.95] tracking-caps text-cream">
+      <p className="text-eyebrow font-bold uppercase tracking-eyebrow text-sand">{nf.eyebrow}</p>
+      <h1 className="mt-6 break-words font-body text-caps-name font-extrabold uppercase leading-[0.95] tracking-caps text-cream">
         {nf.title}
       </h1>
       <p className="mt-4 leading-relaxed text-sand">{nf.body}</p>

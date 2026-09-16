@@ -14,9 +14,12 @@ import { SkipLink } from "@/components/SkipLink";
 import { site } from "@/lib/site";
 import { getDictionary } from "@/lib/i18n";
 
+// 400 italic is the mockup's accent face. Without it the accent inherits the
+// heading's 800 and the browser synthesises a fake bold — measured 800 on the
+// hero and /nosotros accents before this was loaded.
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
-  weight: ["300"],
+  weight: ["300", "400"],
   style: ["normal", "italic"],
   variable: "--font-cormorant",
   display: "swap",

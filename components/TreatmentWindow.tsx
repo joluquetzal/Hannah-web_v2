@@ -100,7 +100,7 @@ export function TreatmentWindow({
         <div className={clsx("min-w-0", imageRight ? "md:order-1" : "md:order-2")}>
           <p
             className={clsx(
-              "flex items-center gap-3 text-xs uppercase tracking-eyebrow",
+              "flex items-center gap-3 text-eyebrow font-bold uppercase tracking-eyebrow",
               skin.accent,
             )}
           >
@@ -115,7 +115,7 @@ export function TreatmentWindow({
           </p>
 
           {treatment.destacado && (
-            <p className={clsx("mt-4 text-xs uppercase tracking-label", skin.accent)}>
+            <p className={clsx("mt-4 text-label font-bold uppercase tracking-label", skin.accent)}>
               <span aria-hidden>★</span> {t.signature}
             </p>
           )}
@@ -130,7 +130,7 @@ export function TreatmentWindow({
           <h2
             lang={lang}
             className={clsx(
-              "mt-4 hyphens-auto break-words font-body text-caps-md font-extrabold uppercase leading-[0.95] tracking-caps",
+              "mt-4 hyphens-auto break-words font-body text-caps-name font-extrabold uppercase leading-[0.95] tracking-caps",
               skin.heading,
             )}
           >
@@ -147,7 +147,7 @@ export function TreatmentWindow({
                 <span
                   key={chip}
                   className={clsx(
-                    "inline-flex min-h-11 items-center rounded-full border px-4 text-xs uppercase tracking-label",
+                    "inline-flex min-h-11 items-center rounded-full border px-4 text-label font-bold uppercase tracking-label",
                     skin.rule,
                     skin.body,
                   )}
@@ -160,7 +160,7 @@ export function TreatmentWindow({
 
           {list && (
             <div className={clsx("mt-6 border-t pt-5", skin.rule)}>
-              <p className={clsx("text-xs uppercase tracking-eyebrow", skin.accent)}>
+              <p className={clsx("text-eyebrow font-bold uppercase tracking-eyebrow", skin.accent)}>
                 {list.heading}
               </p>
               <ul
@@ -179,7 +179,7 @@ export function TreatmentWindow({
           <div className="mt-7">
             <ButtonLink
               href={`${localizedPath("/contacto", lang)}?servicio=${categorySlug}`}
-              variant={skin.theme === "sand" ? "solid" : "cream"}
+              variant={skin.theme === "sand" ? "noir" : "cream"}
             >
               {t.cta} <span aria-hidden>&nbsp;↗</span>
             </ButtonLink>

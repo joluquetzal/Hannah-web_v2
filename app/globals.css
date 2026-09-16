@@ -39,11 +39,15 @@
     @apply bg-noir font-body text-sand antialiased;
   }
 
+  /* No family or weight here. Small headings that should look like labels —
+     "Otras categorías", the /contacto info headings, the philosophy captions,
+     the form title — were all inheriting Cormorant 300 from this rule and
+     reading as display type. Every heading now states its own family. */
   h1,
   h2,
   h3,
   h4 {
-    @apply font-display font-light text-cream;
+    @apply text-cream;
   }
 
   ::selection {
