@@ -67,8 +67,14 @@ export function Nav() {
 
   const address = `${site.address.street}, ${site.address.neighborhood}`;
 
+  // Breadcrumbs render nothing on the landing page, so the header is one row
+  // shorter there. This has to be true in the served HTML, not just after
+  // hydration, or every window-height sheet resizes on first paint.
+  const hasCrumbs = rest !== "/";
+
   return (
     <header ref={headerRef} className="sticky top-0 z-header bg-ink">
+      {!hasCrumbs && <style>{":root{--hdr-crumbs:0px}"}</style>}
       {/* Row 1 — announcement strip */}
       {/* No vertical padding: the 44px controls inside set the row's height,
           so the strip lands at exactly 44 rather than 44 + padding. */}

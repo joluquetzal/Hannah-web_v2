@@ -1,3 +1,5 @@
+import { Sheet } from "@/components/Sheet";
+import { SheetStack } from "@/components/SheetStack";
 import { getDictionary, type Lang } from "@/lib/i18n";
 
 /**
@@ -15,12 +17,13 @@ export function LegalPageView({
   const page = doc === "privacy" ? legal.privacy : legal.terms;
 
   return (
-    <div className="mx-auto max-w-shell px-gutter pb-section-b pt-16">
-      <div className="max-w-prose">
-        <h1 className="font-display text-display-md italic text-cream">
+    <SheetStack>
+      <Sheet theme="noir" className="py-24">
+        <div className="max-w-prose">
+        <h1 className="break-words font-body text-caps-md font-extrabold uppercase leading-[0.95] tracking-caps text-cream">
           {page.title}
         </h1>
-        <p className="mt-2 text-xs uppercase tracking-label text-muted">
+        <p className="mt-2 text-xs uppercase tracking-label text-sand">
           {legal.lastUpdatedLabel} {legal.lastUpdated}
         </p>
 
@@ -33,7 +36,7 @@ export function LegalPageView({
         <div className="mt-12 space-y-10">
           {page.sections.map((section) => (
             <section key={section.heading}>
-              <h2 className="font-display text-display-sm italic text-cream">
+              <h2 className="font-display text-2xl italic text-cream">
                 {section.heading}
               </h2>
               {section.body.map((paragraph) => (
@@ -47,7 +50,8 @@ export function LegalPageView({
             </section>
           ))}
         </div>
-      </div>
-    </div>
+        </div>
+      </Sheet>
+    </SheetStack>
   );
 }

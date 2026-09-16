@@ -5,7 +5,7 @@ export function ClinicInfo({ lang }: { lang: Lang }) {
   const t = getDictionary(lang).clinic;
 
   return (
-    <div className="flex h-full flex-col justify-start space-y-8">
+    <div className="grid gap-10 md:grid-cols-[1fr_1fr_1.2fr] md:gap-12">
       <div>
         <h2 className="font-display text-2xl italic text-cream">{t.visitUs}</h2>
         <address className="mt-3 not-italic leading-relaxed text-sand">
@@ -17,19 +17,19 @@ export function ClinicInfo({ lang }: { lang: Lang }) {
         </address>
       </div>
 
-      <dl className="space-y-4 text-sm">
+      <dl className="space-y-5 text-sm">
         <div>
-          <dt className="text-xs uppercase tracking-label text-muted">
+          <dt className="text-xs uppercase tracking-label text-sand">
             {t.phone}
           </dt>
           <dd className="mt-1">
-            <a href={site.phoneHref} className="text-sand hover:text-cream">
+            <a href={site.phoneHref} className="inline-flex min-h-11 items-center text-sand transition-colors hover:text-cream">
               {site.phone}
             </a>
           </dd>
         </div>
         <div>
-          <dt className="text-xs uppercase tracking-label text-muted">
+          <dt className="text-xs uppercase tracking-label text-sand">
             {t.hours}
           </dt>
           <dd className="mt-1 space-y-0.5 text-sand">
@@ -41,7 +41,7 @@ export function ClinicInfo({ lang }: { lang: Lang }) {
           </dd>
         </div>
         <div>
-          <dt className="text-xs uppercase tracking-label text-muted">
+          <dt className="text-xs uppercase tracking-label text-sand">
             {t.whatsapp}
           </dt>
           <dd className="mt-1">
@@ -49,14 +49,14 @@ export function ClinicInfo({ lang }: { lang: Lang }) {
               href={site.whatsapp}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sand hover:text-cream"
+              className="inline-flex min-h-11 items-center text-sand transition-colors hover:text-cream"
             >
               {t.whatsappCta}
             </a>
           </dd>
         </div>
         <div>
-          <dt className="text-xs uppercase tracking-label text-muted">
+          <dt className="text-xs uppercase tracking-label text-sand">
             {t.social}
           </dt>
           <dd className="mt-1 flex gap-4">
@@ -64,7 +64,7 @@ export function ClinicInfo({ lang }: { lang: Lang }) {
               href={site.social.instagram}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sand hover:text-cream"
+              className="inline-flex min-h-11 items-center text-sand transition-colors hover:text-cream"
             >
               Instagram
             </a>
@@ -72,7 +72,7 @@ export function ClinicInfo({ lang }: { lang: Lang }) {
               href={site.social.facebook}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sand hover:text-cream"
+              className="inline-flex min-h-11 items-center text-sand transition-colors hover:text-cream"
             >
               Facebook
             </a>
@@ -93,13 +93,13 @@ export function ClinicInfo({ lang }: { lang: Lang }) {
             href={site.mapLinkUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-2 inline-block text-xs uppercase tracking-label text-muted transition-colors hover:text-sand"
+            className="mt-2 inline-flex min-h-11 items-center text-xs uppercase tracking-label text-sand transition-colors hover:text-cream"
           >
             {t.mapCta}
           </a>
         </div>
       ) : (
-        <div className="flex aspect-[4/3] w-full items-center justify-center border border-dashed border-crimson-light text-sm text-muted">
+        <div className="flex aspect-[4/3] w-full items-center justify-center border border-dashed border-sand/30 text-sm text-sand">
           {t.mapPending}
         </div>
       )}

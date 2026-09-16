@@ -26,7 +26,6 @@ export const en = {
     closeMenu: "Close menu",
     servicesMenuHeading: "Our services",
     servicesViewAll: "View all",
-    servicesViewAllLong: "View all services",
     servicesCardCta: "View treatments",
   },
 
@@ -40,6 +39,7 @@ export const en = {
 
   home: {
     title: "Caring for your skin, like a ritual",
+    titleParts: ["Caring for", "your skin,", "like a ritual"],
     lead: "Facials, massages and aesthetic treatments in a space designed to help you slow down, breathe and return to yourself.",
     ctaServices: "View services",
     ctaContact: "Contact",
@@ -53,16 +53,31 @@ export const en = {
   categories: {
     faciales: {
       title: "Facials",
+      count: "Six facials",
       lead: "Six facials to hydrate, balance and rejuvenate according to your skin type.",
     },
     masajes: {
       title: "Massages",
+      count: "Four massages",
       lead: "Four massages to relax the body, ease muscle tension and restore your energy.",
     },
     especiales: {
       title: "Special treatments",
+      count: "Four treatments",
       lead: "Four advanced treatments to deeply hydrate and firm the skin of the face.",
     },
+  },
+
+  category: {
+    countLabel: "Services · {count} treatments",
+    scrollCue: "Scroll",
+    others: "Other categories",
+  },
+
+  talk: {
+    title: "Shall we talk?",
+    body: "Tell us what you need and we'll get back to you soon.",
+    cta: "Get in touch",
   },
 
   treatment: {
@@ -76,9 +91,13 @@ export const en = {
   nosotros: {
     eyebrow: "About",
     title: "A space for unhurried care",
+    titleParts: ["A space", "for care,", "unhurried"],
     intro:
       "HannaH is a beauty and aesthetics clinic in Mexico City. We combine technology, professional skincare and a personal touch to care for the skin and wellbeing of everyone who visits us.",
     philosophyTitle: "Philosophy",
+    philosophyHead1: "No generic formulas",
+    philosophyHead2: "A moment for you",
+    philosophyWords: ["Consistency", "Pause"],
     philosophy1:
       "We believe in results built through consistency and in treatments designed for each skin type. No generic formulas: first we listen, then we advise.",
     philosophy2:
@@ -87,13 +106,22 @@ export const en = {
     team1:
       "A team of specialists in facial and body aesthetics, in continuous training to offer current, safe techniques.",
     teamNote: "(Team profiles pending client content.)",
-    talkTitle: "Shall we talk?",
-    talkBody: "Tell us what you need and we'll get back to you soon.",
-    talkCta: "Get in touch",
+    teamStatementParts: ["Specialists in facial", "and", "body aesthetics"],
+    // TODO: client copy — the first two bodies are placeholders on purpose (D12).
+    teamCards: [
+      { title: "Facial aesthetics", body: "(Description pending client content.)" },
+      { title: "Body aesthetics", body: "(Description pending client content.)" },
+      {
+        title: "Continuous training",
+        body: "In continuous training to offer current, safe techniques.",
+      },
+    ],
   },
 
   contacto: {
     title: "Contact",
+    heading: "Shall we talk?",
+    formTitle: "Leave us a message",
     lead: "Leave us a message with your details and we'll get back to you as soon as possible.",
   },
 
@@ -110,6 +138,7 @@ export const en = {
     mapTitle: "HannaH's location on the map",
     hoursSummary:
       "Monday to Friday, 9:00 am – 7:00 pm · Saturday, 9:00 am – 2:00 pm · Sunday closed",
+    hoursShort: "Mon–Fri 9 am – 7 pm · Sat 9 am – 2 pm",
     schedule: [
       { days: "Monday to Friday", time: "9:00 am – 7:00 pm" },
       { days: "Saturday", time: "9:00 am – 2:00 pm" },

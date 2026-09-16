@@ -27,15 +27,16 @@ to enable the slash command, or just ask Claude Code to "continue the Concept 03
 | 0 | Decisions & rule exceptions (no code) | ✅ | — |
 | 1 | Foundations — tokens, fonts, rule-file updates | ✅ | `9b95c0b` |
 | 2 | Header — strip, bar, mega menu, mobile menu, breadcrumbs | ✅ | `ab2ca97` |
-| 3 | Sheet system — sticky stacking + cover effect | ⏸ waiting for gate approval | — |
-| 4 | Inicio | ⬜ | — |
-| 5 | Servicios hub — three image columns | ⬜ | — |
-| 6 | Category pages — one treatment per window | ⬜ | — |
-| 7 | Nosotros | ⬜ | — |
-| 8 | Contacto | ⬜ | — |
-| 9 | Footer, legal pages, 404 | ⬜ | — |
-| 10 | English, cleanup, docs | ⬜ | — |
-| 11 | Full verification & sign-off | ⬜ | — |
+| 3 | Sheet system — sticky stacking + cover effect | ✅ | `2541275` |
+| 4 | Inicio | ✅ | `581edb8` |
+| 5 | Servicios hub — three image columns | ✅ | see log |
+| 6 | Category pages — one treatment per window | ✅ | see log |
+| 7 | Nosotros | ✅ | see log |
+| 8 | Contacto | ✅ | see log |
+| 9 | Footer, legal pages, 404 | ✅ | see log |
+| 10 | English, cleanup, docs | ✅ | see log |
+| 11 | Full verification & sign-off | ⏸ awaiting owner sign-off | see log |
+| 12 | Deferred work — carried out of phases 1–11 | ⬜ | — |
 
 Legend: ⬜ not started · 🟡 in progress · ⏸ waiting for gate approval · ✅ approved
 
@@ -476,3 +477,306 @@ would put `text-cream` on `#C9A27A` at 1.9:1, so it waits for the theme-aware
 
 **Open:** the optional 2px scroll progress bar (deferred from Phase 2) is still not built —
 it now has a natural home in `SheetStack`. Say the word and it's a small addition.
+
+### Phase 4 — 2026-09-15
+
+Inicio rebuilt as a single full-bleed hero sheet (D8): `hero.jpg` behind a scrim, eyebrow,
+three-line heavy-caps `<h1>` with a Cormorant italic accent, lead, two CTAs, and a meta block.
+New keys `home.titleParts` and `clinic.hoursShort` in both languages.
+
+**Accept:**
+
+| Criterion | Target | Measured |
+|---|---|---|
+| `<h1>` overflow, 390 → 2560 | none | **0** at all six widths |
+| `<h1>` lines at 1440 | ≤ 3 | **3** (exactly, at every width) |
+| `<h1>` left edge aligns with the shell | — | **132 / 384 / 704** at 1440 / 1920 / 2560, matching `/servicios/faciales` and `/contacto` |
+| Buttons | ≥ 48px | **48px** at every width, both languages |
+
+**The real work of this phase was CLS.** The landing page measured **0.448**, bimodal across
+runs (0.44 / 0.038 alternating) — a race, not noise. Four distinct causes, each measured and
+fixed:
+
+1. **`--header-h` was wrong on `/` at first paint.** Breadcrumbs don't render on the landing
+   page, so its header is 114px, not the 159px default — every window sheet resized once JS
+   measured the real value. `globals.css` now composes `--header-h` from named rows
+   (`--hdr-strip` + `--hdr-bar` + `--hdr-crumbs`) and `Nav` zeroes the crumb row on routes
+   where `Breadcrumbs` renders nothing, **in the served HTML**, so the first paint is correct.
+2. **`is-tall` thrashed.** `SheetStack` flagged the hero — the only sheet in its stack — as
+   tall and added 30svh of padding, then removed it as fonts settled. A sheet with nothing
+   rising over it needs no reading room: the last sheet is now skipped, and the threshold
+   carries a 1.05 margin so a sheet sitting within a few pixels of the window can't flip.
+3. **The `<h1>` rewrapped on font swap** — four lines in the Arial fallback, three in
+   DM Sans 800. The three `titleParts` are now one block per line, and `caps-xl` was
+   **re-fitted by measurement**: the binding line is es `COMO UN RITUAL`, which needs ≤38px at
+   390 in the *fallback* (41.5px was being rendered). New clamp
+   `clamp(2.34rem, 0.15rem + 9vw, 8.1rem)` keeps every authored line unwrapped in both fonts.
+4. **The window sheet centred its content**, so the lead paragraph rewrapping moved the entire
+   block, h1 included. `Sheet` gained `align="start"`; the hero is top-aligned with extra top
+   padding, which is also what the prototype does (`.hero{min-height:0}` + padding).
+
+| CLS | before | after |
+|---|---|---|
+| es `/` @390 | 0.448 (unstable) | **0.0245** |
+| es `/` @768 | 0.12 | **0.0216** |
+| es `/` @1440 | 0.038 | **0.0009** |
+| en `/` @768 | 0.135 | **0.0275** |
+| `/servicios/faciales` @1440 | 0.0006 | **0.0006** |
+
+Worst case across every page and width is now 0.0275, inside the < 0.05 target and well
+inside Google's 0.1 "good" threshold. Results are deterministic run to run — the race is gone.
+
+**Lighthouse was not run.** `npm install lighthouse` crashed twice (`Exit handler never
+called!`) on a machine with ~0.8 GB free; the package half-installed and its CLI could not
+resolve. Rather than report a score I didn't measure: LCP is **428ms** (the hero image),
+`load` 302ms, total transfer **1294 KB**, and there are no structural a11y faults (one `<h1>`,
+no heading-level jumps, every `<img>` has `alt`, `<main>`/`<title>`/meta description present).
+Phase 11 owns the real Lighthouse run.
+
+**Flag for the performance budget:** `hero.jpg` is **606 KB of the 1294 KB** total and is the
+LCP element. Static export forces `images.unoptimized: true`, so Next will not re-encode it —
+it ships exactly as committed. A pre-compressed / WebP hero is the single highest-value
+perf change available before Phase 11's ≥95 target.
+
+**Other changes:** `ButtonLink` gained a `cream` variant (the filled CTA on a photographic
+ground) and `min-h-12`; its `ghost` variant moved from sand to cream, because sand over the
+worst-case scrim measures ~3.7:1 while cream clears 6.9:1. `CategoryView`'s intro sheet became
+a window sheet — a 275px first sheet was already 63% through its cover animation at rest,
+rendering the intro shrunk and dimmed before the visitor scrolled.
+
+**Rule amendment, §5.** The landing hero is now a third permitted caller of `min-h-window`,
+alongside `ServiceColumns` and `TreatmentWindow`. §5 already allowed the hero a full-viewport
+height; with the header sticky and in flow, "full screen" means the space below it, which is
+exactly what the token computes. Flagged, not silent.
+
+**Open:** `/nosotros` h1 sits at 432px against everyone else's 132 — it still centres its own
+prose column, which §4 forbids. That is Phase 7's job and is expected to close there.
+
+### Phase 5 — 2026-09-15
+
+`/servicios` is now three full-height images in one bleed window sheet, followed by the shared
+talk sheet. New `ServiceColumns.tsx` and `TalkSheet.tsx`; `ServiceCard.tsx` deleted (unused).
+
+**Accept:**
+
+| Criterion | Measured |
+|---|---|
+| ≥ 640px: three equal columns filling the window | **640** 213×747 · **768** 256×741 · **1024** 341×741 · **1440** 480×741 · **2560** 853×741 — equal, and the sheet exactly fills the space below the header |
+| < 640px: three rows | **390**: `grid-template-columns` resolves to 1, three 390×249 rows |
+| Hover and focus produce the same state | reveal `0px → 109.5px` (390) / `132.25px` (640) and tint `1 → 0`, **identical** for `:hover` and `:focus-visible` |
+| Focus ring visible | `outline: auto 2px`, with `outline-offset: -4px` so it reads inside the image |
+| Title and description fit at 390 and 640 | no overflow on either, in the narrowest 213px column |
+| Horizontal overflow / CLS | 0 at all six widths; CLS ≤ 0.003 |
+
+Two structural additions to `Sheet`: `bleed` (skip the centred shell and the vertical padding,
+so an image grid can run edge to edge and fill the sheet) and the `talk` dictionary group,
+moved out of `nosotros` so `/servicios`, the category pages and `/nosotros` share one source.
+
+`@media (hover: none)` is expressed as an arbitrary variant, `[@media(hover:none)]:`, since
+Tailwind ships no `hover-none` and the project keeps `plugins: []`. On touch the tint lightens
+and the description is always open — declared, but not exercised by these measurements, which
+run in a hover-capable context.
+
+**Deferred:** `ScrollBackdrop` + `lib/backdrop.ts` now have exactly one importer left,
+`NosotrosView`. They go in Phase 7.
+
+### Phase 6 — 2026-09-15
+
+`TreatmentRow` replaced by `TreatmentWindow` (D4): one window sheet per treatment, theme
+cycling crimson → surface → sand → crimson-light, image side flipping by index parity.
+Intro sheet gains the count eyebrow, category chips and a scroll cue; closing sheets add
+"Otras categorías" and the shared talk sheet.
+
+**Accept** (all three categories, es + en, at 390 / 768 / 1024 / 1440 / 2560):
+
+| Criterion | Measured |
+|---|---|
+| Title fit — all 14 names, both languages | **0 overflows** across 30 page loads |
+| Each window ≥ space below header | **true** for every treatment sheet |
+| 1440: text and image side by side | 2 columns, tops within 5px |
+| 390: text then image | 1 column, copy at 908 / figure at 1474 |
+| Live crumb | `Inicio/Servicios/Faciales` → `…/HIDRODERMOABRASIÓN` on scroll → clears at top |
+| Deep link `#facial-hannah` | lands at **top 159**, exactly the header height |
+| Hover clip crossfade | video opacity **0 → 1**; `display: none` under reduced motion |
+| Horizontal overflow / CLS | 0 everywhere; CLS max **0.0021** |
+
+**The title fit needed the hyphenation fallback, and the measurement says why.** The binding
+name is es `HIDRODERMOABRASIÓN` — a single unbreakable 18-character word. Fitting it whole
+would cap `caps-md` at **27px at 390 and 48px at 1440**, well below `caps-sm`. Phase 6 allows
+hyphens exactly when a size that fits reads too small, so the `<h2>` takes `hyphens-auto`
+with an explicit `lang` (the static export ships `lang="es"` on `<html>` for every route, so
+the element has to carry its own) plus `break-words` as the no-dictionary safety net.
+
+That was not sufficient on its own: English still overflowed at 390 because `overflow-wrap:
+break-word` does not reduce an element's **min-content** width, so the `1fr` grid track grew
+to 419px inside a 339px column and the sheet clipped the title. `min-w-0` on the copy column
+lets the track shrink and the break take effect. Both languages are clean now.
+
+**Deferred to Phase 9:** the footer is still the old dark one and is not part of any
+`SheetStack`, so it does not yet rise over the last treatment sheet.
+
+### Phase 7 — 2026-09-15
+
+`/nosotros` rebuilt as four sheets: intro (noir), manifesto (crimson gradient, centred, with
+the two big words and the collage), team (surface, three flat cards), talk. New keys
+`titleParts`, `philosophyHead1/2`, `philosophyWords`, `teamStatementParts`, `teamCards` in
+both languages.
+
+**Accept:**
+
+| Criterion | Measured |
+|---|---|
+| No section sized by viewport height | **none** — every sheet is `py-24`; the old `min-h-[45vh]/[70vh]/[50vh]` are gone |
+| Big words never overflow, 390 → 2560 | **0 overflows**, one line each, both languages (46 → 160px) |
+| Horizontal overflow | **0** at all five widths, both languages |
+| CLS | ≤ 0.0015 |
+| Page height at 1440 | **3892px** (es) · **4035px** (en) — baseline was 2948px |
+
+**On the page height:** it went *up*, not down, and that is the right outcome. The 2948px
+baseline was four short text blocks padded out by viewport fractions — D9's complaint was
+450–700px of section height carrying 150–190px of text. The page now carries a manifesto
+sheet with a collage, a three-card team sheet and the talk sheet, all sized by their content.
+More page, because there is more on it.
+
+**`caps-lg` was re-fitted, for the same reason `caps-xl` was in Phase 4.** en `CONSISTENCY`
+— 11 characters — overflowed a 339px column at 390px, rendering at 51px where 46px is the
+fallback-font limit. New clamp `clamp(2.85rem, 0.22rem + 10.85vw, 10rem)`. Since `caps-lg`
+also sets the category and hub titles, those were re-checked after the change: no heading
+passes the viewport and no page overflows, at 390 or 2560, in either language.
+
+**D9 closed.** `/nosotros` no longer centres its own prose column: its `<h1>` sits at **132px
+at 1440**, the same left edge as Inicio, the category pages and Contacto (it was 432px).
+
+**D5 closed.** With `NosotrosView` converted, nothing imported the old colour-crossfade
+backdrop any more, so `ScrollBackdrop.tsx` and `lib/backdrop.ts` are deleted.
+
+**Placeholders, deliberately (D12):** two of the three team-card bodies and all four collage
+images are placeholders, marked `TODO: client copy` in both dictionaries and in the view.
+The collage reuses the existing ~600-byte SVG stubs, so that region will look empty until
+real photography arrives — a content gap, not a CSS bug (§9).
+
+### Phases 8–11 — 2026-09-16
+
+**Phase 8 — Contacto.** A `static` sheet (nothing may slide over a form being filled in) with
+a sticky left column and the form card on the right, then a `surface` info sheet.
+`ContactForm`'s logic, validation, EmailJS call and spam guard are untouched — restyle only,
+plus the `?servicio=` preselect.
+
+| Criterion | Target | Measured |
+|---|---|---|
+| Input width at 1440 | 520–660px | **531px** (baseline 1013px) |
+| Input width at 1920 | — | **518px** |
+| Submit height | ≥ 48px | **48px** |
+| `?servicio=masajes` | preselects Masajes | **"Masajes"**; plain `/contacto` is empty |
+| Tab order | quick links → fields → submit | phone → nombre → telefono → servicio → email → mensaje → … |
+
+The form column was initially **198px wide**. The `caps-lg` heading's min-content width blew
+the left grid track out to 1032px — the same failure mode as the treatment titles in Phase 6.
+`min-w-0` on both columns fixed it. Worth noting as a pattern: every heavy-caps heading placed
+in a grid track needs `min-w-0` on that track.
+
+**Phase 9 — Footer, legal, 404.** The footer is now the last sheet: `sand` ground, rounded top
+and upward shadow, so it rises over the sticky sheet above it. All 8 footer links measure
+**≥44px** at every width, and the giant decorative wordmark (`22vw`, `aria-hidden`) never
+widens the page — `overflow` is 0 at 390 through 2560. Legal pages and the 404 are single
+noir sheets with heavy-caps titles.
+
+**Phase 10 — Cleanup and docs.** `ScrollBackdrop`, `lib/backdrop.ts`, `ServiceCard`,
+`TreatmentRow` and the `top-clear` token are all gone; `nav.servicesViewAllLong` removed from
+both dictionaries (0 references). No component in `components/` is unreferenced. `CLAUDE.md`
+updated: structure, motion principles, all five page descriptions, the D6 service-selector
+correction, and the wide-viewport pass marked **SUPERSEDED**.
+
+**Phase 11 — Full verification.** 9 routes × 2 languages × 5 widths = **90 page loads**:
+
+| Check | Failures |
+|---|---|
+| Horizontal overflow (`scrollWidth − innerWidth`) | **0 / 90** |
+| Interactive targets under 44px (excluding links inline in a sentence) | **0 / 90** |
+| Heading structure (exactly one `<h1>`, no skipped levels) | **0 / 90** |
+| CLS > 0.05 | **0 / 90** |
+| `muted` on a non-noir sheet | **0 / 90** |
+
+The contrast sweep caught a real regression on the first run: **9 `text-muted` elements on the
+contact form's `crimson-light` card**, where muted measures 3.67:1. All moved to `sand`
+(6.56:1). Placeholders stayed on `muted` — the inputs are `bg-noir`, where it passes at 4.68:1.
+The character-counter warning also moved to `crimson-bright`: `sand` against `muted` is 1.79:1,
+which reads as no change at all.
+
+**Progressive enhancement**, both directions:
+- **JS disabled** — all five main routes render with a real `<h1>`, 800–2775 characters of text, nothing sticky, zero overflow.
+- **Reduced motion** — GSAP is *never fetched* (`"gsap" in window === false`), every `[data-sheet-inner]` transform is `none`, the hover clip is `display: none`.
+
+**Phase 0 baselines, at 1920×1000:**
+
+| | baseline | now |
+|---|---|---|
+| Content band | 1792px | **1280px** |
+| Contacto input width | 1013px | **518px** |
+| `/nosotros` page height | 2948px | **4189px** |
+| Masajes bands above / below the text | 197 / 191px | **206 / 206px** |
+
+Two of these need reading rather than scoring. `/nosotros` is taller because it now carries a
+manifesto, a collage, three team cards and a talk sheet instead of four short text blocks
+padded out with viewport fractions. The Masajes bands are now *symmetric* — they are the
+window-centring of a full-height treatment sheet (841px window, ~429px of content), not the
+one-sided dead space beside a short image that the baseline measured.
+
+---
+
+## Phase 12 — Deferred work
+
+Everything phases 1–11 could not finish, with the reason. Nothing here is a blocker for
+review; several items are blocked on the client rather than on code.
+
+### Blocked on the environment
+
+- **Lighthouse has never been run.** `npm install lighthouse` crashed twice
+  (`Exit handler never called!`) with ~0.8 GB free RAM; the package half-installed and its CLI
+  could not resolve its own `package.json`. Phase 4's "≥95 on the landing page" and Phase 11's
+  "≥95 in all four categories" are therefore **unverified**. Measured proxies on `/`: LCP
+  428ms, load 302ms, 1294 KB transferred, CLS ≤ 0.0245, no structural a11y faults.
+  → Run it on a machine with more headroom, or in CI.
+
+### Blocked on client assets and copy
+
+- **`hero.jpg` is 606 KB of the landing page's 1294 KB** and is the LCP element. Static export
+  forces `images.unoptimized: true`, so Next ships it exactly as committed. Pre-compressing it
+  (or shipping WebP/AVIF) is the single highest-value performance change available.
+- **All treatment, category and collage images are ~600-byte SVG stubs.** The hub columns, the
+  treatment windows and the `/nosotros` collage will look empty until real photography lands.
+  A content gap, not a CSS bug (§9) — but judge the design only against representative photos.
+- **Placeholder copy, marked `TODO: client copy` in both dictionaries:** two of the three
+  `/nosotros` team-card bodies, and the whole of both legal pages (pending legal review).
+- **English clinical terms in `data/*.ts`** are a best-effort translation and want a native or
+  clinical review, per `content-i18n.md`.
+
+### Deliberately not built
+
+- **The 2px scroll progress bar** in the header. Listed as optional in Phase 2, deferred again
+  in Phase 3; `SheetStack` is its natural home now.
+- **The footer is not inside `SheetStack`.** It is styled as the last sheet and, being after
+  the stack in flow, does visually rise over the final sticky sheet — but it does not
+  participate in the GSAP cover scrub, so the sheet it covers neither dims nor shrinks.
+  Putting it in the stack means every view rendering its own footer; that is a structural
+  change worth deciding on deliberately.
+
+### Unverified rather than unbuilt
+
+- **Touch behaviour of the hub columns.** `@media (hover: none)` lightens the tint and pins the
+  description open. The CSS is declared and shipped, but every measurement in this pipeline ran
+  in a hover-capable context, so it has never been exercised on a real touch device.
+- **The breadcrumb row's horizontal scroll.** The container and its hidden scrollbar are in
+  place, but no trail is long enough at 390px to engage it, even with a live treatment crumb.
+- **`ContactForm`'s privacy link is 16px tall.** It sits inline inside a sentence, which WCAG
+  2.5.8 exempts, so the Phase 11 sweep excludes it by design. Worth a decision rather than a
+  silent pass.
+
+### Open decisions
+
+- **`layout-responsive.md` §14 is still open** — whether to adopt an automated layout check.
+  This pipeline effectively built one: a Playwright harness living in the session scratchpad
+  that measures overflow, target sizes, heading order, CLS and contrast across 90 page loads.
+  Promoting it to `scripts/layout-check.mjs` would answer §14's "scope" and "target" questions;
+  it would add Playwright as the project's first dev dependency, which `project-workflow.md`
+  says must be justified deliberately.

@@ -23,7 +23,6 @@ export const es = {
     closeMenu: "Cerrar menú",
     servicesMenuHeading: "Nuestros servicios",
     servicesViewAll: "Ver todos",
-    servicesViewAllLong: "Ver todos los servicios",
     servicesCardCta: "Ver tratamientos",
   },
 
@@ -37,6 +36,9 @@ export const es = {
 
   home: {
     title: "El cuidado de tu piel, como un ritual",
+    // The <h1> as three parts; the middle one is set in Cormorant italic.
+    // `title` above stays the plain string for metadata and aria.
+    titleParts: ["El cuidado", "de tu piel,", "como un ritual"],
     lead: "Faciales, masajes y tratamientos estéticos en un espacio pensado para detenerte, respirar y volver a ti.",
     ctaServices: "Ver servicios",
     ctaContact: "Contacto",
@@ -50,16 +52,33 @@ export const es = {
   categories: {
     faciales: {
       title: "Faciales",
+      count: "Seis faciales",
       lead: "Seis faciales para hidratar, equilibrar y rejuvenecer según tu tipo de piel.",
     },
     masajes: {
       title: "Masajes",
+      count: "Cuatro masajes",
       lead: "Cuatro masajes para relajar el cuerpo, aliviar la tensión muscular y renovar la energía.",
     },
     especiales: {
       title: "Especiales",
+      count: "Cuatro tratamientos",
       lead: "Cuatro tratamientos avanzados para hidratar en profundidad y tensar la piel del rostro.",
     },
+  },
+
+  // Category pages. `{count}` is substituted with the number of treatments.
+  category: {
+    countLabel: "Servicios · {count} tratamientos",
+    scrollCue: "Desliza",
+    others: "Otras categorías",
+  },
+
+  // Shared closing sheet — used by /servicios, the category pages and /nosotros.
+  talk: {
+    title: "¿Hablamos?",
+    body: "Cuéntanos qué necesitas y te respondemos pronto.",
+    cta: "Contáctanos",
   },
 
   treatment: {
@@ -73,9 +92,15 @@ export const es = {
   nosotros: {
     eyebrow: "Nosotros",
     title: "Un espacio para el cuidado, sin prisa",
+    // Three lines; the middle one is set in Cormorant italic. `title` above
+    // stays the plain string for metadata.
+    titleParts: ["Un espacio", "para el cuidado,", "sin prisa"],
     intro:
       "HannaH es una clínica de belleza y estética en México. Combinamos aparatología, cosmética profesional y un trato cercano para cuidar la piel y el bienestar de cada persona que nos visita.",
     philosophyTitle: "Filosofía",
+    philosophyHead1: "Nada de fórmulas genéricas",
+    philosophyHead2: "Un momento para ti",
+    philosophyWords: ["Constancia", "Pausa"],
     philosophy1:
       "Creemos en los resultados que se construyen con constancia y en tratamientos diseñados para cada tipo de piel. Nada de fórmulas genéricas: primero escuchamos, después proponemos.",
     philosophy2:
@@ -84,13 +109,29 @@ export const es = {
     team1:
       "Un equipo de especialistas en estética facial y corporal, en formación continua para ofrecer técnicas actuales y seguras.",
     teamNote: "(Perfiles del equipo pendientes de contenido del cliente.)",
-    talkTitle: "¿Hablamos?",
-    talkBody: "Cuéntanos qué necesitas y te respondemos pronto.",
-    talkCta: "Contáctanos",
+    // Accent is the middle part, set in Cormorant italic.
+    teamStatementParts: ["Especialistas en estética facial", "y", "corporal"],
+    // TODO: client copy — the first two bodies are placeholders on purpose (D12).
+    teamCards: [
+      {
+        title: "Estética facial",
+        body: "(Descripción pendiente de contenido del cliente.)",
+      },
+      {
+        title: "Estética corporal",
+        body: "(Descripción pendiente de contenido del cliente.)",
+      },
+      {
+        title: "Formación continua",
+        body: "En formación continua para ofrecer técnicas actuales y seguras.",
+      },
+    ],
   },
 
   contacto: {
     title: "Contacto",
+    heading: "¿Hablamos?",
+    formTitle: "Déjanos un mensaje",
     lead: "Déjanos un mensaje con tus datos y te respondemos lo antes posible.",
   },
 
@@ -109,6 +150,8 @@ export const es = {
     mapTitle: "Ubicación de HannaH en el mapa",
     hoursSummary:
       "Lunes a viernes de 9:00 a 19:00 h · Sábado de 9:00 a 14:00 h · Domingo cerrado",
+    // Compact form for the hero's meta block, where the full summary is too long.
+    hoursShort: "Lun–Vie 9:00–19:00 · Sáb 9:00–14:00",
     schedule: [
       { days: "Lunes a viernes", time: "9:00 – 19:00 h" },
       { days: "Sábado", time: "9:00 – 14:00 h" },
