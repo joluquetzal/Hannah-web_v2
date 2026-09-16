@@ -107,7 +107,7 @@ function Field({
       <div className="flex items-baseline justify-between gap-3">
         <label
           htmlFor={id}
-          className="block text-xs uppercase tracking-label text-sand"
+          className="block text-label font-bold uppercase tracking-label text-sand"
         >
           {label}
         </label>
@@ -251,7 +251,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
         <button
           type="button"
           onClick={() => setStatus("idle")}
-          className="mt-6 inline-flex min-h-11 items-center text-xs uppercase tracking-label text-sand transition-colors hover:text-cream"
+          className="mt-6 inline-flex min-h-11 items-center text-label font-bold uppercase tracking-label text-sand transition-colors hover:text-cream"
         >
           {t.successAgain}
         </button>
@@ -330,7 +330,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
         label={t.email}
         error={errors.email}
         hint={
-          <span className="text-xs uppercase tracking-label text-sand">
+          <span className="text-label font-bold uppercase tracking-label text-sand">
             {t.optional}
           </span>
         }
@@ -353,7 +353,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
         hint={
           <span
             className={clsx(
-              "text-xs uppercase tracking-label",
+              "text-label font-bold uppercase tracking-label",
               // Two states need a measurable delta between EACH OTHER, not just
                 // against the ground: sand vs muted is 1.79:1 and reads as no change.
                 mensajeLeft < 50 ? "text-crimson-bright" : "text-sand",
@@ -422,7 +422,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
       <button
         type="submit"
         disabled={status === "sending" || !isComplete}
-        className="inline-flex min-h-12 items-center justify-center bg-sand px-7 py-3 text-xs uppercase tracking-label text-noir transition-colors hover:bg-cream disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex min-h-12 items-center justify-center bg-sand px-7 py-3 text-label font-bold uppercase tracking-label text-noir transition-colors hover:bg-cream disabled:cursor-not-allowed disabled:opacity-60"
       >
         {status === "sending" ? t.submitting : t.submit}
       </button>

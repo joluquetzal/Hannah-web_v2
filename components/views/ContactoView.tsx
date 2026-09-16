@@ -20,7 +20,7 @@ export function ContactoView({ lang }: { lang: Lang }) {
             <p className="font-display text-2xl italic text-crimson-bright">
               {t.title}
             </p>
-            <h1 className="mt-4 font-body text-caps-lg font-extrabold uppercase leading-[0.9] tracking-caps text-cream">
+            <h1 className="mt-4 font-body text-caps-contact font-extrabold uppercase leading-[0.9] tracking-caps text-cream">
               {t.heading}
             </h1>
             <p className="mt-6 max-w-prose text-lg leading-relaxed text-sand">

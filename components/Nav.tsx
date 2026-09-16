@@ -15,7 +15,7 @@ import { useI18n } from "@/lib/i18n/useLang";
 
 /** Shared shape for the two header buttons (WhatsApp outline, Contacto filled). */
 const headerButton =
-  "inline-flex min-h-12 items-center justify-center whitespace-nowrap px-4 font-grotesk text-xs uppercase tracking-label transition-colors";
+  "inline-flex min-h-12 items-center justify-center whitespace-nowrap px-4 font-grotesk text-hbtn uppercase tracking-hbtn transition-colors";
 
 export function Nav() {
   const pathname = usePathname();
@@ -86,7 +86,7 @@ export function Nav() {
           href={site.mapLinkUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="hidden min-h-11 items-center bg-ink px-3 font-grotesk text-xs uppercase tracking-label text-paper transition-opacity hover:opacity-85 sm:inline-flex"
+          className="hidden min-h-11 items-center bg-ink px-3 font-grotesk text-hstrip uppercase tracking-hstrip text-paper transition-opacity hover:opacity-85 sm:inline-flex"
         >
           {t.clinic.mapCta}
         </a>

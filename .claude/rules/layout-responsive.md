@@ -84,7 +84,7 @@ Use the Tailwind scale (`4/8/12/16/24…`) plus the project's fluid tokens, and 
 
 | Token | Use |
 |---|---|
-| `px-gutter` | horizontal page margin (clamps 1.5→4rem) |
+| `px-gutter` | horizontal page margin — `clamp(1.25rem, 0.5rem + 3vw, 4rem)`, the mockup's (20px @390, 51px @1440) |
 | `pb-section-b` / `pb-section-b-lg` | bottom of a page's content |
 | `max-w-shell` | the 1280px content cap (§4) |
 | `max-w-prose` | long-form text measure (§7) |
@@ -97,27 +97,28 @@ Don't invent one-off values. If a value is needed twice, it's a token.
 
 | Class | px | Role |
 |---|---|---|
-| `text-caps-xl / -lg / -md / -sm` | fluid | **Concept 03 page type** — DM Sans **800**, uppercase, tight leading. `xl` = Inicio + page `<h1>`; `lg` = category and hub titles; `md` = treatment names; `sm` = cards and hub columns |
-| `text-display-lg / -md / -sm` | fluid | Cormorant Garamond light italic. Since Concept 03, its role is the **accent phrase inside a heavy-caps heading** ("como un *ritual*"), plus long-form legal headings |
-| `text-2xl` (`text-3xl` sparingly) | 24 / 30 | Component headings — footer brand, clinic-info subhead, menu-card titles — Cormorant italic |
-| `text-lg` | 18 | Lead **and** body paragraphs — page intros, hero subtext, treatment descriptions. A 16px body paragraph is a bug, not a variant. |
-| base (no size class) | 16 | Form controls (`<input>` / `<select>` / `<textarea>`). Below 16px iOS Safari zooms the viewport on focus — **never** put `text-sm` on a form control. |
-| `text-sm` | 14 | Dense secondary content only — "incluye" lists, the clinic `<dl>`, footer, card copy. Never a running paragraph. |
-| `text-xs` | 12 | Uppercase eyebrows, labels, button text, small-caps CTAs. **The floor — nothing smaller.** No `text-[10px]` / `[11px]` / `[13px]`. |
+| `text-caps-*` | fluid | **Display type** — DM Sans **800**, uppercase, `tracking-caps`, leading `0.9`. Named by role, never by size: `caps-hero`, `caps-page`, `caps-talk`, `caps-link`, `caps-name`, `caps-col`, `caps-word`, `caps-about`, `caps-statement`, `caps-card`, `caps-contact`, `caps-form`, `caps-footer`. Each value is the size the **mockup renders** (Phase 13). |
+| `text-display-*` | fluid | Cormorant Garamond light italic — long-form legal headings only. The accent phrase inside a heavy-caps heading uses `font-display` at `text-[1.04em] font-normal italic`. |
+| `text-2xl` (`text-3xl` sparingly) | 24 / 30 | Cormorant italic component headings — the `/contacto` eyebrow, footer brand. |
+| `text-lg` | 18 | Lead **and** body paragraphs, `leading-relaxed`, `max-w-prose`. A 16px body paragraph is a bug. |
+| base | 16 | Form controls, and footer / info links at weight **500**. Below 16px iOS Safari zooms on focus — **never** `text-sm` on a form control. |
+| `text-sm` | 14 | Dense secondary content only. Never a running paragraph. |
+| `text-arrow` | 12.5 | Arrow links — DM Sans **700**, uppercase, `tracking-arrow`. |
+| `text-btn` | 12 | Button text — DM Sans **700**, uppercase, `tracking-label`. |
+| `text-eyebrow` | 11.5 | Eyebrows — DM Sans **700**, uppercase, `tracking-eyebrow`. |
+| `text-label` | 11.2 | Counters, list and column headings, form labels, chips — DM Sans **700**, uppercase, `tracking-label`. **The floor.** |
 
-**Four families, each with one job** (Concept 03, pipeline D2). Don't mix them freely:
+**Small uppercase is weight 700, always.** This is the single thing that most made the built
+site's "text style" read differently from the mockup: every eyebrow, chip, counter, button and
+form label was rendering at 400. If you add a small uppercase element, it takes `font-bold`.
 
-| Family | Class | Job |
-|---|---|---|
-| DM Sans | `font-body` | Everything by default: body copy, UI, and — at `font-extrabold` — the `text-caps-*` headings |
-| Cormorant Garamond 300 italic | `font-display` | The accent phrase inside a heavy-caps heading, and `text-2xl` component headings |
-| Source Serif 4 600 | `font-hserif` | **Header chrome only** — nav links, breadcrumbs, the announcement strip |
-| Space Grotesk 400 | `font-grotesk` | **Header controls only** — the strip button, the two bar buttons, ES/EN |
+**`text-label` (11.2px) replaced `text-xs` (12px) as the floor** — the mockup sets its small
+labels at 11.2–11.5px and the mockup is the spec (Phase 13). Nothing below `text-label`.
 
-`font-hserif` and `font-grotesk` exist for the header. Using either in page content is a
-bug — it dilutes the header's distinct voice and pulls in a font file the page didn't need.
-The logo is `public/brand/hannah-wordmark.svg`, not a font: Anton is deliberately **not**
-loaded, so never reach for a fourth family.
+**Headings carry their own family.** `globals.css` must not set a family or weight on
+`h1–h4`. It used to apply `font-display font-light`, which silently turned every small heading
+that happened to be an `<h2>`/`<h3>` — "Otras categorías", the `/contacto` info headings, the
+philosophy captions, the form title — into Cormorant display type.
 
 - Visual hierarchy comes from size, weight and contrast — never from a heading tag chosen for its default size.
 - **Uppercase text is always tracked — but which way depends on size.** *Small* uppercase (`text-xs` / `text-sm` labels, eyebrows, button text, CTAs) is letter-*spaced*: `tracking-label` (0.2em) for inline labels / buttons / small CTAs, `tracking-eyebrow` (0.3em) for the eyebrow above a heading. *Display* uppercase — the `text-caps-*` scale, and anything uppercase at roughly `text-2xl` or larger — takes `tracking-caps` (−0.025em) instead: letters that big read as loose at zero, so they tighten. Uppercase with no tracking at all is a bug either way. **Never uppercase running text** — only labels, eyebrows, CTAs and headings.

@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "compare:mockup": "node docs/design/concept-03/tools/compare.mjs"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
@@ -25,6 +26,7 @@
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.1",
     "eslint-config-next": "^14.2.33",
+    "playwright": "^1.48.0",
     "postcss": "^8.4.47",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.8",

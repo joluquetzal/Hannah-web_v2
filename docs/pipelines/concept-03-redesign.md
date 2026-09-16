@@ -35,10 +35,14 @@ to enable the slash command, or just ask Claude Code to "continue the Concept 03
 | 8 | Contacto | ✅ | see log |
 | 9 | Footer, legal pages, 404 | ✅ | see log |
 | 10 | English, cleanup, docs | ✅ | see log |
-| 11 | Full verification & sign-off | ⏸ awaiting owner sign-off | see log |
-| 12 | Deferred work — carried out of phases 1–11 | ⬜ | — |
+| 11 | Full verification & sign-off | ↩ reopened 2026-09-16 — waits for Phase 13 | see log |
+| 12 | Deferred work — backlog, never blocks another phase | ⬜ | — |
+| 13 | Mockup fidelity pass → `docs/pipelines/concept-03-fidelity.md` | ⬜ (answer F1–F8 first) | — |
 
-Legend: ⬜ not started · 🟡 in progress · ⏸ waiting for gate approval · ✅ approved
+Legend: ⬜ not started · 🟡 in progress · ⏸ waiting for gate approval · ✅ approved · ↩ reopened
+
+**Order now:** Phase 13 (steps 13.0 → 13.10, own file) → Phase 11 re-run and sign-off. Phase 12 is a backlog of
+client- and environment-blocked items; it never blocks 11 or 13.
 
 ---
 
@@ -722,6 +726,16 @@ padded out with viewport fractions. The Masajes bands are now *symmetric* — th
 window-centring of a full-height treatment sheet (841px window, ~429px of content), not the
 one-sided dead space beside a short image that the baseline measured.
 
+### Owner review — 2026-09-16 (Phase 11 reopened)
+
+The owner reviewed the built site against the prototype. Direction approved, fidelity not: sizes, spacing,
+weights and text styling drifted from the mockup; the scroll progress bar, several buttons and the reveal
+animations are missing; the footer wordmark is clipped and too small; the `/contacto` heading overlaps its
+column; the `/nosotros` opening sheet doesn't look like the mockup; category pages should open with the first
+treatment already peeking in from below. A measured audit (mockup vs. a local static export, same fonts) is in
+`docs/design/concept-03/audit/2026-09-16/`. The fix is planned as **Phase 13** in
+`docs/pipelines/concept-03-fidelity.md`. Phase 11 goes back to ⏸ only after 13.10.
+
 ---
 
 ## Phase 12 — Deferred work
@@ -780,3 +794,117 @@ review; several items are blocked on the client rather than on code.
   Promoting it to `scripts/layout-check.mjs` would answer §14's "scope" and "target" questions;
   it would add Playwright as the project's first dev dependency, which `project-workflow.md`
   says must be justified deliberately.
+
+---
+
+## Phase 13 — Mockup fidelity pass
+
+**The plan, the decisions (F1–F8) and the step list live in `docs/pipelines/concept-03-fidelity.md`** — this
+section only tracks it. Two items listed under Phase 12 → "Deliberately not built" (the scroll progress bar and
+the footer outside `SheetStack`) are pulled into 13.2 and 13.3; strike them from Phase 12 when those steps land.
+
+| Step | Scope | Status |
+|---|---|---|
+| F | Decisions F1–F8 answered | ✅ |
+| 13.0 | Tooling — `compare:mockup`, `.mockup-compare/` | ✅ |
+| 13.1 | Global type roles, tokens, buttons (gate: stop for approval) | ⏸ |
+| 13.2 | Header — progress bar, button type, nav offset, mega card, mobile menu | ⬜ |
+| 13.3 | Sheet motion, tall-sheet padding, footer in the stack, `Reveal` | ⬜ |
+| 13.4 | Category pages — peek, intro order, treatment window | ⬜ |
+| 13.5 | Servicios hub and talk sheet | ⬜ |
+| 13.6 | Inicio | ⬜ |
+| 13.7 | Nosotros | ⬜ |
+| 13.8 | Contacto | ⬜ |
+| 13.9 | Footer | ⬜ |
+| 13.10 | Verify at six widths, new audit, hand back (gate) | ⬜ |
+
+Each step logs its before/after numbers in the Log above (`### Phase 13.N — <date>`) and commits as
+`concept-03: phase 13.N — <summary>`.
+
+### Phase 13.0 — 2026-09-16
+
+**F1–F8 answered**, recorded in `concept-03-fidelity.md`. Seven took the ★ recommendation;
+**F3 did not** — the owner kept the strip map button's 44px visual box rather than the mockup's
+30px one, choosing the touch-target rule over mockup fidelity. That row will therefore always
+differ in the compare report: treat it as intended, like the logo row, and do not "fix" it later.
+
+Two answers are coupled and must land in order: **F8** (remove hyphenation from treatment names)
+depends on **F5** (CSS container-query shrink-to-fit), because hyphens are currently the only
+thing keeping `HIDRODERMOABRASIÓN` inside its column. **F6** (inline hero heading) reverses the
+forced block lines that took the landing page from 0.13 to 0.02 CLS, so 13.6 must re-measure CLS
+at 390 and 1440 and report the number rather than assume.
+
+**Tooling:** `playwright` added to `devDependencies` (the project's first — justified per F2, and
+it settles `layout-responsive.md` §14's "scope/target" question), `npm run compare:mockup` script
+added, `/.mockup-compare/` gitignored. Chromium was already in the local cache, so no download.
+`npm install` also pruned 176 extraneous packages; `lint` and `build` both re-verified clean after.
+
+**Baseline confirmed.** A fresh run over all six pages at 1440 and 390 reproduces the
+2026-09-16 audit: **661 flagged cells against the baseline's 665** (−0.6 %), with every page
+within ±2 cells. The tool measures what the baseline measured, so its numbers can be trusted as
+the before/after yardstick for 13.1–13.10.
+
+| Page | baseline | fresh | | Page | baseline | fresh |
+|---|---|---|---|---|---|---|
+| inicio 1440 | 55 | 55 | | inicio 390 | 59 | 59 |
+| servicios 1440 | 33 | 33 | | servicios 390 | 30 | 28 |
+| faciales 1440 | 88 | 87 | | faciales 390 | 94 | 95 |
+| masajes 1440 | 13 | 13 | | masajes 390 | 13 | 12 |
+| nosotros 1440 | 67 | 67 | | nosotros 390 | 70 | 70 |
+| contacto 1440 | 65 | 63 | | contacto 390 | 78 | 79 |
+
+**661 flagged cells is the number Phase 13 has to bring down.**
+
+### Phase 13.1 — 2026-09-16
+
+**Flagged cells: 665 → 483 (−182, −27 %).** Every page improved; `/servicios/faciales` at 390
+fell the most, 94 → 59.
+
+| page | before | after | | page | before | after |
+|---|---|---|---|---|---|---|
+| inicio 1440 | 55 | **43** | | inicio 390 | 59 | **38** |
+| servicios 1440 | 33 | **22** | | servicios 390 | 30 | **19** |
+| faciales 1440 | 88 | **67** | | faciales 390 | 94 | **59** |
+| masajes 1440 | 13 | **9** | | masajes 390 | 13 | **5** |
+| nosotros 1440 | 67 | **52** | | nosotros 390 | 70 | **48** |
+| contacto 1440 | 65 | **60** | | contacto 390 | 78 | **61** |
+
+**Accept: met.** Eyebrow / label / button / chip rows with a font or weight mismatch:
+**0 across all twelve page-widths**. All four accent rows (hero es+en, `/nosotros` intro and
+team statement) measure **Cormorant Garamond 400 italic** on both sides.
+
+**What changed**
+
+1. **The base-style bug.** `globals.css` applied `font-display font-light` to `h1–h4`, so every
+   small heading that happened to be an `<h2>`/`<h3>` rendered as Cormorant display type. The rule
+   now sets colour only; each heading states its own family.
+2. **Cormorant 400 italic is loaded.** The accents previously inherited the heading's 800 and the
+   browser synthesised a fake bold — measured 800 before, 400 now.
+3. **Small uppercase is weight 700**, swept across 33 call sites (12 eyebrows, 21 labels) onto the
+   new `text-eyebrow` (11.5px) and `text-label` (11.2px) roles. This is the change the owner's
+   note #6 was pointing at.
+4. **The `caps-*` scale is renamed by role, not size** — `caps-hero`, `caps-page`, `caps-talk`,
+   `caps-link`, `caps-name`, `caps-col`, `caps-word`, `caps-about`, `caps-statement`, `caps-card`,
+   `caps-contact`, `caps-form`, `caps-footer` — each set to the size the mockup *renders*. All 15
+   call sites were remapped; a stale `text-caps-lg` would have emitted nothing silently.
+5. **Gutter** to the mockup's `clamp(1.25rem, 0.5rem + 3vw, 4rem)` (20px @390 vs 26px before).
+6. **`ButtonLink` rebuilt** — `min-h-12 rounded px-[1.4rem] gap-2`, hover `-translate-y-0.5`,
+   variants cream / sand / noir / ghost, optional `arrow`. New `ArrowLink` and `Chip` / `MetaChip`
+   components for 13.4–13.9 to consume.
+
+**A mistake worth recording.** The blanket sweep also hit the header's Space Grotesk controls —
+the strip button and the two bar buttons — pushing them to 11.2px/700 when the mockup has them at
+14.4px/400. They are chrome, not content labels. Caught by the report, fixed with dedicated
+`text-hbtn` / `text-hstrip` tokens before this step closed. A global find-and-replace across
+33 sites needs the report run against it, not just a build.
+
+**Deliberately left for their own steps** (all flagged, none regressions): the treatment counter's
+900 weight (13.4), the philosophy captions and form title still in Cormorant (13.7 / 13.8), and
+the `/contacto` quick links and info headings (13.8).
+
+**Rules updated in the same commit:** `layout-responsive.md` §6 (gutter) and §7 (rewritten — role
+table, "small uppercase is 700", `text-label` replaces `text-xs` as the floor, headings carry their
+own family); `styling-tailwind.md` (closed scale, the 700 requirement).
+
+**No regressions:** lint and build clean; 50 overflow checks across 5 routes × 2 languages ×
+5 widths, **0 failures**.

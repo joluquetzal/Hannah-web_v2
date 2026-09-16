@@ -154,7 +154,7 @@ export function NavDropdown({
             <Link
               data-menu-item
               href={path("/servicios")}
-              className="inline-flex min-h-11 items-center font-grotesk text-xs uppercase tracking-label text-paper transition-opacity hover:opacity-80"
+              className="inline-flex min-h-11 items-center font-grotesk text-label font-bold uppercase tracking-label text-paper transition-opacity hover:opacity-80"
             >
               {t.nav.servicesViewAll} <span aria-hidden>↗</span>
             </Link>

@@ -20,10 +20,10 @@ export function LegalPageView({
     <SheetStack>
       <Sheet theme="noir" className="py-24">
         <div className="max-w-prose">
-        <h1 className="break-words font-body text-caps-md font-extrabold uppercase leading-[0.95] tracking-caps text-cream">
+        <h1 className="break-words font-body text-caps-name font-extrabold uppercase leading-[0.95] tracking-caps text-cream">
           {page.title}
         </h1>
-        <p className="mt-2 text-xs uppercase tracking-label text-sand">
+        <p className="mt-2 text-label font-bold uppercase tracking-label text-sand">
           {legal.lastUpdatedLabel} {legal.lastUpdated}
         </p>
 

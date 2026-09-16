@@ -257,7 +257,16 @@ deviation are recorded in the pipeline file's Status table and Log. The rule fil
 contrast tables (§8) are all live. Where the pipeline and a rule disagree on anything not
 settled in Phase 0, stop and ask.
 
-Work still outstanding is collected as **Phase 12** at the end of the pipeline file.
+Work still outstanding is collected as **Phase 12** at the end of the pipeline file (a backlog — it
+never blocks another phase).
+
+**Current work: Phase 13 — mockup fidelity pass** (owner review, 2026-09-16). The built site drifted from the
+prototype in sizes, spacing, weights and details, so Phase 11's sign-off is reopened until 13 is done.
+Plan and decisions: `docs/pipelines/concept-03-fidelity.md`; measured baseline:
+`docs/design/concept-03/audit/2026-09-16/`; comparison tool: `docs/design/concept-03/tools/compare.mjs`.
+Run it with `/concept-03 13` (next step) or `/concept-03 13.4` (one step). **For look and feel, the prototype
+is the spec** — where the built site and `prototipo.html` differ and the fidelity file doesn't say otherwise,
+the prototype wins.
 
 ## Layout rework — wide-viewport pass (planned 2026-09-07) — **SUPERSEDED**
 

@@ -19,7 +19,7 @@ export function ClinicInfo({ lang }: { lang: Lang }) {
 
       <dl className="space-y-5 text-sm">
         <div>
-          <dt className="text-xs uppercase tracking-label text-sand">
+          <dt className="text-label font-bold uppercase tracking-label text-sand">
             {t.phone}
           </dt>
           <dd className="mt-1">
@@ -29,7 +29,7 @@ export function ClinicInfo({ lang }: { lang: Lang }) {
           </dd>
         </div>
         <div>
-          <dt className="text-xs uppercase tracking-label text-sand">
+          <dt className="text-label font-bold uppercase tracking-label text-sand">
             {t.hours}
           </dt>
           <dd className="mt-1 space-y-0.5 text-sand">
@@ -41,7 +41,7 @@ export function ClinicInfo({ lang }: { lang: Lang }) {
           </dd>
         </div>
         <div>
-          <dt className="text-xs uppercase tracking-label text-sand">
+          <dt className="text-label font-bold uppercase tracking-label text-sand">
             {t.whatsapp}
           </dt>
           <dd className="mt-1">
@@ -56,7 +56,7 @@ export function ClinicInfo({ lang }: { lang: Lang }) {
           </dd>
         </div>
         <div>
-          <dt className="text-xs uppercase tracking-label text-sand">
+          <dt className="text-label font-bold uppercase tracking-label text-sand">
             {t.social}
           </dt>
           <dd className="mt-1 flex gap-4">
@@ -93,7 +93,7 @@ export function ClinicInfo({ lang }: { lang: Lang }) {
             href={site.mapLinkUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-2 inline-flex min-h-11 items-center text-xs uppercase tracking-label text-sand transition-colors hover:text-cream"
+            className="mt-2 inline-flex min-h-11 items-center text-label font-bold uppercase tracking-label text-sand transition-colors hover:text-cream"
           >
             {t.mapCta}
           </a>

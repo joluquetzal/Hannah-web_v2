@@ -39,3 +39,6 @@ next-env.d.ts
 # local scratch
 /.claude/worktrees/
 /Claude outputs/
+
+# mockup fidelity comparison output (Phase 13)
+/.mockup-compare/

@@ -32,12 +32,12 @@ export function NosotrosView({ lang }: { lang: Lang }) {
       {/* Height comes from content plus padding — no viewport fractions
           anywhere on this page (closes D9's open item). */}
       <Sheet theme="noir" className="py-24">
-        <p className="text-xs uppercase tracking-eyebrow text-sand">
+        <p className="text-eyebrow font-bold uppercase tracking-eyebrow text-sand">
           {t.eyebrow}
         </p>
-        <h1 className="mt-6 font-body text-caps-lg font-extrabold uppercase leading-[0.9] tracking-caps text-cream">
+        <h1 className="mt-6 font-body text-caps-about font-extrabold uppercase leading-[0.9] tracking-caps text-cream">
           <span className="block">{titleStart}</span>
-          <span className="block font-display text-[1.04em] italic normal-case tracking-normal text-crimson-bright">
+          <span className="block font-display text-[1.04em] font-normal italic normal-case leading-[0.8] tracking-normal text-crimson-bright">
             {titleAccent}
           </span>
           <span className="block">{titleEnd}</span>
@@ -51,7 +51,7 @@ export function NosotrosView({ lang }: { lang: Lang }) {
         theme="crimson"
         className="bg-gradient-to-b from-crimson-light via-crimson to-crimson-light py-24 text-center"
       >
-        <p className="text-xs uppercase tracking-eyebrow text-crimson-bright">
+        <p className="text-eyebrow font-bold uppercase tracking-eyebrow text-crimson-bright">
           {t.philosophyTitle}
         </p>
 
@@ -62,7 +62,7 @@ export function NosotrosView({ lang }: { lang: Lang }) {
           {t.philosophy1}
         </p>
 
-        <p className="mt-14 break-words font-body text-caps-lg font-extrabold uppercase leading-none tracking-caps text-cream">
+        <p className="mt-14 break-words font-body text-caps-word font-extrabold uppercase leading-none tracking-caps text-cream">
           {t.philosophyWords[0]}
         </p>
 
@@ -83,7 +83,7 @@ export function NosotrosView({ lang }: { lang: Lang }) {
           ))}
         </div>
 
-        <p className="mt-10 break-words font-body text-caps-lg font-extrabold uppercase leading-none tracking-caps text-cream">
+        <p className="mt-10 break-words font-body text-caps-word font-extrabold uppercase leading-none tracking-caps text-cream">
           {t.philosophyWords[1]}
         </p>
 
@@ -96,13 +96,13 @@ export function NosotrosView({ lang }: { lang: Lang }) {
       </Sheet>
 
       <Sheet theme="surface" className="py-24">
-        <p className="text-xs uppercase tracking-eyebrow text-sand">
+        <p className="text-eyebrow font-bold uppercase tracking-eyebrow text-sand">
           {t.teamTitle}
         </p>
 
-        <h2 className="mt-6 max-w-[22ch] font-body text-caps-sm font-extrabold uppercase leading-[0.98] tracking-caps text-cream">
+        <h2 className="mt-6 max-w-[22ch] font-body text-caps-statement font-extrabold uppercase leading-[0.98] tracking-caps text-cream">
           {stmtStart}{" "}
-          <span className="font-display text-[1.04em] italic normal-case tracking-normal text-sand">
+          <span className="font-display text-[1.04em] font-normal italic normal-case leading-[0.8] tracking-normal text-sand">
             {stmtAccent}
           </span>{" "}
           {stmtEnd}
@@ -117,7 +117,7 @@ export function NosotrosView({ lang }: { lang: Lang }) {
                 cardSkins[i],
               )}
             >
-              <h3 className="font-body text-caps-sm font-extrabold uppercase leading-none tracking-caps">
+              <h3 className="font-body text-caps-card font-extrabold uppercase leading-none tracking-caps">
                 {card.title}
               </h3>
               <p className="text-sm leading-relaxed">{card.body}</p>

@@ -41,10 +41,10 @@ export function ServiceColumns({ lang }: { lang: Lang }) {
             />
 
             <span className="relative z-20 w-full p-5 md:p-7">
-              <span className="block text-xs uppercase tracking-eyebrow text-sand">
+              <span className="block text-eyebrow font-bold uppercase tracking-eyebrow text-sand">
                 {String(index + 1).padStart(2, "0")} · {cat.count}
               </span>
-              <span className="mt-2 block font-body text-caps-sm font-extrabold uppercase leading-none tracking-caps text-cream">
+              <span className="mt-2 block font-body text-caps-col font-extrabold uppercase leading-none tracking-caps text-cream">
                 {cat.title}
               </span>
 
@@ -55,7 +55,7 @@ export function ServiceColumns({ lang }: { lang: Lang }) {
                   <span className="mt-3 block max-w-[30ch] text-sm leading-relaxed text-cream">
                     {cat.lead}
                   </span>
-                  <span className="inline-flex min-h-11 items-center text-xs uppercase tracking-label text-cream">
+                  <span className="inline-flex min-h-11 items-center text-label font-bold uppercase tracking-label text-cream">
                     {t.nav.servicesCardCta} <span aria-hidden>&nbsp;↗</span>
                   </span>
                 </span>
