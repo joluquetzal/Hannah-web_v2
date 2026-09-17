@@ -811,7 +811,7 @@ the footer outside `SheetStack`) are pulled into 13.2 and 13.3; strike them from
 | 13.2 | Header — progress bar, button type, nav offset, mega card, mobile menu | ✅ |
 | 13.3 | Sheet motion, tall-sheet padding, footer in the stack, `Reveal` | ✅ |
 | 13.4 | Category pages — peek, intro order, treatment window | ✅ |
-| 13.5 | Servicios hub and talk sheet | ⬜ |
+| 13.5 | Servicios hub and talk sheet | ✅ |
 | 13.6 | Inicio | ⬜ |
 | 13.7 | Nosotros | ⬜ |
 | 13.8 | Contacto | ⬜ |
@@ -1037,3 +1037,29 @@ number; the signature pill; meta chips; the text column now wider than the image
 (`1.25fr / 0.85fr`) with text on the left at even indices — the site previously had this
 reversed; and "Otras categorías" as full-width rows with the restored
 "Ver todos los servicios ↗" link (`nav.servicesViewAllLong` re-added to both dictionaries).
+
+### Phase 13.5 — 2026-09-17
+
+**Flagged cells: 421 → 392 (−273 from baseline).** `/servicios` **33 → 12** at 1440;
+faciales down to 35 and 41.
+
+**Accept met — every talk row matches, on every page that has one:**
+
+| row | mismatches | size |
+|---|---|---|
+| talk eyebrow | **0** | 11.5px |
+| talk title | **0** | **192px** (the spec's figure exactly) |
+| talk lead | **0** | 18px |
+| talk button | **0** | 12px |
+| talk WhatsApp button | **0** | 12px |
+
+Two of the six missing elements are now built: the talk sheet's **"Contacto" eyebrow** and its
+**WhatsApp ghost button**. The sheet also takes the spacing table's
+`clamp(4rem, 10vw, 8rem)` padding.
+
+**Hub columns** now reveal `servicios.descripcion` — the category's own description — rather
+than the page lead, at the mockup's `0.98rem/1.5` in cream/90, with the body padding on
+`clamp(1.25rem, 2.4vw, 2.25rem)` and a proper "Ver tratamientos ↗" arrow link.
+
+**Still missing after this step:** footer lead, footer nav column (13.9), the `/nosotros`
+collage centre image and team card text (13.7).
