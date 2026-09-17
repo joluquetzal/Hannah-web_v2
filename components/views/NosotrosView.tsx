@@ -11,10 +11,10 @@ import { getDictionary, type Lang } from "@/lib/i18n";
 
 /** Decorative collage. Real photography replaces these (images-assets §9). */
 const swatches = [
-  { src: "/images/facials/img2.svg", at: "left-[6%] top-[18%]" },
-  { src: "/images/massages/img3.svg", at: "right-[5%] top-[38%]" },
-  { src: "/images/specials/img1.svg", at: "bottom-[22%] left-[2%]" },
-  { src: "/images/facials/img5.svg", at: "bottom-[6%] right-[10%]" },
+  { src: "/images/facials/img2.webp", at: "left-[6%] top-[18%]" },
+  { src: "/images/massages/img3.webp", at: "right-[5%] top-[38%]" },
+  { src: "/images/specials/img1.webp", at: "bottom-[22%] left-[2%]" },
+  { src: "/images/facials/img5.webp", at: "bottom-[6%] right-[10%]" },
 ];
 
 const cardSkins = [
@@ -82,7 +82,7 @@ export function NosotrosView({ lang }: { lang: Lang }) {
             className="relative z-[2] my-[-4vw] aspect-[16/10] w-[min(62%,34rem)] overflow-hidden rounded"
           >
             <Image
-              src="/images/facials/img4.svg"
+              src="/images/facials/img4.webp"
               alt=""
               fill
               sizes="(min-width: 56rem) 34rem, 62vw"

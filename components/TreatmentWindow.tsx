@@ -1,8 +1,8 @@
-import Image from "next/image";
 import clsx from "clsx";
 import { Sheet, type SheetTheme } from "@/components/Sheet";
 import { ButtonLink } from "@/components/ButtonLink";
 import { MetaChip } from "@/components/Chip";
+import { TreatmentMedia } from "@/components/TreatmentMedia";
 import type { Treatment } from "@/data/types";
 import { getDictionary, localizedPath, type Lang } from "@/lib/i18n";
 
@@ -225,27 +225,11 @@ export function TreatmentWindow({
 
         <figure
           className={clsx(
-            "group relative aspect-[4/3] overflow-hidden rounded-md wide:aspect-[4/5] wide:max-h-[calc(100svh-var(--header-h)-8rem)]",
+            "relative aspect-[4/3] overflow-hidden rounded-md wide:aspect-[4/5] wide:max-h-[calc(100svh-var(--header-h)-8rem)]",
             imageLeft ? "wide:order-1" : "wide:order-2",
           )}
         >
-          <Image
-            src={treatment.img}
-            alt={nombre}
-            fill
-            sizes="(min-width: 768px) 45vw, 100vw"
-            className="object-cover transition-[opacity,transform] duration-[1200ms] group-hover:scale-105 group-hover:opacity-0 motion-reduce:transition-none"
-          />
-          <video
-            src={treatment.video}
-            poster={treatment.img}
-            aria-hidden
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 h-full w-full scale-105 object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100 motion-reduce:hidden"
-          />
+          <TreatmentMedia img={treatment.img} video={treatment.video} alt={nombre} />
         </figure>
       </div>
     </Sheet>

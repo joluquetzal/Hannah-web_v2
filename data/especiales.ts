@@ -12,7 +12,7 @@ export const especiales = [
       es: ["4 sesiones", "1 sesión cada 15 días"],
       en: ["4 sessions", "1 session every 15 days"],
     },
-    img: "/images/specials/img1.svg",
+    img: "/images/specials/img1.webp",
     video: "/images/specials/video1.mp4",
   },
   {
@@ -40,7 +40,7 @@ export const especiales = [
         "Neck",
       ],
     },
-    img: "/images/specials/img2.svg",
+    img: "/images/specials/img2.webp",
     video: "/images/specials/video2.mp4",
   },
   {
@@ -54,7 +54,7 @@ export const especiales = [
       es: ["Una aplicación", "Un refuerzo"],
       en: ["One application", "One touch-up"],
     },
-    img: "/images/specials/img3.svg",
+    img: "/images/specials/img3.webp",
     video: "/images/specials/video3.mp4",
   },
   {
@@ -68,7 +68,7 @@ export const especiales = [
       es: ["Una aplicación", "Un refuerzo"],
       en: ["One application", "One touch-up"],
     },
-    img: "/images/specials/img4.svg",
+    img: "/images/specials/img4.webp",
     video: "/images/specials/video4.mp4",
   },
 ] as const satisfies readonly Treatment[];

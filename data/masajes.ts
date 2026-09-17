@@ -9,7 +9,7 @@ export const masajes = [
       es: "Favorece la circulación, reduce el estrés y mejora el estado de ánimo.",
       en: "Improves circulation, reduces stress and lifts your mood.",
     },
-    img: "/images/massages/img1.svg",
+    img: "/images/massages/img1.webp",
     video: "/images/massages/video1.mp4",
   },
   {
@@ -20,7 +20,7 @@ export const masajes = [
       es: "Masaje Zen. Mejora la calidad del sueño y reduce los dolores musculares.",
       en: "A Zen massage. Improves sleep quality and eases muscle aches.",
     },
-    img: "/images/massages/img2.svg",
+    img: "/images/massages/img2.webp",
     video: "/images/massages/video2.mp4",
   },
   {
@@ -31,7 +31,7 @@ export const masajes = [
       es: "Mejora el dolor en contracturas, disminuye el estrés y relaja los músculos.",
       en: "Relieves knot and muscle-strain pain, lowers stress and relaxes the muscles.",
     },
-    img: "/images/massages/img3.svg",
+    img: "/images/massages/img3.webp",
     video: "/images/massages/video3.mp4",
   },
   {
@@ -42,7 +42,7 @@ export const masajes = [
       es: "Drenaje linfático, compresas de lodo del Mar Muerto, cavitación y radiofrecuencia.",
       en: "Lymphatic drainage, Dead Sea mud wraps, cavitation and radiofrequency.",
     },
-    img: "/images/massages/img4.svg",
+    img: "/images/massages/img4.webp",
     video: "/images/massages/video4.mp4",
   },
 ] as const satisfies readonly Treatment[];

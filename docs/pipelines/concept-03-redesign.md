@@ -1182,3 +1182,46 @@ text (mockup and site both carry placeholder copy, but different wording, so the
 pair them — resolves with the real copy in Phase 12).
 
 **Phase 11 is ready for sign-off.**
+
+### Performance pass — 2026-09-17
+
+Triggered by the owner: scrolling the treatment slides felt slow. Profiling said it was not
+the animations — a full-page scroll cost 4ms of script, 0 layouts, and held 60fps. It was the
+assets.
+
+**Page weight, `/servicios/faciales`: 2,755 KB → 301 KB on load (−89%).**
+
+| | before | after |
+|---|---|---|
+| SVG images | 1,022 KB | **1 KB** |
+| Video | 800 KB | **0 KB on load** |
+| JS | 525 KB | 530 KB |
+
+**1. The "placeholder" images were not placeholders.** `CLAUDE.md`, `images-assets.md` and the
+Phase 12 notes all said `public/images/**` held ~600-byte SVG stubs. It held **150–250 KB
+files** — the client's real photographs, base64-encoded rasters at 559×396 wrapped in SVG.
+Static export sets `images.unoptimized: true`, so `next/image` could not re-encode them; what
+was committed was exactly what shipped. Converted to WebP at 0.82: **2,241 KB → 187 KB, 92%
+smaller**, no visible difference. Rules and asset naming updated.
+
+**2. Six clips downloaded on load.** The `<video>` had no `preload`, which defaults to `auto`,
+so every treatment clip fully buffered before the visitor scrolled. Now `preload="none"` with
+no `autoPlay`: **nothing is fetched until a slide is reached.**
+
+**3. The clip now plays on the slide you are on, not on hover** (owner's request). This works
+on touch, where hover does not exist.
+
+**A regression the measurement caught, and the reason it happened.** The first implementation
+used an IntersectionObserver on the figure itself. Frame pacing fell from a 16.7ms median to
+**33.3ms — half the frame rate** — because a sticky sheet stays fully in the viewport after it
+has been covered, so every visited clip kept playing: three at once by the third treatment,
+and it would have been six by the end.
+
+Fixed by reusing the signal that already exists for the live breadcrumb: `SheetStack` reports
+the sheet whose top has risen above 45% of the window, and `TreatmentMedia` plays only when
+that name matches its own. Exactly one clip plays, verified at treatments 2, 4 and 6 against the
+crumb. Median frame time back to **16.7ms**.
+
+Re-verified after the change: 126 checks, **0 failures** on overflow, targets, headings, CLS
+and contrast. Reduced motion never loads or plays a clip and keeps the still at opacity 1.
+JS off renders all six stills with no overflow.
