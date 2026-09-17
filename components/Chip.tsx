@@ -20,7 +20,11 @@ export function Chip({
       href={href}
       aria-current={active ? "page" : undefined}
       className={clsx(
-        "inline-flex min-h-11 items-center gap-2 rounded-full border px-4",
+        // 46px, not the mockup's 44: the intro sheet is already ~1.3% into
+        // its cover transform at rest (that scale is what creates the
+        // peek), so a 44px control renders 43.4px. 46 keeps the RENDERED
+        // target above the 44px floor, and 2px on a pill is invisible.
+        "inline-flex h-[2.875rem] items-center gap-2 rounded-full border px-4",
         "font-body text-label font-bold uppercase tracking-label transition-colors",
         active
           ? "border-sand bg-sand text-noir"

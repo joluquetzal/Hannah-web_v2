@@ -35,9 +35,9 @@ to enable the slash command, or just ask Claude Code to "continue the Concept 03
 | 8 | Contacto | ✅ | see log |
 | 9 | Footer, legal pages, 404 | ✅ | see log |
 | 10 | English, cleanup, docs | ✅ | see log |
-| 11 | Full verification & sign-off | ↩ reopened 2026-09-16 — waits for Phase 13 | see log |
+| 11 | Full verification & sign-off | ⏸ ready for sign-off — Phase 13 complete | see log |
 | 12 | Deferred work — backlog, never blocks another phase | ⬜ | — |
-| 13 | Mockup fidelity pass → `docs/pipelines/concept-03-fidelity.md` | ⬜ (answer F1–F8 first) | — |
+| 13 | Mockup fidelity pass → `docs/pipelines/concept-03-fidelity.md` | ⏸ all steps done — 13.1 and 13.10 await approval | see log |
 
 Legend: ⬜ not started · 🟡 in progress · ⏸ waiting for gate approval · ✅ approved · ↩ reopened
 
@@ -813,10 +813,10 @@ the footer outside `SheetStack`) are pulled into 13.2 and 13.3; strike them from
 | 13.4 | Category pages — peek, intro order, treatment window | ✅ |
 | 13.5 | Servicios hub and talk sheet | ✅ |
 | 13.6 | Inicio | ✅ |
-| 13.7 | Nosotros | ⬜ |
-| 13.8 | Contacto | ⬜ |
-| 13.9 | Footer | ⬜ |
-| 13.10 | Verify at six widths, new audit, hand back (gate) | ⬜ |
+| 13.7 | Nosotros | ✅ |
+| 13.8 | Contacto | ✅ |
+| 13.9 | Footer | ✅ |
+| 13.10 | Verify at six widths, new audit, hand back (gate) | ⏸ |
 
 Each step logs its before/after numbers in the Log above (`### Phase 13.N — <date>`) and commits as
 `concept-03: phase 13.N — <summary>`.
@@ -1116,3 +1116,69 @@ failures across 70 route × width combinations** afterwards.
 
 That regression existed for two commits because 13.2's checks — and the compare tool — only
 run 1440 and 390. Intermediate widths need sweeping too.
+
+### Phase 13.7–13.10 — 2026-09-17
+
+**Flagged cells: 379 → 265. Against the 2026-09-16 baseline: 665 → 265, −60%.**
+New audit committed at `docs/design/concept-03/audit/2026-09-17/`.
+
+| page | base | now | | page | base | now |
+|---|---|---|---|---|---|---|
+| inicio 1440 | 55 | **22** | | inicio 390 | 59 | **23** |
+| servicios 1440 | 33 | **12** | | servicios 390 | 30 | **14** |
+| faciales 1440 | 88 | **35** | | faciales 390 | 94 | **40** |
+| masajes 1440 | 13 | **2** | | masajes 390 | 13 | **3** |
+| nosotros 1440 | 67 | **23** | | nosotros 390 | 70 | **24** |
+| contacto 1440 | 65 | **36** | | contacto 390 | 78 | **31** |
+
+**Both remaining owner bugs are fixed, and measured:**
+
+| Bug | Result |
+|---|---|
+| `/contacto` "¿HABLAMOS?" over the form | **fits at every width**, never overlaps the card. 51 / 84 / 61 / **76**px at 390 / 768 / 1024 / 1440 — the spec's 51.2 / 84.5 / 60.6 / 76 |
+| Footer wordmark clipped and wrong size | **98% of the viewport at every width, never clipped**, effective size 121 / 239 / 318 / **448** / 597 / 796px against the spec's 120.6 / 239 / 318 / 445.6 / 594.8 / 794.4 |
+
+The wordmark is now an inline `<svg><text>` with `textLength`. An SVG scales to its box by
+construction, so unlike a `vw` font-size it *cannot* overflow the shell or clip — which is what
+the old `22vw` italic version did. `textLength="980"` rather than 1000: at the full width the
+trailing letter-space fell outside the viewBox and shaved the last glyph.
+
+**Phase 11's checks, re-run at seven widths — 126 combinations, zero failures:**
+
+| Check | Failures |
+|---|---|
+| Horizontal overflow | **0 / 126** |
+| Interactive targets under 44px | **0 / 126** |
+| Heading structure | **0 / 126** |
+| CLS > 0.05 | **0 / 126** |
+| `muted` on a non-noir sheet | **0 / 126** |
+
+Reduced motion: GSAP never fetched, all transforms `none`, **0** invisible content elements.
+JS disabled: **0** problems across 6 routes.
+
+**Three defects this sweep caught that the 1440/390 comparison could not:**
+
+1. **`/nosotros` skipped from `<h1>` to `<h3>`.** The section eyebrows were `<p>`, so the
+   philosophy captions and card titles had no `<h2>` above them. Fixed by making the eyebrows
+   `<h2>` and demoting the team statement to `<p>` — it is a statement, not a heading. §7's
+   rule applies: change the class, not the tag.
+2. **Category chips rendered 43.41px against a 44px floor.** Not a sizing mistake — the intro
+   sheet is deliberately ~1.3% into its cover transform at rest, because *that scale is what
+   creates the peek*. A 44px control inside it renders 43.4. The chip is now 46px so the
+   **rendered** target clears 44.
+3. **`/contacto` went two-column at `md` (768)** rather than the mockup's 56rem — the same
+   breakpoint mistake fixed for the header in 13.6. At 768 the heading was 46px where the
+   mockup renders 84.5.
+
+**One correction to my own tooling.** The verification's contrast check flagged every category
+page for `muted` on a sheet. It was wrong: `muted` is legal on `noir` (4.68:1) and banned only
+on the other grounds, and the element was the scroll cue on a noir sheet. The check is now
+theme-aware. A false positive in a check costs as much as a missed defect — it trains you to
+ignore the output.
+
+**Still "missing" in the report, both tool artifacts rather than defects:** the footer wordmark
+(the tool looked for a `<p>`; it is now an `<svg><text>` — selector updated) and the team card
+text (mockup and site both carry placeholder copy, but different wording, so the tool cannot
+pair them — resolves with the real copy in Phase 12).
+
+**Phase 11 is ready for sign-off.**

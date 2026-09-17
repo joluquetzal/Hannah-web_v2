@@ -32,6 +32,7 @@ const config: Config = {
         ink: "#221A08", // header bar ground
         paper: "#FFEBD6", // header strip ground + filled header button
         stone: "#9C917D", // inactive breadcrumbs on `ink` (5.54:1)
+        clay: "#8A4A3E", // first stop of the /nosotros manifesto gradient
       },
       fontFamily: {
         display: ["var(--font-cormorant)", "Georgia", "Cambria", "serif"],
@@ -112,6 +113,8 @@ const config: Config = {
         btn: "0.75rem", // 12px — button text
         arrow: "0.78rem", // 12.5px — arrow links
         list: "0.95rem", // "Incluye" / "Zonas" rows, category descriptions
+        caption: "0.85rem", // /nosotros philosophy captions
+        micro: "0.66rem", // the label above a contact quick-link value
         // Header controls are Space Grotesk at weight 400, not DM Sans 700 —
         // they are chrome, not content labels.
         hbtn: "0.9rem", // 14.4px — header bar buttons
@@ -138,6 +141,7 @@ const config: Config = {
         arrow: "0.16em", // arrow links
         meta: "0.08em", // meta chips (not uppercase)
         hero: "0.14em", // Inicio hero meta block
+        caption: "0.14em", // /nosotros philosophy captions
         hbtn: "0.02em", // header bar buttons
         hstrip: "0.03em", // announcement strip button
         nav: "-0.005em", // header nav links

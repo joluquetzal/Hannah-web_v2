@@ -84,7 +84,7 @@ function validateField(
 }
 
 const inputClass =
-  "w-full border bg-noir px-4 py-3 text-cream placeholder:text-muted focus:outline-none";
+  "w-full rounded border bg-noir px-4 py-3 text-cream placeholder:text-muted focus:outline-none";
 
 const borderClass = (invalid: boolean) =>
   invalid ? "border-crimson-bright" : "border-sand/35 focus:border-sand";
@@ -107,7 +107,7 @@ function Field({
       <div className="flex items-baseline justify-between gap-3">
         <label
           htmlFor={id}
-          className="block text-label font-bold uppercase tracking-label text-sand"
+          className="block text-label font-bold uppercase tracking-label text-cream"
         >
           {label}
         </label>
@@ -422,7 +422,7 @@ export function ContactForm({ lang }: { lang: Lang }) {
       <button
         type="submit"
         disabled={status === "sending" || !isComplete}
-        className="inline-flex min-h-12 items-center justify-center bg-sand px-7 py-3 text-label font-bold uppercase tracking-label text-noir transition-colors hover:bg-cream disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex min-h-12 w-auto items-center justify-center self-start rounded bg-sand px-7 py-3 text-btn font-bold uppercase tracking-label text-noir transition-colors hover:bg-cream disabled:cursor-not-allowed disabled:opacity-60"
       >
         {status === "sending" ? t.submitting : t.submit}
       </button>
