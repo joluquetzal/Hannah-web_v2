@@ -12,11 +12,13 @@ export function HomeView({ lang }: { lang: Lang }) {
 
   return (
     <SheetStack>
+      {/* Content height with the mockup's hero padding; `min-h-window` stays
+          only as a floor, so a short viewport still gets a full-screen hero. */}
       <Sheet
         theme="noir"
         variant="window"
         align="start"
-        className="pt-20 md:pt-28"
+        className="pb-[clamp(2.5rem,6vw,5rem)] pt-[clamp(4rem,12vw,10rem)]"
         backdrop={
           <>
             <Image
@@ -27,39 +29,39 @@ export function HomeView({ lang }: { lang: Lang }) {
               sizes="100vw"
               className="object-cover"
             />
-            {/* The photo can be replaced at any time, so the scrim is sized for
-                the worst case (a bright image): at 75% noir, cream still clears
-                6.9:1 and the bottom fades to solid noir for the meta block. */}
-            <div className="absolute inset-0 bg-gradient-to-b from-noir/75 via-noir/65 to-noir" />
+            {/* The mockup's scrim: light through the middle so the photograph
+                reads, solid at the foot so the meta block stays legible.
+                Contrast for cream at the lead's position is measured, not
+                assumed — see the Phase 13.6 log. */}
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgb(14_10_10/0.35)_0%,rgb(14_10_10/0.10)_40%,rgb(14_10_10/0.85)_100%)]" />
           </>
         }
       >
         <HeroReveal>
           <p
             data-reveal
-            className="text-eyebrow font-bold uppercase tracking-eyebrow text-cream"
+            className="mb-[clamp(1.5rem,4vw,3rem)] text-eyebrow font-bold uppercase leading-normal tracking-eyebrow text-cream"
           >
             {t.site.tagline}
           </p>
 
-          {/* One part per line. The three parts are authored as three lines,
-              and fixing the line count here means the fallback font and the
-              real font produce the same box — letting it wrap freely cost
-              0.13 CLS at 390px, where it reflowed from four lines to three. */}
+          {/* F6: one flowing heading with the accent inline, balanced rather
+              than broken into fixed lines. At 1440 this breaks
+              "EL CUIDADO / de tu piel, COMO / UN RITUAL". */}
           <h1
             data-reveal
-            className="mt-6 font-body text-caps-hero font-extrabold uppercase leading-[0.9] tracking-caps text-cream"
+            className="max-w-[68rem] text-balance font-body text-caps-hero font-extrabold uppercase leading-[0.9] tracking-caps text-cream"
           >
-            <span className="block">{titleStart}</span>
+            {titleStart}{" "}
             {/* Cormorant's caps are optically smaller than DM Sans at the same
                 size, so the accent is nudged up to match. */}
-            <span className="block font-display text-[1.04em] font-normal italic normal-case leading-[0.8] tracking-normal text-crimson-bright">
+            <span className="font-display text-[1.04em] font-normal italic normal-case leading-[0.8] tracking-normal text-crimson-bright">
               {titleAccent}
-            </span>
-            <span className="block">{titleEnd}</span>
+            </span>{" "}
+            {titleEnd}
           </h1>
 
-          <div className="mt-8 grid items-end gap-8 md:grid-cols-[1fr_auto] md:gap-12">
+          <div className="mt-[clamp(2rem,5vw,4rem)] grid items-end gap-8 md:grid-cols-[1fr_auto] md:gap-12">
             <div>
               <p
                 data-reveal
@@ -71,6 +73,7 @@ export function HomeView({ lang }: { lang: Lang }) {
                 <ButtonLink
                   href={localizedPath("/servicios", lang)}
                   variant="cream"
+                  arrow
                 >
                   {t.home.ctaServices}
                 </ButtonLink>
@@ -85,7 +88,7 @@ export function HomeView({ lang }: { lang: Lang }) {
 
             <p
               data-reveal
-              className="text-arrow font-bold uppercase leading-[1.9] tracking-hero text-sand md:text-right"
+              className="text-arrow font-bold uppercase leading-[1.9] tracking-hero text-cream md:text-right"
             >
               {site.address.street} · {site.address.neighborhood},{" "}
               {site.address.state}

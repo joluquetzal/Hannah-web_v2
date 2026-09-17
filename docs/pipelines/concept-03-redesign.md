@@ -812,7 +812,7 @@ the footer outside `SheetStack`) are pulled into 13.2 and 13.3; strike them from
 | 13.3 | Sheet motion, tall-sheet padding, footer in the stack, `Reveal` | ✅ |
 | 13.4 | Category pages — peek, intro order, treatment window | ✅ |
 | 13.5 | Servicios hub and talk sheet | ✅ |
-| 13.6 | Inicio | ⬜ |
+| 13.6 | Inicio | ✅ |
 | 13.7 | Nosotros | ⬜ |
 | 13.8 | Contacto | ⬜ |
 | 13.9 | Footer | ⬜ |
@@ -1063,3 +1063,56 @@ than the page lead, at the mockup's `0.98rem/1.5` in cream/90, with the body pad
 
 **Still missing after this step:** footer lead, footer nav column (13.9), the `/nosotros`
 collage centre image and team card text (13.7).
+
+### Phase 13.6 — 2026-09-17
+
+**Flagged cells: 392 → 379 (−286 from baseline).** Inicio **55 → 32** at 1440 and **59 → 35**
+at 390.
+
+This step carried both of Phase 13's risky decisions, and both needed real work to hold.
+
+**F6 — the inline balanced heading — broke CLS, and the fix was not the one F6 predicted.**
+Reverting the forced block lines took the landing page to **0.09–0.15 CLS** across six widths,
+far over the 0.05 budget. F6 assumed `next/font`'s size-adjusted fallback metrics would hold
+it; they did not, because the reflow is a *wrap-count* change (2 ↔ 3 lines), which metric
+adjustment cannot prevent — the fallback's per-glyph widths still differ.
+
+What did hold it: moving **DM Sans and Cormorant Garamond to `display: "block"`**. Those two
+compose the `<h1>`, so neither may swap under it. Worst case is now **0.0219**:
+
+| | 390 | 640 | 768 | 1024 | 1440 | 2560 |
+|---|---|---|---|---|---|---|
+| es | 0.0004 | 0.0172 | 0.0190 | **0.0219** | 0.0069 | 0.0003 |
+| en | 0.0162 | 0.0010 | 0.0021 | 0.0020 | 0.0010 | 0.0003 |
+
+**The trade-off, stated plainly:** `block` replaces a flash of *fallback* text with a brief
+flash of *invisible* text. `next/font` self-hosts and preloads these faces from the same
+origin, so the block period is short in practice — but it is a real change to first paint, and
+it affects all DM Sans body copy, not just the hero. Source Serif 4 and Space Grotesk stay on
+`swap`: they set header chrome, where a swap shifts nothing. Recorded in
+`project-workflow.md`. **Say if you would rather have the fallback flash and accept the CLS.**
+
+**The mockup's scrim fails contrast over the real photograph.** Its
+`noir/35 → noir/10 → noir/85` gradient leaves only ~0.29–0.40 alpha where the small text sits
+at 390, and the mockup's **sand** eyebrow and meta block measured **3.39:1** and **3.83:1** —
+under the 4.5:1 floor. The mockup composites those over a generated dark gradient; the client's
+actual `hero.jpg` is brighter. §8 is binding and the mockup is not, so both moved to cream.
+All six samples now pass:
+
+| | eyebrow | lead | meta |
+|---|---|---|---|
+| 390 | **6.56:1** | 10.56:1 | **7.41:1** |
+| 1440 | 11.21:1 | 8.13:1 | 13.47:1 |
+
+Measured by sampling `hero.jpg` through a canvas at each element's position and compositing
+the gradient's alpha at that height — not estimated.
+
+**A regression from 13.2 that this step's wider sweep caught.** The header overflowed the
+viewport by **17px at 768**. The mockup has exactly one desktop breakpoint, **56rem (896px)**,
+where the nav, the header buttons and the two-column treatment layout all appear together;
+13.2 had used Tailwind's `md` (768px), showing the desktop header 128px too early. Added a
+`wide: "56rem"` screen and moved the header and `TreatmentWindow` onto it. **0 overflow
+failures across 70 route × width combinations** afterwards.
+
+That regression existed for two commits because 13.2's checks — and the compare tool — only
+run 1440 and 390. Intermediate widths need sweeping too.

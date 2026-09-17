@@ -22,7 +22,7 @@ const cormorant = Cormorant_Garamond({
   weight: ["300", "400"],
   style: ["normal", "italic"],
   variable: "--font-cormorant",
-  display: "swap",
+  display: "block",
 });
 
 // 700/800 carry the Concept 03 heavy-caps scale (`text-caps-*`).
@@ -30,7 +30,7 @@ const dmSans = DM_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "700", "800"],
   variable: "--font-dm-sans",
-  display: "swap",
+  display: "block",
 });
 
 // Header chrome only: nav links, breadcrumbs, the announcement strip.

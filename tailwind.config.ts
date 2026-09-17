@@ -4,6 +4,13 @@ const config: Config = {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
     extend: {
+      // The mockup has ONE desktop breakpoint, 56rem, where the header shows
+      // its nav and buttons and the treatment windows go two-column. Using
+      // Tailwind's `md` (768px) showed the desktop header 128px too early and
+      // overflowed the viewport by 17px at 768.
+      screens: {
+        wide: "56rem",
+      },
       colors: {
         noir: "#0E0A0A",
         crimson: {

@@ -113,14 +113,14 @@ export function TreatmentWindow({
       variant="window"
       align="start"
       crumb={nombre}
-      className="scroll-mt-[var(--header-h)] md:items-center"
+      className="scroll-mt-[var(--header-h)] wide:items-center"
     >
       <div
         className={clsx(
           "grid items-center gap-[clamp(1.75rem,4vw,4.5rem)]",
           imageLeft
-            ? "md:grid-cols-[0.85fr_1.25fr]"
-            : "md:grid-cols-[1.25fr_0.85fr]",
+            ? "wide:grid-cols-[0.85fr_1.25fr]"
+            : "wide:grid-cols-[1.25fr_0.85fr]",
         )}
       >
         {/* `@container` makes 100cqi this column's width, which is what the
@@ -128,7 +128,7 @@ export function TreatmentWindow({
         <div
           className={clsx(
             "[container-type:inline-size] min-w-0",
-            imageLeft ? "md:order-2" : "md:order-1",
+            imageLeft ? "wide:order-2" : "wide:order-1",
           )}
         >
           <p
@@ -225,8 +225,8 @@ export function TreatmentWindow({
 
         <figure
           className={clsx(
-            "group relative aspect-[4/3] overflow-hidden rounded-md md:aspect-[4/5] md:max-h-[calc(100svh-var(--header-h)-8rem)]",
-            imageLeft ? "md:order-1" : "md:order-2",
+            "group relative aspect-[4/3] overflow-hidden rounded-md wide:aspect-[4/5] wide:max-h-[calc(100svh-var(--header-h)-8rem)]",
+            imageLeft ? "wide:order-1" : "wide:order-2",
           )}
         >
           <Image
