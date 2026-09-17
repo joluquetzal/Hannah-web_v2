@@ -29,7 +29,6 @@ export const faciales = [
       ],
     },
     img: "/images/facials/img1.webp",
-    video: "/images/facials/video1.mp4",
   },
   {
     slug: "anti-acne-piel-grasa",
@@ -59,7 +58,6 @@ export const faciales = [
       ],
     },
     img: "/images/facials/img2.webp",
-    video: "/images/facials/video2.mp4",
   },
   {
     slug: "hidrodermoabrasion",
@@ -87,7 +85,6 @@ export const faciales = [
       ],
     },
     img: "/images/facials/img3.webp",
-    video: "/images/facials/video3.mp4",
   },
   {
     slug: "facial-hannah",
@@ -119,7 +116,6 @@ export const faciales = [
     recomendacion: { es: "2 sesiones", en: "2 sessions" },
     destacado: true,
     img: "/images/facials/img4.webp",
-    video: "/images/facials/video4.mp4",
   },
   {
     slug: "facial-rejuvenecedor",
@@ -151,7 +147,6 @@ export const faciales = [
       en: "8 to 10 regular sessions",
     },
     img: "/images/facials/img5.webp",
-    video: "/images/facials/video5.mp4",
   },
   {
     slug: "microdermoabrasion",
@@ -179,7 +174,6 @@ export const faciales = [
       ],
     },
     img: "/images/facials/img6.webp",
-    video: "/images/facials/video6.mp4",
   },
 ] as const satisfies readonly Treatment[];
 

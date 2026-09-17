@@ -19,10 +19,8 @@ export type Treatment = {
   recomendacion?: Localized<string>;
   /** Signature treatment (Facial HannaH). */
   destacado?: boolean;
-  /** Static image, served from /public. */
+  /** Still image, served from /public. */
   img: string;
-  /** Muted looping clip shown on hover, served from /public. */
-  video: string;
 };
 
 export type ServiceCategory = {

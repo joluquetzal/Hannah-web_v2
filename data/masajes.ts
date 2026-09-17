@@ -10,7 +10,6 @@ export const masajes = [
       en: "Improves circulation, reduces stress and lifts your mood.",
     },
     img: "/images/massages/img1.webp",
-    video: "/images/massages/video1.mp4",
   },
   {
     slug: "masaje-piedras-calientes",
@@ -21,7 +20,6 @@ export const masajes = [
       en: "A Zen massage. Improves sleep quality and eases muscle aches.",
     },
     img: "/images/massages/img2.webp",
-    video: "/images/massages/video2.mp4",
   },
   {
     slug: "masaje-deportivo",
@@ -32,7 +30,6 @@ export const masajes = [
       en: "Relieves knot and muscle-strain pain, lowers stress and relaxes the muscles.",
     },
     img: "/images/massages/img3.webp",
-    video: "/images/massages/video3.mp4",
   },
   {
     slug: "masaje-modelador",
@@ -43,7 +40,6 @@ export const masajes = [
       en: "Lymphatic drainage, Dead Sea mud wraps, cavitation and radiofrequency.",
     },
     img: "/images/massages/img4.webp",
-    video: "/images/massages/video4.mp4",
   },
 ] as const satisfies readonly Treatment[];
 

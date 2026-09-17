@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import { Sheet, type SheetTheme } from "@/components/Sheet";
 import { ButtonLink } from "@/components/ButtonLink";
+import Image from "next/image";
 import { MetaChip } from "@/components/Chip";
-import { TreatmentMedia } from "@/components/TreatmentMedia";
 import type { Treatment } from "@/data/types";
 import { getDictionary, localizedPath, type Lang } from "@/lib/i18n";
 
@@ -229,7 +229,13 @@ export function TreatmentWindow({
             imageLeft ? "wide:order-1" : "wide:order-2",
           )}
         >
-          <TreatmentMedia img={treatment.img} video={treatment.video} alt={nombre} />
+          <Image
+            src={treatment.img}
+            alt={nombre}
+            fill
+            sizes="(min-width: 56rem) 45vw, 100vw"
+            className="object-cover"
+          />
         </figure>
       </div>
     </Sheet>

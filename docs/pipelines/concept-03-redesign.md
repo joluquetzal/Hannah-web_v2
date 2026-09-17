@@ -1225,3 +1225,35 @@ crumb. Median frame time back to **16.7ms**.
 Re-verified after the change: 126 checks, **0 failures** on overflow, targets, headings, CLS
 and contrast. Reduced motion never loads or plays a clip and keeps the still at opacity 1.
 JS off renders all six stills with no overflow.
+
+### Video removed — 2026-09-17
+
+The services pages still felt slow after the asset pass, so the owner called it: **take the
+video out entirely.** Done — not disabled, removed.
+
+- `TreatmentMedia.tsx` deleted; `TreatmentWindow` renders a plain `next/image`.
+- The `video` field is gone from the `Treatment` type and from all **14** data entries.
+- All **14 MP4 files** deleted from `public/images/**`.
+- `images-assets.md`, `animations-gsap.md`, `layout-responsive.md` §9 and `CLAUDE.md` updated —
+  each described the image → clip swap as a rule.
+
+**`/servicios/faciales` weight, measured by resource timing:**
+
+| | original | now |
+|---|---|---|
+| Images | 1,022 KB | **89 KB** |
+| Video | 800 KB | **0 KB** |
+| JS | 525 KB | 530 KB |
+| Fonts | 136 KB | 136 KB |
+| **Total** | **2,755 KB** | **973 KB** (−65%) |
+
+**A correction to my own reporting.** I earlier claimed 301 KB on load after the lazy-video
+change. That was wrong — an artifact of reading the running total before every response body
+had resolved. The honest figures are the resource-timing ones above. Numbers from a listener
+that races the page are not measurements.
+
+Re-verified: 126 checks, **0 failures** across overflow, targets, headings, CLS and contrast.
+With JS disabled all six treatment stills render and there is no overflow.
+
+**What is left on that page is now JS: 530 KB**, the largest single item by far — React, the
+Next runtime and GSAP. Reducing it is a separate decision, not an asset fix.

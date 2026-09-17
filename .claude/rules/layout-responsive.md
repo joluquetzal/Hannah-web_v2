@@ -196,7 +196,7 @@ Keep the colour table in `CLAUDE.md` in sync with `tailwind.config.ts`.
 - `next/image` for every image — no bare `<img>`.
 - Every media container declares an **aspect ratio**; never a fixed height. An unconstrained ratio in a wide column produced an image taller than the viewport.
 - `object-cover` on anything that fills a frame.
-- **Placeholders are placeholders.** `public/images/**` currently holds ~600-byte SVGs and 42-byte GIFs. They render exactly as coded. Any region meant to be carried by a photo will look empty until real assets arrive — that is a content gap, not a CSS bug, and must not be "fixed" in CSS. Judge layout with representative content, never with blank placeholders.
+- **The images are real.** `public/images/**` holds the client's photographs as WebP. They arrived as rasters wrapped in SVG at 150–250 KB each and were converted (2,241 KB → 187 KB). An earlier version of this rule called them "~600-byte stubs" — that was wrong, and it is why a page was shipping 2.7 MB. Judge layout against these, and re-check weight whenever art is replaced: static export ships exactly what is committed.
 
 ## 10. Interactive targets
 
