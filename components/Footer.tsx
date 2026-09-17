@@ -126,12 +126,16 @@ export function Footer() {
       {/* Full-bleed wordmark, drawn as SVG text inside a viewBox. An SVG scales
           to its box by construction, so unlike a font-size in vw it cannot
           overflow the shell or clip at any width — which is what the previous
-          22vw italic version did (bug: "the wordmark is cut off"). */}
+          22vw italic version did (bug: "the wordmark is cut off").
+          No vertical translate: the spec's `translate-y-[8%]` pushed the whole
+          SVG down and added dead height under the footer. The glyphs already
+          sit at y 13–218 in a 0–224 viewBox, and the bottom bar overlaps
+          their foot on its own. */}
       <svg
         aria-hidden
         viewBox="0 0 1000 224"
         preserveAspectRatio="xMidYMax meet"
-        className="mt-[clamp(2rem,5vw,4rem)] block w-full translate-y-[8%] select-none"
+        className="mt-[clamp(2rem,5vw,4rem)] block w-full select-none"
       >
         <text
           x="500"
