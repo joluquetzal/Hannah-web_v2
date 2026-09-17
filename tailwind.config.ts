@@ -41,6 +41,8 @@ const config: Config = {
       // rhythm) intentionally stays on the fixed Tailwind scale.
       spacing: {
         gutter: "clamp(1.25rem, 0.5rem + 3vw, 4rem)", // mockup: 20px @390, 51px @1440
+        // Gap between the logo and the first nav link (mockup: x=431 @1440).
+        "nav-offset": "clamp(1rem, 10vw, 12rem)",
         "section-b": "clamp(4rem, 3rem + 6vw, 7rem)",
         "section-b-lg": "clamp(5rem, 4rem + 7vw, 9rem)",
       },
@@ -83,6 +85,13 @@ const config: Config = {
         // they are chrome, not content labels.
         hbtn: "0.9rem", // 14.4px — header bar buttons
         hstrip: "0.8rem", // 12.8px — announcement strip button
+        strip: "0.92rem", // 14.7px — announcement strip text (Source Serif 400)
+        nav: "0.98rem", // 15.7px — header nav links (Source Serif 600)
+        mega: "0.95rem", // 15.2px — mega-menu heading
+        "mega-card": "1.6rem", // mega-menu card title
+        "mega-body": "0.82rem", // mega-menu card description
+        "m-link": "2.4rem", // mobile menu primary links
+        "m-sub": "1.4rem", // mobile menu category links
       },
       // Tracking for the two uppercase-caps roles. Uppercase text is always
       // tracked (see styling-tailwind rule); these replace the repeated
@@ -100,6 +109,7 @@ const config: Config = {
         hero: "0.14em", // Inicio hero meta block
         hbtn: "0.02em", // header bar buttons
         hstrip: "0.03em", // announcement strip button
+        nav: "-0.005em", // header nav links
       },
       // Fluid prose width: page intros and long-form copy grow with the
       // viewport instead of hitting a fixed breakpoint cap. The upper bound
@@ -134,6 +144,20 @@ const config: Config = {
       // Documented z-scale — no arbitrary values (styling-tailwind).
       // Sheets stack in normal flow at the default z-index; everything here
       // sits above them.
+      keyframes: {
+        "crumb-in": {
+          from: { opacity: "0", transform: "translateY(4px)" },
+          to: { opacity: "1", transform: "none" },
+        },
+        "mega-in": {
+          from: { opacity: "0", transform: "translateY(-6px)" },
+          to: { opacity: "1", transform: "none" },
+        },
+      },
+      animation: {
+        "crumb-in": "crumb-in 400ms cubic-bezier(0.22, 1, 0.36, 1)",
+        "mega-in": "mega-in 250ms cubic-bezier(0.22, 1, 0.36, 1)",
+      },
       zIndex: {
         menu: "30", // mobile menu panel
         header: "40", // sticky site header

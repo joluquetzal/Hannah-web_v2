@@ -8,6 +8,7 @@ import clsx from "clsx";
 import { NavDropdown } from "@/components/NavDropdown";
 import { LanguageSwitch } from "@/components/LanguageSwitch";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { ScrollProgress } from "@/components/ScrollProgress";
 import { site } from "@/lib/site";
 import { servicios } from "@/data/servicios";
 import { localizedPath, stripLocale } from "@/lib/i18n";
@@ -54,10 +55,14 @@ export function Nav() {
   const path = (p: string) => localizedPath(p, lang);
   const isActive = (p: string) => (p === "/" ? rest === "/" : rest.startsWith(p));
 
+  // The active underline is a 1px background gradient, not text-decoration,
+  // so its width can animate from 0 (the mockup grows it in).
   const navLinkClass = (active: boolean) =>
     clsx(
-      "inline-flex min-h-11 items-center px-3.5 font-hserif text-base font-semibold text-paper transition-opacity hover:opacity-80",
-      active && "underline decoration-1 underline-offset-8",
+      "inline-flex min-h-11 items-center px-3.5 font-hserif text-nav font-semibold tracking-nav text-paper",
+      "bg-[linear-gradient(currentColor,currentColor)] bg-[position:0.875rem_calc(100%-9px)] bg-no-repeat",
+      "transition-[background-size,opacity] duration-[350ms] hover:opacity-80 motion-reduce:transition-none",
+      active ? "bg-[length:calc(100%-1.75rem)_1px]" : "bg-[length:0_1px]",
     );
 
   const links = [
@@ -79,14 +84,14 @@ export function Nav() {
       {/* No vertical padding: the 44px controls inside set the row's height,
           so the strip lands at exactly 44 rather than 44 + padding. */}
       <div className="flex min-h-11 items-center justify-center gap-5 bg-paper px-gutter text-ink">
-        <p className="hidden font-hserif text-sm sm:block">
+        <p className="hidden font-hserif text-strip sm:block">
           {t.clinic.visitUsAt} {address}, {site.address.city}
         </p>
         <a
           href={site.mapLinkUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="hidden min-h-11 items-center bg-ink px-3 font-grotesk text-hstrip uppercase tracking-hstrip text-paper transition-opacity hover:opacity-85 sm:inline-flex"
+          className="hidden min-h-11 items-center bg-ink px-[0.8rem] font-grotesk text-hstrip uppercase tracking-hstrip text-paper transition-opacity hover:opacity-85 sm:inline-flex"
         >
           {t.clinic.mapCta}
         </a>
@@ -95,7 +100,7 @@ export function Nav() {
           href={site.mapLinkUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex min-h-11 items-center font-hserif text-sm underline underline-offset-4 sm:hidden"
+          className="inline-flex min-h-11 items-center font-hserif text-strip underline underline-offset-4 sm:hidden"
         >
           {t.clinic.visitUsAt} {address}
         </a>
@@ -117,13 +122,13 @@ export function Nav() {
             width={138}
             height={40}
             priority
-            className="h-7 w-auto md:h-8"
+            className="h-7 w-auto sm:h-8"
           />
         </Link>
 
         <nav
           aria-label={t.nav.primaryLabel}
-          className="ml-8 hidden md:block lg:ml-16"
+          className="ml-nav-offset hidden md:block"
         >
           <ul className="flex items-center">
             <NavDropdown navLinkClass={navLinkClass} />
@@ -192,28 +197,32 @@ export function Nav() {
       {/* Row 3 — breadcrumbs (renders nothing on the landing page) */}
       <Breadcrumbs />
 
-      {/* Mobile menu — rises from below the header. */}
+      <ScrollProgress />
+
+      {/* Mobile menu — fills everything below the header and slides up into it.
+          `h-[calc(100svh - header)]` is the window height, but this is an
+          overlay, not a content section, so §5's ban doesn't apply. `invisible`
+          when closed keeps its links out of the tab order. */}
       <div
           id="menu-movil"
           className={clsx(
-            "absolute inset-x-0 top-full z-menu origin-top bg-ink transition-all duration-300 motion-reduce:transition-none md:hidden",
-            mobileOpen
-              ? "translate-y-0 opacity-100"
-              : "pointer-events-none translate-y-3 opacity-0",
+            "absolute inset-x-0 top-full z-menu h-[calc(100svh-var(--header-h))] overflow-y-auto bg-ink transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none md:hidden",
+            mobileOpen ? "visible translate-y-0" : "invisible translate-y-full",
           )}
           aria-hidden={!mobileOpen}
         >
           <nav
             aria-label={t.nav.mobileLabel}
-            className="flex flex-col gap-1 border-t border-paper/15 px-gutter py-6"
+            className="flex min-h-full flex-col justify-between border-t border-paper/15 px-gutter py-6"
           >
-            <Link href={path("/")} className="py-1 font-hserif text-3xl font-semibold text-paper">
+            <div className="flex flex-col">
+            <Link href={path("/")} className="py-1 font-hserif text-m-link font-semibold leading-[1.1] text-paper">
               {t.nav.home}
             </Link>
 
             <Link
               href={path("/servicios")}
-              className="py-1 font-hserif text-3xl font-semibold text-paper"
+              className="py-1 font-hserif text-m-link font-semibold leading-[1.1] text-paper"
             >
               {t.nav.services}
             </Link>
@@ -222,7 +231,7 @@ export function Nav() {
                 <Link
                   key={cat.slug}
                   href={path(cat.href)}
-                  className="inline-flex min-h-11 items-center font-display text-xl italic text-crimson-bright"
+                  className="inline-flex min-h-11 items-center font-display text-m-sub italic text-crimson-bright"
                 >
                   {cat.titulo[lang]}
                 </Link>
@@ -233,13 +242,16 @@ export function Nav() {
               <Link
                 key={link.href}
                 href={path(link.href)}
-                className="py-1 font-hserif text-3xl font-semibold text-paper"
+                className="py-1 font-hserif text-m-link font-semibold leading-[1.1] text-paper"
               >
                 {link.label}
               </Link>
             ))}
+            </div>
 
-            <div className="mt-4 border-t border-paper/15 pt-4 font-hserif text-sm text-paper">
+            <div>
+
+            <div className="mt-8 border-t border-paper/15 pt-4 font-hserif text-sm text-paper">
               <p>
                 {address}, {site.address.city}
               </p>
@@ -251,7 +263,7 @@ export function Nav() {
               </a>
             </div>
 
-            <div className="grid gap-2">
+            <div className="mt-5 grid gap-2">
               <a
                 href={site.whatsapp}
                 target="_blank"
@@ -266,6 +278,7 @@ export function Nav() {
               >
                 {t.footer.contactCta}
               </Link>
+            </div>
             </div>
           </nav>
         </div>

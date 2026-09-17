@@ -36,7 +36,7 @@ const dmSans = DM_Sans({
 // Header chrome only: nav links, breadcrumbs, the announcement strip.
 const sourceSerif = Source_Serif_4({
   subsets: ["latin"],
-  weight: ["600"],
+  weight: ["400", "600"],
   variable: "--font-source-serif",
   display: "swap",
 });

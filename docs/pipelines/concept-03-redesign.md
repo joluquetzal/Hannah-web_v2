@@ -808,7 +808,7 @@ the footer outside `SheetStack`) are pulled into 13.2 and 13.3; strike them from
 | F | Decisions F1–F8 answered | ✅ |
 | 13.0 | Tooling — `compare:mockup`, `.mockup-compare/` | ✅ |
 | 13.1 | Global type roles, tokens, buttons (gate: stop for approval) | ⏸ |
-| 13.2 | Header — progress bar, button type, nav offset, mega card, mobile menu | ⬜ |
+| 13.2 | Header — progress bar, button type, nav offset, mega card, mobile menu | ✅ |
 | 13.3 | Sheet motion, tall-sheet padding, footer in the stack, `Reveal` | ⬜ |
 | 13.4 | Category pages — peek, intro order, treatment window | ⬜ |
 | 13.5 | Servicios hub and talk sheet | ⬜ |
@@ -908,3 +908,46 @@ own family); `styling-tailwind.md` (closed scale, the 700 requirement).
 
 **No regressions:** lint and build clean; 50 overflow checks across 5 routes × 2 languages ×
 5 widths, **0 failures**.
+
+### Phase 13.2 — 2026-09-17
+
+**Flagged cells: 483 → 480.** A small net move, and that is the honest reading: the scroll
+progress bar previously counted as a *single* "missing on site" cell, so building it replaced
+one cell with a real row. The header itself is what moved.
+
+**Header rows, across all 12 page-widths:**
+
+| row | mismatched cells |
+|---|---|
+| nav link | **0** (was flagged on x — the nav now starts at the mockup's offset) |
+| WhatsApp button | **0** |
+| Contáctanos button | **0** |
+| ES switch | **0** |
+| crumb | **0** |
+| progress bar | **0** (was MISSING) |
+| logo | 48 — documented tool noise, the mockup's is Anton text and ours is the SVG wordmark |
+| strip button | 6 — **F3**, the owner's 44px choice over the mockup's 30px box |
+| strip text | 12 — at 390 the strip collapses to a link, which is 44px on the site and 20px in the mockup. Same F3 touch-target divergence. |
+
+**Built:** the progress bar (2px, `origin-left` `scaleX`, rAF-throttled, hidden under reduced
+motion — verified 0 at the top and 0.572 at halfway); the mega menu's per-card
+"Ver tratamientos ↗"; the mobile menu now fills the area below the header exactly
+(**689px measured against 689px available** at 390×844) and slides up from `translate-y-full`
+instead of fading. Nav links, the strip and the crumb row all moved onto the mockup's sizes,
+and the active nav underline now grows in from zero width.
+
+**A bug I introduced and had to back out.** To animate the mega panel I replaced its `hidden`
+attribute with `visibility`. That silently broke keyboard access: ArrowDown opened the panel
+but focus never moved into it. `visibility` animates as a *step function* — at progress 0 it
+is still `hidden`, and a hidden element refuses focus, so neither a style flush nor a
+`requestAnimationFrame` could place it. Three attempts failed before I stopped guessing and
+instrumented, which showed `open` flipping correctly while focus stayed on the trigger.
+
+Resolved by restoring the `hidden` attribute — which is also what keeps the panel's links out
+of the tab order — and getting the entrance from a CSS **animation**, which plays on un-hide,
+rather than a transition, which cannot run on a hidden element. Re-verified: ArrowDown focuses
+"Ver todos ↗", Escape restores focus to the trigger, Enter reopens, and at rest the panel is
+`hidden` with **0 reachable links** and a tab order that skips it entirely.
+
+The lesson is the same one 13.1 taught: a change that looks purely visual can move behaviour,
+and only instrumenting the running page tells you which.

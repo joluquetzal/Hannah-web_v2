@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import type { FocusEvent, KeyboardEvent } from "react";
 import clsx from "clsx";
+import { ArrowLink } from "@/components/ArrowLink";
 import { servicios } from "@/data/servicios";
 import { localizedPath, stripLocale } from "@/lib/i18n";
 import { useI18n } from "@/lib/i18n/useLang";
@@ -43,6 +44,8 @@ export function NavDropdown({
   const containerRef = useRef<HTMLLIElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout>>();
+  // Set when the panel is opened from the keyboard, so focus moves into it.
+  const focusOnOpen = useRef(false);
 
   const active = rest.startsWith("/servicios");
   const path = (p: string) => localizedPath(p, lang);
@@ -70,13 +73,18 @@ export function NavDropdown({
 
   useEffect(() => () => clearTimeout(closeTimer.current), []);
 
-  function focusFirstItem() {
-    requestAnimationFrame(() => {
-      containerRef.current
-        ?.querySelector<HTMLAnchorElement>("[data-menu-item]")
-        ?.focus();
-    });
-  }
+  // Move focus into the panel when it was opened from the keyboard.
+  useEffect(() => {
+    if (!open || !focusOnOpen.current) return;
+    focusOnOpen.current = false;
+    const item =
+      containerRef.current?.querySelector<HTMLAnchorElement>("[data-menu-item]");
+    if (!item) return;
+    // Next frame: the panel is un-hidden during this commit, and an element
+    // still carrying `hidden` cannot take focus.
+    const frame = requestAnimationFrame(() => item.focus());
+    return () => cancelAnimationFrame(frame);
+  }, [open]);
 
   function onKeyDown(event: KeyboardEvent<HTMLLIElement>) {
     if (event.key === "Escape" && open) {
@@ -87,8 +95,8 @@ export function NavDropdown({
     }
     if (event.key === "ArrowDown") {
       event.preventDefault();
+      focusOnOpen.current = true;
       setOpen(true);
-      focusFirstItem();
     }
   }
 
@@ -144,20 +152,22 @@ export function NavDropdown({
         hidden={!open}
         onMouseEnter={cancelClose}
         onMouseLeave={closeSoon}
-        className="absolute inset-x-0 top-full z-mega border-t border-paper/15 bg-ink shadow-[0_30px_50px_-20px_rgb(0_0_0/0.7)]"
+        className={clsx(
+          "absolute inset-x-0 top-full z-mega border-t border-paper/15 bg-ink shadow-[0_30px_50px_-20px_rgb(0_0_0/0.7)]",
+          // An animation, not a transition: `hidden` is what keeps the panel's
+          // links out of the tab order, and a hidden element cannot be
+          // transitioned into view or focused. The animation plays on un-hide.
+          "animate-mega-in motion-reduce:animate-none",
+        )}
       >
         <div className="mx-auto max-w-shell px-gutter py-6">
           <div className="flex items-baseline justify-between gap-4">
-            <p className="font-hserif text-base font-semibold text-stone">
+            <p className="font-hserif text-mega font-semibold text-stone">
               {t.nav.servicesMenuHeading}
             </p>
-            <Link
-              data-menu-item
-              href={path("/servicios")}
-              className="inline-flex min-h-11 items-center font-grotesk text-label font-bold uppercase tracking-label text-paper transition-opacity hover:opacity-80"
-            >
-              {t.nav.servicesViewAll} <span aria-hidden>↗</span>
-            </Link>
+            <ArrowLink data-menu-item href={path("/servicios")} className="text-paper">
+              {t.nav.servicesViewAll}
+            </ArrowLink>
           </div>
 
           <ul className="mt-3 grid gap-2 sm:grid-cols-3">
@@ -170,17 +180,25 @@ export function NavDropdown({
                     href={path(category.href)}
                     aria-current={current ? "page" : undefined}
                     className={clsx(
-                      "flex h-full min-h-36 flex-col justify-between gap-3 p-4 transition-transform duration-300 hover:-translate-y-0.5 motion-reduce:transition-none",
+                      "flex h-full min-h-[150px] flex-col justify-between gap-3 rounded-md p-4 transition-transform duration-300 hover:-translate-y-0.5 motion-reduce:transition-none",
                       cardTheme[category.slug],
                       current && "ring-1 ring-inset ring-paper/60",
                     )}
                   >
-                    <p className="font-body text-2xl font-extrabold uppercase leading-none tracking-caps">
+                    <p className="font-body text-mega-card font-extrabold uppercase leading-none tracking-caps">
                       {category.titulo[lang]}
                     </p>
-                    <p className="max-w-[30ch] text-sm leading-snug">
-                      {category.descripcion[lang]}
-                    </p>
+                    <span>
+                      <span className="block max-w-[30ch] text-mega-body leading-[1.45]">
+                        {category.descripcion[lang]}
+                      </span>
+                      {/* Not a nested <a> — the whole card is the link, so this
+                          only needs to look like the mockup's arrow link. */}
+                      <span className="mt-3 inline-flex min-h-11 items-center gap-2 font-body text-arrow font-bold uppercase tracking-arrow">
+                        {t.nav.servicesCardCta}
+                        <span aria-hidden>↗</span>
+                      </span>
+                    </span>
                   </Link>
                 </li>
               );
