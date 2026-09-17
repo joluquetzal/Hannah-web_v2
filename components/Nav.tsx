@@ -110,7 +110,7 @@ export function Nav() {
           scale has no 70px step. The sticky <header> is the positioning
           ancestor for the mega menu and the mobile panel, so both drop below
           the breadcrumbs rather than over them. */}
-      <div className="flex min-h-16 items-center gap-4 px-gutter py-2 text-paper md:min-h-[4.375rem]">
+      <div className="flex min-h-16 items-center gap-4 px-gutter py-2 text-paper wide:min-h-[4.375rem]">
         <Link
           href={path("/")}
           aria-label={`${site.name} — ${t.nav.home}`}
@@ -128,7 +128,7 @@ export function Nav() {
 
         <nav
           aria-label={t.nav.primaryLabel}
-          className="ml-nav-offset hidden md:block"
+          className="ml-nav-offset hidden wide:block"
         >
           <ul className="flex items-center">
             <NavDropdown navLinkClass={navLinkClass} />
@@ -153,7 +153,7 @@ export function Nav() {
             rel="noopener noreferrer"
             className={clsx(
               headerButton,
-              "hidden border border-paper text-paper hover:bg-paper hover:text-ink md:inline-flex",
+              "hidden border border-paper text-paper hover:bg-paper hover:text-ink wide:inline-flex",
             )}
           >
             {t.clinic.whatsapp}
@@ -162,7 +162,7 @@ export function Nav() {
             href={path("/contacto")}
             className={clsx(
               headerButton,
-              "hidden border border-paper bg-paper text-ink hover:bg-transparent hover:text-paper md:inline-flex",
+              "hidden border border-paper bg-paper text-ink hover:bg-transparent hover:text-paper wide:inline-flex",
             )}
           >
             {t.footer.contactCta}
@@ -176,7 +176,7 @@ export function Nav() {
             aria-expanded={mobileOpen}
             aria-controls="menu-movil"
             onClick={() => setMobileOpen((v) => !v)}
-            className="flex h-11 w-11 flex-col items-center justify-center gap-1.5 border border-paper md:hidden"
+            className="flex h-11 w-11 flex-col items-center justify-center gap-1.5 border border-paper wide:hidden"
           >
             <span
               className={clsx(
@@ -206,7 +206,7 @@ export function Nav() {
       <div
           id="menu-movil"
           className={clsx(
-            "absolute inset-x-0 top-full z-menu h-[calc(100svh-var(--header-h))] overflow-y-auto bg-ink transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none md:hidden",
+            "absolute inset-x-0 top-full z-menu h-[calc(100svh-var(--header-h))] overflow-y-auto bg-ink transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none wide:hidden",
             mobileOpen ? "visible translate-y-0" : "invisible translate-y-full",
           )}
           aria-hidden={!mobileOpen}

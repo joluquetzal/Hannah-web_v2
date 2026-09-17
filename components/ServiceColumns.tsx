@@ -40,11 +40,11 @@ export function ServiceColumns({ lang }: { lang: Lang }) {
               className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-3/5 bg-gradient-to-t from-noir/90 to-transparent"
             />
 
-            <span className="relative z-20 w-full p-5 md:p-7">
-              <span className="block text-eyebrow font-bold uppercase tracking-eyebrow text-sand">
+            <span className="relative z-20 w-full p-[clamp(1.25rem,2.4vw,2.25rem)] text-cream">
+              <span className="mb-2 block text-eyebrow font-bold uppercase tracking-eyebrow text-sand">
                 {String(index + 1).padStart(2, "0")} · {cat.count}
               </span>
-              <span className="mt-2 block font-body text-caps-col font-extrabold uppercase leading-none tracking-caps text-cream">
+              <span className="block font-body text-caps-col font-extrabold uppercase leading-none tracking-caps text-cream">
                 {cat.title}
               </span>
 
@@ -52,11 +52,13 @@ export function ServiceColumns({ lang }: { lang: Lang }) {
                   transition to. Always open where there is no hover. */}
               <span className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-500 group-hover:grid-rows-[1fr] group-focus-visible:grid-rows-[1fr] motion-reduce:transition-none [@media(hover:none)]:grid-rows-[1fr]">
                 <span className="flex flex-col items-start gap-2 overflow-hidden">
-                  <span className="mt-3 block max-w-[30ch] text-sm leading-relaxed text-cream">
-                    {cat.lead}
+                  <span className="mt-3 block max-w-[30ch] text-nav leading-[1.5] text-cream/90">
+                    {category.descripcion[lang]}
                   </span>
-                  <span className="inline-flex min-h-11 items-center text-label font-bold uppercase tracking-label text-cream">
-                    {t.nav.servicesCardCta} <span aria-hidden>&nbsp;↗</span>
+                  {/* Not a nested <a>: the whole column is the link. */}
+                  <span className="inline-flex min-h-11 items-center gap-2 font-body text-arrow font-bold uppercase tracking-arrow text-cream">
+                    {t.nav.servicesCardCta}
+                    <span aria-hidden>↗</span>
                   </span>
                 </span>
               </span>

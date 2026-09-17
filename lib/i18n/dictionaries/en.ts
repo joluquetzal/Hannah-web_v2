@@ -26,6 +26,7 @@ export const en = {
     closeMenu: "Close menu",
     servicesMenuHeading: "Our services",
     servicesViewAll: "View all",
+    servicesViewAllLong: "View all services",
     servicesCardCta: "View treatments",
   },
 

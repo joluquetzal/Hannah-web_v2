@@ -66,7 +66,7 @@ const FOOTER = [
   { name: "footer column heading", t: "Contacto", exact: true, in: "footer" },
   { name: "footer link", t: "+52 55 3956 0265", exact: true, in: "footer" },
   { name: "footer nav link", t: "Servicios", exact: true, in: "footer" },
-  { name: "footer wordmark", proto: { css: ".wordmark" }, site: { css: "footer p[aria-hidden]" } },
+  { name: "footer wordmark", proto: { css: ".wordmark" }, site: { css: "footer svg[aria-hidden] text, footer p[aria-hidden]" } },
   { name: "footer legal link", t: "Aviso de Privacidad", exact: true, in: "footer" },
 ];
 

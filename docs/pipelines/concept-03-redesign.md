@@ -35,9 +35,9 @@ to enable the slash command, or just ask Claude Code to "continue the Concept 03
 | 8 | Contacto | ✅ | see log |
 | 9 | Footer, legal pages, 404 | ✅ | see log |
 | 10 | English, cleanup, docs | ✅ | see log |
-| 11 | Full verification & sign-off | ↩ reopened 2026-09-16 — waits for Phase 13 | see log |
+| 11 | Full verification & sign-off | ⏸ ready for sign-off — Phase 13 complete | see log |
 | 12 | Deferred work — backlog, never blocks another phase | ⬜ | — |
-| 13 | Mockup fidelity pass → `docs/pipelines/concept-03-fidelity.md` | ⬜ (answer F1–F8 first) | — |
+| 13 | Mockup fidelity pass → `docs/pipelines/concept-03-fidelity.md` | ⏸ all steps done — 13.1 and 13.10 await approval | see log |
 
 Legend: ⬜ not started · 🟡 in progress · ⏸ waiting for gate approval · ✅ approved · ↩ reopened
 
@@ -809,14 +809,14 @@ the footer outside `SheetStack`) are pulled into 13.2 and 13.3; strike them from
 | 13.0 | Tooling — `compare:mockup`, `.mockup-compare/` | ✅ |
 | 13.1 | Global type roles, tokens, buttons (gate: stop for approval) | ⏸ |
 | 13.2 | Header — progress bar, button type, nav offset, mega card, mobile menu | ✅ |
-| 13.3 | Sheet motion, tall-sheet padding, footer in the stack, `Reveal` | ⬜ |
-| 13.4 | Category pages — peek, intro order, treatment window | ⬜ |
-| 13.5 | Servicios hub and talk sheet | ⬜ |
-| 13.6 | Inicio | ⬜ |
-| 13.7 | Nosotros | ⬜ |
-| 13.8 | Contacto | ⬜ |
-| 13.9 | Footer | ⬜ |
-| 13.10 | Verify at six widths, new audit, hand back (gate) | ⬜ |
+| 13.3 | Sheet motion, tall-sheet padding, footer in the stack, `Reveal` | ✅ |
+| 13.4 | Category pages — peek, intro order, treatment window | ✅ |
+| 13.5 | Servicios hub and talk sheet | ✅ |
+| 13.6 | Inicio | ✅ |
+| 13.7 | Nosotros | ✅ |
+| 13.8 | Contacto | ✅ |
+| 13.9 | Footer | ✅ |
+| 13.10 | Verify at six widths, new audit, hand back (gate) | ⏸ |
 
 Each step logs its before/after numbers in the Log above (`### Phase 13.N — <date>`) and commits as
 `concept-03: phase 13.N — <summary>`.
@@ -951,3 +951,309 @@ rather than a transition, which cannot run on a hidden element. Re-verified: Arr
 
 The lesson is the same one 13.1 taught: a change that looks purely visual can move behaviour,
 and only instrumenting the running page tells you which.
+
+### Phase 13.3 — 2026-09-17
+
+**Flagged cells: 480 → 465 (−200 from the 665 baseline).** `/servicios/faciales` at 390 is
+down to 54 from 94.
+
+**Measured:**
+
+| Check | Result |
+|---|---|
+| Incoming sheet lift | `translateY(70px)` entering → **`0`** at the header — exactly the mockup's `(1 − enter) × 70` |
+| Footer covers the last sheet | shade **0.315** with 300px of scroll left; `--footer-h` published at **689px**, matching the real footer |
+| Tall-sheet room | now 30% of `(100svh − header)`, not 30% of the whole viewport |
+| Reduced motion | GSAP never fetched · every `[data-sheet-inner]` / `[data-sheet-lift]` transform `none` · Reveal content at **opacity 1** |
+| JS disabled | **0** unexpectedly invisible elements, 1550 chars of text, no overflow |
+
+**`Sheet` now nests two wrappers.** The cover effect scales and lifts `[data-sheet-inner]`
+while the entrance lifts `[data-sheet-lift]`. One element cannot carry two independently
+scrubbed transforms — GSAP would have the two ScrollTriggers overwriting each other's `y`.
+Nesting composes them instead, which is also how the mockup's single combined transform
+(`lift − cover × 40`) behaves.
+
+**Footer joins the stack (F4)** without moving out of the layout: `SheetStack` publishes
+`--footer-h`, `<main>` reserves it with `pb-[var(--footer-h)]` and pulls it back with a
+negative bottom margin, so the last content sheet stays pinned while the footer rises over it,
+and the cover scrub treats the footer as the next sheet. The negative margin is written
+`mb-[calc(var(--footer-h)*-1)]` — Tailwind's `-mb-[var(…)]` emits `-var(…)`, which is invalid
+CSS and would have failed silently.
+
+**One geometry note, not a defect.** The shade under the footer reaches **0.559**, not 0.6, at
+maximum scroll. The footer is 689px tall in a 900px viewport, so its top can only ever reach
+211px — it physically cannot travel up to the header's 159px. The mockup has the same geometry.
+The accept criterion (the talk sheet dimming as the footer rises) is met.
+
+**`Reveal` added** — fades up 28px over 900ms at 15% visibility, once, then disconnects. It
+renders visible and only *becomes* hidden after the observer attaches, so JS-off and
+reduced-motion both leave content on screen rather than stuck at opacity 0. Applied to the
+`/nosotros` big words, team statement and team cards.
+
+**Left deliberately:** the last sheet still gets no `is-tall` reading room even though the
+footer now covers it. Re-enabling that risks the 0.44 CLS thrash fixed in Phase 4, and the
+cover scrub does not depend on it.
+
+### Phase 13.4 — 2026-09-17
+
+**Flagged cells: 465 → 421 (−244 from the 665 baseline).** The category pages moved most:
+faciales **88 → 41** at 1440 and **94 → 44** at 390; masajes is down to **2** and **4**.
+
+**Accept — every target met:**
+
+| Criterion | Target | Measured |
+|---|---|---|
+| First treatment peeking, 1440×900 | ≥ 150px | **164px** (mockup 167) |
+| First treatment peeking, 390×844 | ≥ 200px | **243px** (mockup 223) |
+| Window 1 text column, 1440 | x = 131 | **x = 131**, 667px wide |
+| Window 1 image, 1440 | x = 855 | **x = 855**, **453×567** |
+| "Incluye" list rows | 39px | **39px** |
+| Treatment names | display table ±6% | 18ch → **57px** (57.3) · 13ch → **79px** (79.3) · short → **89px** (89.3) |
+| Hyphenation | none | `hyphens: manual`, **no name overflows** in either language |
+
+**Owner note #7 is closed.** The intro sheet is content height rather than a window sheet,
+which is the whole reason the first treatment now shows at the bottom on load.
+
+**F5 and F8 landed together, as planned.** The name size comes from a closed set of
+container-query tokens, `min(clamp(2.4rem, 6.2vw, 5.6rem), calc(100cqi / k))`, with
+`k = 0.647 × the longest word's length`. That constant is not a guess — it is solved from the
+mockup's own rendered sizes, which give 0.647 from both the 18-character case (57.3px) and the
+13-character case (79.3px) in a 667px column. The column carries `container-type: inline-size`,
+so `100cqi` is the column, and the name shrinks with it at any width. Hyphenation is gone.
+
+Two implementation notes worth keeping:
+
+- **The longest *word*, not the longest name**, decides the size: a name wraps between words
+  but never inside one. `BODY-CONTOURING MASSAGE` breaks at its hyphen, so its longest token is
+  10 characters and it stays at full size — verified rendering at 89px with no overflow.
+- **`@container` is not a stock Tailwind v3 class.** It needs the container-queries plugin,
+  which this project does not carry, so the arbitrary property `[container-type:inline-size]`
+  does the job with no new dependency. Had I used `@container` it would have emitted nothing
+  and the fit would have silently failed open.
+
+**Also built:** chips-first intro order with the animated scroll cue (a 1px rule that draws
+down and retracts on a 1.8s loop, static under reduced motion); the counter's 900-weight
+number; the signature pill; meta chips; the text column now wider than the image
+(`1.25fr / 0.85fr`) with text on the left at even indices — the site previously had this
+reversed; and "Otras categorías" as full-width rows with the restored
+"Ver todos los servicios ↗" link (`nav.servicesViewAllLong` re-added to both dictionaries).
+
+### Phase 13.5 — 2026-09-17
+
+**Flagged cells: 421 → 392 (−273 from baseline).** `/servicios` **33 → 12** at 1440;
+faciales down to 35 and 41.
+
+**Accept met — every talk row matches, on every page that has one:**
+
+| row | mismatches | size |
+|---|---|---|
+| talk eyebrow | **0** | 11.5px |
+| talk title | **0** | **192px** (the spec's figure exactly) |
+| talk lead | **0** | 18px |
+| talk button | **0** | 12px |
+| talk WhatsApp button | **0** | 12px |
+
+Two of the six missing elements are now built: the talk sheet's **"Contacto" eyebrow** and its
+**WhatsApp ghost button**. The sheet also takes the spacing table's
+`clamp(4rem, 10vw, 8rem)` padding.
+
+**Hub columns** now reveal `servicios.descripcion` — the category's own description — rather
+than the page lead, at the mockup's `0.98rem/1.5` in cream/90, with the body padding on
+`clamp(1.25rem, 2.4vw, 2.25rem)` and a proper "Ver tratamientos ↗" arrow link.
+
+**Still missing after this step:** footer lead, footer nav column (13.9), the `/nosotros`
+collage centre image and team card text (13.7).
+
+### Phase 13.6 — 2026-09-17
+
+**Flagged cells: 392 → 379 (−286 from baseline).** Inicio **55 → 32** at 1440 and **59 → 35**
+at 390.
+
+This step carried both of Phase 13's risky decisions, and both needed real work to hold.
+
+**F6 — the inline balanced heading — broke CLS, and the fix was not the one F6 predicted.**
+Reverting the forced block lines took the landing page to **0.09–0.15 CLS** across six widths,
+far over the 0.05 budget. F6 assumed `next/font`'s size-adjusted fallback metrics would hold
+it; they did not, because the reflow is a *wrap-count* change (2 ↔ 3 lines), which metric
+adjustment cannot prevent — the fallback's per-glyph widths still differ.
+
+What did hold it: moving **DM Sans and Cormorant Garamond to `display: "block"`**. Those two
+compose the `<h1>`, so neither may swap under it. Worst case is now **0.0219**:
+
+| | 390 | 640 | 768 | 1024 | 1440 | 2560 |
+|---|---|---|---|---|---|---|
+| es | 0.0004 | 0.0172 | 0.0190 | **0.0219** | 0.0069 | 0.0003 |
+| en | 0.0162 | 0.0010 | 0.0021 | 0.0020 | 0.0010 | 0.0003 |
+
+**The trade-off, stated plainly:** `block` replaces a flash of *fallback* text with a brief
+flash of *invisible* text. `next/font` self-hosts and preloads these faces from the same
+origin, so the block period is short in practice — but it is a real change to first paint, and
+it affects all DM Sans body copy, not just the hero. Source Serif 4 and Space Grotesk stay on
+`swap`: they set header chrome, where a swap shifts nothing. Recorded in
+`project-workflow.md`. **Say if you would rather have the fallback flash and accept the CLS.**
+
+**The mockup's scrim fails contrast over the real photograph.** Its
+`noir/35 → noir/10 → noir/85` gradient leaves only ~0.29–0.40 alpha where the small text sits
+at 390, and the mockup's **sand** eyebrow and meta block measured **3.39:1** and **3.83:1** —
+under the 4.5:1 floor. The mockup composites those over a generated dark gradient; the client's
+actual `hero.jpg` is brighter. §8 is binding and the mockup is not, so both moved to cream.
+All six samples now pass:
+
+| | eyebrow | lead | meta |
+|---|---|---|---|
+| 390 | **6.56:1** | 10.56:1 | **7.41:1** |
+| 1440 | 11.21:1 | 8.13:1 | 13.47:1 |
+
+Measured by sampling `hero.jpg` through a canvas at each element's position and compositing
+the gradient's alpha at that height — not estimated.
+
+**A regression from 13.2 that this step's wider sweep caught.** The header overflowed the
+viewport by **17px at 768**. The mockup has exactly one desktop breakpoint, **56rem (896px)**,
+where the nav, the header buttons and the two-column treatment layout all appear together;
+13.2 had used Tailwind's `md` (768px), showing the desktop header 128px too early. Added a
+`wide: "56rem"` screen and moved the header and `TreatmentWindow` onto it. **0 overflow
+failures across 70 route × width combinations** afterwards.
+
+That regression existed for two commits because 13.2's checks — and the compare tool — only
+run 1440 and 390. Intermediate widths need sweeping too.
+
+### Phase 13.7–13.10 — 2026-09-17
+
+**Flagged cells: 379 → 265. Against the 2026-09-16 baseline: 665 → 265, −60%.**
+New audit committed at `docs/design/concept-03/audit/2026-09-17/`.
+
+| page | base | now | | page | base | now |
+|---|---|---|---|---|---|---|
+| inicio 1440 | 55 | **22** | | inicio 390 | 59 | **23** |
+| servicios 1440 | 33 | **12** | | servicios 390 | 30 | **14** |
+| faciales 1440 | 88 | **35** | | faciales 390 | 94 | **40** |
+| masajes 1440 | 13 | **2** | | masajes 390 | 13 | **3** |
+| nosotros 1440 | 67 | **23** | | nosotros 390 | 70 | **24** |
+| contacto 1440 | 65 | **36** | | contacto 390 | 78 | **31** |
+
+**Both remaining owner bugs are fixed, and measured:**
+
+| Bug | Result |
+|---|---|
+| `/contacto` "¿HABLAMOS?" over the form | **fits at every width**, never overlaps the card. 51 / 84 / 61 / **76**px at 390 / 768 / 1024 / 1440 — the spec's 51.2 / 84.5 / 60.6 / 76 |
+| Footer wordmark clipped and wrong size | **98% of the viewport at every width, never clipped**, effective size 121 / 239 / 318 / **448** / 597 / 796px against the spec's 120.6 / 239 / 318 / 445.6 / 594.8 / 794.4 |
+
+The wordmark is now an inline `<svg><text>` with `textLength`. An SVG scales to its box by
+construction, so unlike a `vw` font-size it *cannot* overflow the shell or clip — which is what
+the old `22vw` italic version did. `textLength="980"` rather than 1000: at the full width the
+trailing letter-space fell outside the viewBox and shaved the last glyph.
+
+**Phase 11's checks, re-run at seven widths — 126 combinations, zero failures:**
+
+| Check | Failures |
+|---|---|
+| Horizontal overflow | **0 / 126** |
+| Interactive targets under 44px | **0 / 126** |
+| Heading structure | **0 / 126** |
+| CLS > 0.05 | **0 / 126** |
+| `muted` on a non-noir sheet | **0 / 126** |
+
+Reduced motion: GSAP never fetched, all transforms `none`, **0** invisible content elements.
+JS disabled: **0** problems across 6 routes.
+
+**Three defects this sweep caught that the 1440/390 comparison could not:**
+
+1. **`/nosotros` skipped from `<h1>` to `<h3>`.** The section eyebrows were `<p>`, so the
+   philosophy captions and card titles had no `<h2>` above them. Fixed by making the eyebrows
+   `<h2>` and demoting the team statement to `<p>` — it is a statement, not a heading. §7's
+   rule applies: change the class, not the tag.
+2. **Category chips rendered 43.41px against a 44px floor.** Not a sizing mistake — the intro
+   sheet is deliberately ~1.3% into its cover transform at rest, because *that scale is what
+   creates the peek*. A 44px control inside it renders 43.4. The chip is now 46px so the
+   **rendered** target clears 44.
+3. **`/contacto` went two-column at `md` (768)** rather than the mockup's 56rem — the same
+   breakpoint mistake fixed for the header in 13.6. At 768 the heading was 46px where the
+   mockup renders 84.5.
+
+**One correction to my own tooling.** The verification's contrast check flagged every category
+page for `muted` on a sheet. It was wrong: `muted` is legal on `noir` (4.68:1) and banned only
+on the other grounds, and the element was the scroll cue on a noir sheet. The check is now
+theme-aware. A false positive in a check costs as much as a missed defect — it trains you to
+ignore the output.
+
+**Still "missing" in the report, both tool artifacts rather than defects:** the footer wordmark
+(the tool looked for a `<p>`; it is now an `<svg><text>` — selector updated) and the team card
+text (mockup and site both carry placeholder copy, but different wording, so the tool cannot
+pair them — resolves with the real copy in Phase 12).
+
+**Phase 11 is ready for sign-off.**
+
+### Performance pass — 2026-09-17
+
+Triggered by the owner: scrolling the treatment slides felt slow. Profiling said it was not
+the animations — a full-page scroll cost 4ms of script, 0 layouts, and held 60fps. It was the
+assets.
+
+**Page weight, `/servicios/faciales`: 2,755 KB → 301 KB on load (−89%).**
+
+| | before | after |
+|---|---|---|
+| SVG images | 1,022 KB | **1 KB** |
+| Video | 800 KB | **0 KB on load** |
+| JS | 525 KB | 530 KB |
+
+**1. The "placeholder" images were not placeholders.** `CLAUDE.md`, `images-assets.md` and the
+Phase 12 notes all said `public/images/**` held ~600-byte SVG stubs. It held **150–250 KB
+files** — the client's real photographs, base64-encoded rasters at 559×396 wrapped in SVG.
+Static export sets `images.unoptimized: true`, so `next/image` could not re-encode them; what
+was committed was exactly what shipped. Converted to WebP at 0.82: **2,241 KB → 187 KB, 92%
+smaller**, no visible difference. Rules and asset naming updated.
+
+**2. Six clips downloaded on load.** The `<video>` had no `preload`, which defaults to `auto`,
+so every treatment clip fully buffered before the visitor scrolled. Now `preload="none"` with
+no `autoPlay`: **nothing is fetched until a slide is reached.**
+
+**3. The clip now plays on the slide you are on, not on hover** (owner's request). This works
+on touch, where hover does not exist.
+
+**A regression the measurement caught, and the reason it happened.** The first implementation
+used an IntersectionObserver on the figure itself. Frame pacing fell from a 16.7ms median to
+**33.3ms — half the frame rate** — because a sticky sheet stays fully in the viewport after it
+has been covered, so every visited clip kept playing: three at once by the third treatment,
+and it would have been six by the end.
+
+Fixed by reusing the signal that already exists for the live breadcrumb: `SheetStack` reports
+the sheet whose top has risen above 45% of the window, and `TreatmentMedia` plays only when
+that name matches its own. Exactly one clip plays, verified at treatments 2, 4 and 6 against the
+crumb. Median frame time back to **16.7ms**.
+
+Re-verified after the change: 126 checks, **0 failures** on overflow, targets, headings, CLS
+and contrast. Reduced motion never loads or plays a clip and keeps the still at opacity 1.
+JS off renders all six stills with no overflow.
+
+### Video removed — 2026-09-17
+
+The services pages still felt slow after the asset pass, so the owner called it: **take the
+video out entirely.** Done — not disabled, removed.
+
+- `TreatmentMedia.tsx` deleted; `TreatmentWindow` renders a plain `next/image`.
+- The `video` field is gone from the `Treatment` type and from all **14** data entries.
+- All **14 MP4 files** deleted from `public/images/**`.
+- `images-assets.md`, `animations-gsap.md`, `layout-responsive.md` §9 and `CLAUDE.md` updated —
+  each described the image → clip swap as a rule.
+
+**`/servicios/faciales` weight, measured by resource timing:**
+
+| | original | now |
+|---|---|---|
+| Images | 1,022 KB | **89 KB** |
+| Video | 800 KB | **0 KB** |
+| JS | 525 KB | 530 KB |
+| Fonts | 136 KB | 136 KB |
+| **Total** | **2,755 KB** | **973 KB** (−65%) |
+
+**A correction to my own reporting.** I earlier claimed 301 KB on load after the lazy-video
+change. That was wrong — an artifact of reading the running total before every response body
+had resolved. The honest figures are the resource-timing ones above. Numbers from a listener
+that races the page are not measurements.
+
+Re-verified: 126 checks, **0 failures** across overflow, targets, headings, CLS and contrast.
+With JS disabled all six treatment stills render and there is no overflow.
+
+**What is left on that page is now JS: 530 KB**, the largest single item by far — React, the
+Next runtime and GSAP. Reducing it is a separate decision, not an asset fix.

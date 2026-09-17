@@ -65,9 +65,9 @@ lib/
   site.ts                 # language-neutral NAP only
 public/
   images/
-    facials/              # img1.svg … img6.svg, video1.mp4 … video6.mp4
-    massages/             # img1.svg … img4.svg, video1.mp4 … video4.mp4
-    specials/             # img1.svg … img4.svg, video1.mp4 … video4.mp4
+    facials/              # img1.webp … img6.webp
+    massages/             # img1.webp … img4.webp
+    specials/             # img1.webp … img4.webp
 .claude/
   rules/                  # BINDING coding rules, split by topic — read before changing code
 ```
@@ -109,7 +109,7 @@ Four families, one job each (Concept 03). All loaded via `next/font/google` in `
 
 - **Sticky sheet stack**: every top-level section is a full-bleed colour sheet that pins below the header while the next one rises over it. GSAP ScrollTrigger only *scrubs* the cover effect (the covered sheet's scale/shade). This replaced the old `ScrollBackdrop` colour crossfade, which is deleted.
 - Sticky is switched on after mount (`data-stack="on"`), so with JS off nothing is pinned or hidden.
-- Hover on treatment images: static image → muted looping `<video>` swap (CSS only, `group-hover`)
+- No video anywhere. The treatment slides are still images (removed 2026-09-17 for performance)
 - Respect `prefers-reduced-motion` — stacking stays (it is only scrolling), but GSAP is never even fetched
 
 ## Pages
@@ -235,7 +235,7 @@ Two columns in a **static** sheet (nothing ever slides over a form being filled 
 - Static export (`output: 'export'` in next.config.ts)
 - Each service category has its own route (`/servicios/faciales`, not anchor links)
 - Landing page (`/`) contains NO service listings
-- Images are provided by the client as SVG + video pairs per treatment (GIFs converted to H.264 MP4 at build-prep time; source GIFs not committed)
+- Images are the client's photographs, committed as **WebP**. They arrived as rasters wrapped in SVG (150–250 KB each) and were converted — 2,241 KB → 187 KB. Static export means what is committed is what ships; `next/image` cannot re-encode it.
 - Bilingual `es` (default, `/`) + `en` (`/en`) — no `[lang]` dynamic segment; the English tree is an explicit `app/en/` mirror of thin wrappers over shared `components/views/*`. Strings in `lib/i18n/dictionaries/{es,en}.ts` (`en` typed `satisfies Dictionary`) and `Localized<T>` fields in `data/`.
 
 ## Redesign — Concept 03 (planned 2026-09-15)
@@ -377,5 +377,5 @@ Per `.claude/rules/layout-responsive.md` §Verification:
 
 ### Out of scope for this pass
 
-- **Placeholder art.** `public/images/**` holds ~600-byte SVG stubs and 42-byte GIFs. They render exactly as coded; image regions will look empty until real photos arrive. That is a content gap, not a CSS bug — do not "fix" it in CSS and do not replace the files.
+- **Placeholder art.** *(Superseded — the images are the client's real photographs, now WebP. See the Coding conventions note above.)*
 - **Accessibility debt** surfaced by the conventions but not by this review: touch targets are under-size (footer and `ClinicInfo` links 16px tall, submit 40px, CTAs 42px, mobile menu button 40×40). Still a separate pass. *(The `text-crimson`-on-`noir` error-colour issue is fixed — `crimson-bright` token added; see `.claude/rules/accessibility-seo.md`.)*

@@ -58,6 +58,17 @@ export function SheetStack({ children }: { children: React.ReactNode }) {
         if (sheet.hasAttribute("data-static")) return;
         sheet.style.top = `${header + Math.min(0, available - sheet.offsetHeight)}px`;
       });
+
+      // The footer is the last sheet but lives in the layout, outside this
+      // stack. <main> reserves its height and pulls it straight back, so the
+      // last content sheet stays pinned while the footer scrolls over it (F4).
+      const footer = document.querySelector<HTMLElement>("body > footer");
+      if (footer) {
+        document.documentElement.style.setProperty(
+          "--footer-h",
+          `${footer.offsetHeight}px`,
+        );
+      }
     };
 
     measure();
@@ -117,27 +128,30 @@ export function SheetStack({ children }: { children: React.ReactNode }) {
 
               // Rising into view: fade the incoming sheet up to full opacity
               // by the time its top reaches the header.
+              const lift = sheet.querySelector<HTMLElement>("[data-sheet-lift]");
               if (i > 0 && !sheet.hasAttribute("data-static")) {
-                gsap.fromTo(
-                  inner,
-                  { opacity: 0.55 },
-                  {
-                    opacity: 1,
-                    ease: "none",
-                    scrollTrigger: {
-                      trigger: sheet,
-                      start: "top bottom",
-                      end: `top ${header}px`,
-                      scrub: true,
-                    },
+                const entrance = gsap.timeline({
+                  scrollTrigger: {
+                    trigger: sheet,
+                    start: "top bottom",
+                    end: `top ${header}px`,
+                    scrub: true,
                   },
-                );
+                });
+                entrance.fromTo(inner, { opacity: 0.55 }, { opacity: 1, ease: "none" }, 0);
+                // The mockup lifts the incoming content 70px as the sheet rises.
+                if (lift) {
+                  entrance.fromTo(lift, { y: 70 }, { y: 0, ease: "none" }, 0);
+                }
               }
 
               // Being covered: shrink and dim as the NEXT sheet rises. The
               // shade reaches 0.6 exactly when that sheet's top meets the
               // header's bottom.
-              const next = all[i + 1];
+              // The footer covers the last sheet, exactly as a sheet would.
+              const next =
+                all[i + 1] ??
+                document.querySelector<HTMLElement>("body > footer");
               if (!next) return;
 
               const timeline = gsap.timeline({

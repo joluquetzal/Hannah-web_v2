@@ -4,6 +4,13 @@ const config: Config = {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
     extend: {
+      // The mockup has ONE desktop breakpoint, 56rem, where the header shows
+      // its nav and buttons and the treatment windows go two-column. Using
+      // Tailwind's `md` (768px) showed the desktop header 128px too early and
+      // overflowed the viewport by 17px at 768.
+      screens: {
+        wide: "56rem",
+      },
       colors: {
         noir: "#0E0A0A",
         crimson: {
@@ -25,6 +32,7 @@ const config: Config = {
         ink: "#221A08", // header bar ground
         paper: "#FFEBD6", // header strip ground + filled header button
         stone: "#9C917D", // inactive breadcrumbs on `ink` (5.54:1)
+        clay: "#8A4A3E", // first stop of the /nosotros manifesto gradient
       },
       fontFamily: {
         display: ["var(--font-cormorant)", "Georgia", "Cambria", "serif"],
@@ -75,12 +83,38 @@ const config: Config = {
         "caps-form": "clamp(1.8rem, 3.2vw, 2.6rem)", // /contacto form title
         "caps-footer": "clamp(2.2rem, 6vw, 4.5rem)", // footer "¿Hablamos?"
 
+        // F5 — treatment names shrink to fit their column instead of
+        // hyphenating (F8). `100cqi` is the text column, made a container by
+        // `@container` on it. The divisor is 0.647 x the longest word's
+        // character count, solved from the mockup's own rendered sizes
+        // (18 chars -> 57.3px, 13 chars -> 79.3px, both in a 667px column).
+        // A closed set because Tailwind cannot build a class from runtime data.
+        "name-9": "min(clamp(2.4rem, 6.2vw, 5.6rem), calc(100cqi / 5.82))",
+        "name-10": "min(clamp(2.4rem, 6.2vw, 5.6rem), calc(100cqi / 6.47))",
+        "name-11": "min(clamp(2.4rem, 6.2vw, 5.6rem), calc(100cqi / 7.12))",
+        "name-12": "min(clamp(2.4rem, 6.2vw, 5.6rem), calc(100cqi / 7.76))",
+        "name-13": "min(clamp(2.4rem, 6.2vw, 5.6rem), calc(100cqi / 8.41))",
+        "name-14": "min(clamp(2.4rem, 6.2vw, 5.6rem), calc(100cqi / 9.06))",
+        "name-15": "min(clamp(2.4rem, 6.2vw, 5.6rem), calc(100cqi / 9.71))",
+        "name-16": "min(clamp(2.4rem, 6.2vw, 5.6rem), calc(100cqi / 10.35))",
+        "name-17": "min(clamp(2.4rem, 6.2vw, 5.6rem), calc(100cqi / 11.0))",
+        "name-18": "min(clamp(2.4rem, 6.2vw, 5.6rem), calc(100cqi / 11.65))",
+        "name-19": "min(clamp(2.4rem, 6.2vw, 5.6rem), calc(100cqi / 12.29))",
+        "name-20": "min(clamp(2.4rem, 6.2vw, 5.6rem), calc(100cqi / 12.94))",
+        "name-21": "min(clamp(2.4rem, 6.2vw, 5.6rem), calc(100cqi / 13.59))",
+        "name-22": "min(clamp(2.4rem, 6.2vw, 5.6rem), calc(100cqi / 14.23))",
+        "name-23": "min(clamp(2.4rem, 6.2vw, 5.6rem), calc(100cqi / 14.88))",
+        "name-24": "min(clamp(2.4rem, 6.2vw, 5.6rem), calc(100cqi / 15.53))",
+
         // Small-text roles. These sit BELOW the old 12px floor because the
         // mockup sets them at 11.2–11.5px; §7 records the exception.
         eyebrow: "0.72rem", // 11.5px — eyebrows
         label: "0.7rem", // 11.2px — counters, list/column headings, form labels
         btn: "0.75rem", // 12px — button text
         arrow: "0.78rem", // 12.5px — arrow links
+        list: "0.95rem", // "Incluye" / "Zonas" rows, category descriptions
+        caption: "0.85rem", // /nosotros philosophy captions
+        micro: "0.66rem", // the label above a contact quick-link value
         // Header controls are Space Grotesk at weight 400, not DM Sans 700 —
         // they are chrome, not content labels.
         hbtn: "0.9rem", // 14.4px — header bar buttons
@@ -107,9 +141,11 @@ const config: Config = {
         arrow: "0.16em", // arrow links
         meta: "0.08em", // meta chips (not uppercase)
         hero: "0.14em", // Inicio hero meta block
+        caption: "0.14em", // /nosotros philosophy captions
         hbtn: "0.02em", // header bar buttons
         hstrip: "0.03em", // announcement strip button
         nav: "-0.005em", // header nav links
+        num: "0.06em", // the treatment counter's leading number
       },
       // Fluid prose width: page intros and long-form copy grow with the
       // viewport instead of hitting a fixed breakpoint cap. The upper bound
@@ -153,10 +189,18 @@ const config: Config = {
           from: { opacity: "0", transform: "translateY(-6px)" },
           to: { opacity: "1", transform: "none" },
         },
+        // The scroll cue's rule draws downward, then retracts downward.
+        cue: {
+          "0%": { transform: "scaleY(0)", transformOrigin: "0 0" },
+          "50%": { transform: "scaleY(1)", transformOrigin: "0 0" },
+          "51%": { transform: "scaleY(1)", transformOrigin: "0 100%" },
+          "100%": { transform: "scaleY(0)", transformOrigin: "0 100%" },
+        },
       },
       animation: {
         "crumb-in": "crumb-in 400ms cubic-bezier(0.22, 1, 0.36, 1)",
         "mega-in": "mega-in 250ms cubic-bezier(0.22, 1, 0.36, 1)",
+        cue: "cue 1.8s cubic-bezier(0.22, 1, 0.36, 1) infinite",
       },
       zIndex: {
         menu: "30", // mobile menu panel

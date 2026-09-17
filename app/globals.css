@@ -65,7 +65,7 @@
      bottom, so its last lines stay readable for a while before the next sheet
      rises. Padding, not height — §5's ban is on sizing sections by viewport. */
   [data-sheet].is-tall {
-    padding-bottom: 30svh;
+    padding-bottom: calc((100svh - var(--header-h)) * 0.3);
   }
 
   :focus-visible {

@@ -9,7 +9,7 @@ export const servicios = [
       en: "Deep cleansing, hydration and rejuvenation for every skin type.",
     },
     href: "/servicios/faciales",
-    cover: "/images/facials/img1.svg",
+    cover: "/images/facials/img1.webp",
   },
   {
     slug: "masajes",
@@ -19,7 +19,7 @@ export const servicios = [
       en: "Relaxation, muscle relief and wellbeing in every session.",
     },
     href: "/servicios/masajes",
-    cover: "/images/massages/img1.svg",
+    cover: "/images/massages/img1.webp",
   },
   {
     slug: "especiales",
@@ -29,6 +29,6 @@ export const servicios = [
       en: "Advanced treatments: skin booster, tensor threads and botulinum toxin.",
     },
     href: "/servicios/especiales",
-    cover: "/images/specials/img1.svg",
+    cover: "/images/specials/img1.webp",
   },
 ] as const satisfies readonly ServiceCategory[];
