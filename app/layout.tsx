@@ -82,7 +82,14 @@ export default function RootLayout({
         <SkipLink />
         <SyncHtmlLang />
         <Nav />
-        <main id="contenido" className="flex-1">
+        {/* Reserve the footer's height and pull it straight back, so the last
+            sticky sheet stays pinned while the footer scrolls up over it
+            instead of pushing it away (F4). --footer-h is published by
+            SheetStack; the fallback keeps this inert before JS runs. */}
+        <main
+          id="contenido"
+          className="flex-1 pb-[var(--footer-h,0px)] mb-[calc(var(--footer-h,0px)*-1)]"
+        >
           {children}
         </main>
         <Footer />

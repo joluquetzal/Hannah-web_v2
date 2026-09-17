@@ -3,6 +3,7 @@ import clsx from "clsx";
 import { Sheet } from "@/components/Sheet";
 import { SheetStack } from "@/components/SheetStack";
 import { TalkSheet } from "@/components/TalkSheet";
+import { Reveal } from "@/components/Reveal";
 import { getDictionary, type Lang } from "@/lib/i18n";
 
 /* TODO: client copy — the team card bodies and the collage images are
@@ -62,9 +63,11 @@ export function NosotrosView({ lang }: { lang: Lang }) {
           {t.philosophy1}
         </p>
 
-        <p className="mt-14 break-words font-body text-caps-word font-extrabold uppercase leading-none tracking-caps text-cream">
-          {t.philosophyWords[0]}
-        </p>
+        <Reveal className="mt-14">
+          <p className="break-words font-body text-caps-word font-extrabold uppercase leading-none tracking-caps text-cream">
+            {t.philosophyWords[0]}
+          </p>
+        </Reveal>
 
         <div className="mx-auto mt-10 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
           {swatches.map((src) => (
@@ -83,9 +86,11 @@ export function NosotrosView({ lang }: { lang: Lang }) {
           ))}
         </div>
 
-        <p className="mt-10 break-words font-body text-caps-word font-extrabold uppercase leading-none tracking-caps text-cream">
-          {t.philosophyWords[1]}
-        </p>
+        <Reveal className="mt-10">
+          <p className="break-words font-body text-caps-word font-extrabold uppercase leading-none tracking-caps text-cream">
+            {t.philosophyWords[1]}
+          </p>
+        </Reveal>
 
         <h2 className="mx-auto mt-14 max-w-prose font-display text-2xl italic text-cream">
           {t.philosophyHead2}
@@ -100,15 +105,18 @@ export function NosotrosView({ lang }: { lang: Lang }) {
           {t.teamTitle}
         </p>
 
-        <h2 className="mt-6 max-w-[22ch] font-body text-caps-statement font-extrabold uppercase leading-[0.98] tracking-caps text-cream">
+        <Reveal className="mt-6">
+        <h2 className="max-w-[22ch] font-body text-caps-statement font-extrabold uppercase leading-[0.98] tracking-caps text-cream">
           {stmtStart}{" "}
           <span className="font-display text-[1.04em] font-normal italic normal-case leading-[0.8] tracking-normal text-sand">
             {stmtAccent}
           </span>{" "}
           {stmtEnd}
         </h2>
+        </Reveal>
 
-        <ul className="mt-10 grid gap-3 sm:grid-cols-3">
+        <Reveal className="mt-10">
+        <ul className="grid gap-3 sm:grid-cols-3">
           {t.teamCards.map((card, i) => (
             <li
               key={card.title}
@@ -124,6 +132,7 @@ export function NosotrosView({ lang }: { lang: Lang }) {
             </li>
           ))}
         </ul>
+        </Reveal>
 
         <p className="mt-8 text-sm text-sand">{t.teamNote}</p>
       </Sheet>

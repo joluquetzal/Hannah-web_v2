@@ -809,7 +809,7 @@ the footer outside `SheetStack`) are pulled into 13.2 and 13.3; strike them from
 | 13.0 | Tooling — `compare:mockup`, `.mockup-compare/` | ✅ |
 | 13.1 | Global type roles, tokens, buttons (gate: stop for approval) | ⏸ |
 | 13.2 | Header — progress bar, button type, nav offset, mega card, mobile menu | ✅ |
-| 13.3 | Sheet motion, tall-sheet padding, footer in the stack, `Reveal` | ⬜ |
+| 13.3 | Sheet motion, tall-sheet padding, footer in the stack, `Reveal` | ✅ |
 | 13.4 | Category pages — peek, intro order, treatment window | ⬜ |
 | 13.5 | Servicios hub and talk sheet | ⬜ |
 | 13.6 | Inicio | ⬜ |
@@ -951,3 +951,45 @@ rather than a transition, which cannot run on a hidden element. Re-verified: Arr
 
 The lesson is the same one 13.1 taught: a change that looks purely visual can move behaviour,
 and only instrumenting the running page tells you which.
+
+### Phase 13.3 — 2026-09-17
+
+**Flagged cells: 480 → 465 (−200 from the 665 baseline).** `/servicios/faciales` at 390 is
+down to 54 from 94.
+
+**Measured:**
+
+| Check | Result |
+|---|---|
+| Incoming sheet lift | `translateY(70px)` entering → **`0`** at the header — exactly the mockup's `(1 − enter) × 70` |
+| Footer covers the last sheet | shade **0.315** with 300px of scroll left; `--footer-h` published at **689px**, matching the real footer |
+| Tall-sheet room | now 30% of `(100svh − header)`, not 30% of the whole viewport |
+| Reduced motion | GSAP never fetched · every `[data-sheet-inner]` / `[data-sheet-lift]` transform `none` · Reveal content at **opacity 1** |
+| JS disabled | **0** unexpectedly invisible elements, 1550 chars of text, no overflow |
+
+**`Sheet` now nests two wrappers.** The cover effect scales and lifts `[data-sheet-inner]`
+while the entrance lifts `[data-sheet-lift]`. One element cannot carry two independently
+scrubbed transforms — GSAP would have the two ScrollTriggers overwriting each other's `y`.
+Nesting composes them instead, which is also how the mockup's single combined transform
+(`lift − cover × 40`) behaves.
+
+**Footer joins the stack (F4)** without moving out of the layout: `SheetStack` publishes
+`--footer-h`, `<main>` reserves it with `pb-[var(--footer-h)]` and pulls it back with a
+negative bottom margin, so the last content sheet stays pinned while the footer rises over it,
+and the cover scrub treats the footer as the next sheet. The negative margin is written
+`mb-[calc(var(--footer-h)*-1)]` — Tailwind's `-mb-[var(…)]` emits `-var(…)`, which is invalid
+CSS and would have failed silently.
+
+**One geometry note, not a defect.** The shade under the footer reaches **0.559**, not 0.6, at
+maximum scroll. The footer is 689px tall in a 900px viewport, so its top can only ever reach
+211px — it physically cannot travel up to the header's 159px. The mockup has the same geometry.
+The accept criterion (the talk sheet dimming as the footer rises) is met.
+
+**`Reveal` added** — fades up 28px over 900ms at 15% visibility, once, then disconnects. It
+renders visible and only *becomes* hidden after the observer attaches, so JS-off and
+reduced-motion both leave content on screen rather than stuck at opacity 0. Applied to the
+`/nosotros` big words, team statement and team cards.
+
+**Left deliberately:** the last sheet still gets no `is-tall` reading room even though the
+footer now covers it. Re-enabling that risks the 0.44 CLS thrash fixed in Phase 4, and the
+cover scrub does not depend on it.

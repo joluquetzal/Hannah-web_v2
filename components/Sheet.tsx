@@ -84,6 +84,9 @@ export function Sheet({
         aria-hidden
         className="pointer-events-none absolute inset-0 z-20 bg-black opacity-0"
       />
+      {/* Two nested wrappers on purpose: the cover effect scales and lifts
+          `inner` while the entrance lifts `lift`. One element cannot carry two
+          independently scrubbed transforms — they would overwrite each other. */}
       <div
         data-sheet-inner
         className={clsx(
@@ -91,11 +94,13 @@ export function Sheet({
           bleed && "self-stretch",
         )}
       >
-        {bleed ? (
-          children
-        ) : (
-          <div className="mx-auto w-full max-w-shell px-gutter">{children}</div>
-        )}
+        <div data-sheet-lift className={clsx(bleed && "h-full")}>
+          {bleed ? (
+            children
+          ) : (
+            <div className="mx-auto w-full max-w-shell px-gutter">{children}</div>
+          )}
+        </div>
       </div>
     </section>
   );
