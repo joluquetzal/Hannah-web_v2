@@ -84,7 +84,7 @@ export function Breadcrumbs() {
       // Long trails scroll inside this row rather than widening the page.
       className="overflow-x-auto border-t border-paper/15 px-gutter [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
     >
-      <ol className="flex min-h-11 items-center whitespace-nowrap font-hserif text-sm font-semibold">
+      <ol className="flex min-h-[2.875rem] items-center whitespace-nowrap font-hserif text-strip font-semibold">
         {trail.map((crumb, i) => {
           const isLast = i === trail.length - 1;
           return (
@@ -114,7 +114,7 @@ export function Breadcrumbs() {
         })}
 
         {live && (
-          <li className="flex items-center">
+          <li key={live} className="flex animate-crumb-in items-center motion-reduce:animate-none">
             <span aria-hidden className="mx-3.5 text-paper">
               /
             </span>

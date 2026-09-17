@@ -21,11 +21,14 @@ export function ArrowLink({
   children,
   external = false,
   className,
+  /** NavDropdown finds its first focusable item by this attribute. */
+  "data-menu-item": dataMenuItem,
 }: {
   href: string;
   children: ReactNode;
   external?: boolean;
   className?: string;
+  "data-menu-item"?: boolean;
 }) {
   const content = (
     <>
@@ -40,6 +43,7 @@ export function ArrowLink({
         href={href}
         target="_blank"
         rel="noopener noreferrer"
+        data-menu-item={dataMenuItem}
         className={clsx(base, className)}
       >
         {content}
@@ -47,7 +51,7 @@ export function ArrowLink({
     );
   }
   return (
-    <Link href={href} className={clsx(base, className)}>
+    <Link href={href} data-menu-item={dataMenuItem} className={clsx(base, className)}>
       {content}
     </Link>
   );
