@@ -23,6 +23,7 @@ export const es = {
     closeMenu: "Cerrar menú",
     servicesMenuHeading: "Nuestros servicios",
     servicesViewAll: "Ver todos",
+    servicesViewAllLong: "Ver todos los servicios",
     servicesCardCta: "Ver tratamientos",
   },
 

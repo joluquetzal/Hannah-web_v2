@@ -810,7 +810,7 @@ the footer outside `SheetStack`) are pulled into 13.2 and 13.3; strike them from
 | 13.1 | Global type roles, tokens, buttons (gate: stop for approval) | ⏸ |
 | 13.2 | Header — progress bar, button type, nav offset, mega card, mobile menu | ✅ |
 | 13.3 | Sheet motion, tall-sheet padding, footer in the stack, `Reveal` | ✅ |
-| 13.4 | Category pages — peek, intro order, treatment window | ⬜ |
+| 13.4 | Category pages — peek, intro order, treatment window | ✅ |
 | 13.5 | Servicios hub and talk sheet | ⬜ |
 | 13.6 | Inicio | ⬜ |
 | 13.7 | Nosotros | ⬜ |
@@ -993,3 +993,47 @@ reduced-motion both leave content on screen rather than stuck at opacity 0. Appl
 **Left deliberately:** the last sheet still gets no `is-tall` reading room even though the
 footer now covers it. Re-enabling that risks the 0.44 CLS thrash fixed in Phase 4, and the
 cover scrub does not depend on it.
+
+### Phase 13.4 — 2026-09-17
+
+**Flagged cells: 465 → 421 (−244 from the 665 baseline).** The category pages moved most:
+faciales **88 → 41** at 1440 and **94 → 44** at 390; masajes is down to **2** and **4**.
+
+**Accept — every target met:**
+
+| Criterion | Target | Measured |
+|---|---|---|
+| First treatment peeking, 1440×900 | ≥ 150px | **164px** (mockup 167) |
+| First treatment peeking, 390×844 | ≥ 200px | **243px** (mockup 223) |
+| Window 1 text column, 1440 | x = 131 | **x = 131**, 667px wide |
+| Window 1 image, 1440 | x = 855 | **x = 855**, **453×567** |
+| "Incluye" list rows | 39px | **39px** |
+| Treatment names | display table ±6% | 18ch → **57px** (57.3) · 13ch → **79px** (79.3) · short → **89px** (89.3) |
+| Hyphenation | none | `hyphens: manual`, **no name overflows** in either language |
+
+**Owner note #7 is closed.** The intro sheet is content height rather than a window sheet,
+which is the whole reason the first treatment now shows at the bottom on load.
+
+**F5 and F8 landed together, as planned.** The name size comes from a closed set of
+container-query tokens, `min(clamp(2.4rem, 6.2vw, 5.6rem), calc(100cqi / k))`, with
+`k = 0.647 × the longest word's length`. That constant is not a guess — it is solved from the
+mockup's own rendered sizes, which give 0.647 from both the 18-character case (57.3px) and the
+13-character case (79.3px) in a 667px column. The column carries `container-type: inline-size`,
+so `100cqi` is the column, and the name shrinks with it at any width. Hyphenation is gone.
+
+Two implementation notes worth keeping:
+
+- **The longest *word*, not the longest name**, decides the size: a name wraps between words
+  but never inside one. `BODY-CONTOURING MASSAGE` breaks at its hyphen, so its longest token is
+  10 characters and it stays at full size — verified rendering at 89px with no overflow.
+- **`@container` is not a stock Tailwind v3 class.** It needs the container-queries plugin,
+  which this project does not carry, so the arbitrary property `[container-type:inline-size]`
+  does the job with no new dependency. Had I used `@container` it would have emitted nothing
+  and the fit would have silently failed open.
+
+**Also built:** chips-first intro order with the animated scroll cue (a 1px rule that draws
+down and retracts on a 1.8s loop, static under reduced motion); the counter's 900-weight
+number; the signature pill; meta chips; the text column now wider than the image
+(`1.25fr / 0.85fr`) with text on the left at even indices — the site previously had this
+reversed; and "Otras categorías" as full-width rows with the restored
+"Ver todos los servicios ↗" link (`nav.servicesViewAllLong` re-added to both dictionaries).
